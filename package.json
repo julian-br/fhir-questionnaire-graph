@@ -11,9 +11,11 @@
   "dependencies": {
     "@headlessui/react": "^1.7.4",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "reaflow": "^5.1.2"
   },
   "devDependencies": {
+    "@types/fhir": "^0.0.35",
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
     "@vitejs/plugin-react": "^2.2.0",
