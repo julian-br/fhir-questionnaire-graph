@@ -13,8 +13,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-zoom-pan-pinch": "^2.6.1",
-    "reaflow": "^5.1.2",
-    "zustand": "^4.3.3"
+    "reaflow": "^5.1.2"
   },
   "devDependencies": {
     "@types/fhir": "^0.0.35",
