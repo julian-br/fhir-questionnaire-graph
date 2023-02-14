@@ -7,13 +7,12 @@ const questionnaireData = data as Questionnaire;
 const currentGroup = questionnaireData.item![3];
 
 function App() {
-  console.log(currentGroup);
-
   function determineNodes(item: QuestionnaireItem) {
     if (item.type === "group" && item.item !== undefined) {
       return item.item.map((question) => ({
         id: question.linkId,
         text: question.text ?? "",
+        width: 300,
       }));
     }
 
@@ -62,7 +61,7 @@ function App() {
         </div>
         <div className="w-5/6 bg-slate-100">
           <TransformWrapper
-            wheel={{ step: 4 }}
+            wheel={{ step: 0.2 }}
             limitToBounds={false}
             panning={{ velocityDisabled: true }}
             doubleClick={{
@@ -78,7 +77,6 @@ function App() {
             >
               <Canvas
                 onLayoutChange={() => console.log("layout changed")}
-                pannable={true}
                 zoomable={false}
                 fit={true}
                 nodes={nodes}
