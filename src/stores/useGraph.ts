@@ -1,7 +1,7 @@
 import { Questionnaire, QuestionnaireItem } from "fhir/r4";
 import { NodeData, EdgeData } from "reaflow";
 import { create } from "zustand";
-import data from "../fhir-questionnaire-example.json";
+import data from "../assets/fhir-questionnaire-example.json";
 
 const questionnaireData = data as Questionnaire;
 const currentGroup = questionnaireData.item![3];
