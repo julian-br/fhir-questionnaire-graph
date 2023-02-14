@@ -1,9 +1,10 @@
 import { Questionnaire, QuestionnaireItem } from "fhir/r4";
-import { Canvas, CanvasPosition, ElkNodeLayoutOptions } from "reaflow";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { Canvas, CanvasPosition } from "reaflow";
 import data from "./fhir-questionnaire-example.json";
 
 const questionnaireData = data as Questionnaire;
-const currentGroup = questionnaireData.item![23];
+const currentGroup = questionnaireData.item![3];
 
 function App() {
   console.log(currentGroup);
@@ -46,22 +47,52 @@ function App() {
   const edges = determineEdges(currentGroup);
 
   return (
-    <div className="App">
-      <h1 className="bg-slate-800 py-4 text-3xl font-semibold ">
-        <span className="ml-3 font-semibold text-sky-100">
-          Fhir Questionnaire Viewer
-        </span>
+    <div className="flex min-h-screen flex-col">
+      <h1 className="border-b py-4 text-3xl font-semibold">
+        <span className="ml-3 font-bold text-blue-600">FHIR TREE</span>
       </h1>
-      <Canvas
-        className="bg-slate-50"
-        nodes={nodes}
-        edges={edges}
-        maxHeight={800}
-        maxWidth={1000}
-        readonly={true}
-        direction="RIGHT"
-        defaultPosition={CanvasPosition.LEFT}
-      />
+      <div className="flex flex-grow">
+        <div className="border-slate-60 w-1/6 border-r">
+          <div className="pl-3 pt-5 text-2xl font-medium">Sidebar</div>
+          <div className="py-2 pl-3 ">entry</div>
+          <div className="bg-blue-500 py-2 pl-3 font-medium text-blue-50">
+            entry
+          </div>
+          <div className="pl-3 pt-1 ">entry</div>
+        </div>
+        <div className="w-5/6 bg-slate-100">
+          <TransformWrapper
+            wheel={{ step: 4 }}
+            limitToBounds={false}
+            panning={{ velocityDisabled: true }}
+            doubleClick={{
+              disabled: true,
+            }}
+          >
+            <TransformComponent
+              wrapperStyle={{
+                width: "100%",
+                height: "100%",
+                overflow: "hidden",
+              }}
+            >
+              <Canvas
+                onLayoutChange={() => console.log("layout changed")}
+                pannable={true}
+                zoomable={false}
+                fit={true}
+                nodes={nodes}
+                edges={edges}
+                maxHeight={885}
+                maxWidth={1000}
+                readonly={true}
+                direction="RIGHT"
+                defaultPosition={CanvasPosition.LEFT}
+              />
+            </TransformComponent>
+          </TransformWrapper>
+        </div>
+      </div>
     </div>
   );
 }

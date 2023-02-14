@@ -12,6 +12,7 @@
     "@headlessui/react": "^1.7.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-zoom-pan-pinch": "^2.6.1",
     "reaflow": "^5.1.2"
   },
   "devDependencies": {
