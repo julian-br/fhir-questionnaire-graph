@@ -1,52 +1,13 @@
-import { Questionnaire, QuestionnaireItem } from "fhir/r4";
+import { useEffect, useRef } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { Canvas, CanvasPosition } from "reaflow";
-import data from "./fhir-questionnaire-example.json";
-
-const questionnaireData = data as Questionnaire;
-const currentGroup = questionnaireData.item![3];
+import { Canvas, CanvasPosition, NodeProps } from "reaflow";
+import { useGraph } from "./stores/useGraph";
 
 function App() {
-  function determineNodes(item: QuestionnaireItem) {
-    if (item.type === "group" && item.item !== undefined) {
-      return item.item.map((question) => ({
-        id: question.linkId,
-        text: question.text ?? "",
-        width: 300,
-      }));
-    }
-
-    return [
-      {
-        id: item.linkId,
-        text: item.text ?? "",
-      },
-    ];
-  }
-
-  function determineEdges(item: QuestionnaireItem) {
-    if (item.type === "group" && item.item !== undefined) {
-      const nestedQuestions = item.item.filter(
-        (question) => question.enableWhen !== undefined
-      );
-
-      return nestedQuestions.map((nestedQuestion) => {
-        return {
-          id: nestedQuestion.linkId,
-          from: nestedQuestion.enableWhen![0].question,
-          to: nestedQuestion.linkId,
-        };
-      });
-    }
-
-    return [];
-  }
-
-  const nodes = determineNodes(currentGroup);
-  const edges = determineEdges(currentGroup);
+  const graph = useGraph();
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex h-screen flex-col overflow-hidden">
       <h1 className="border-b py-4 text-3xl font-semibold">
         <span className="ml-3 font-bold text-blue-600">FHIR TREE</span>
       </h1>
@@ -76,22 +37,46 @@ function App() {
               }}
             >
               <Canvas
-                onLayoutChange={() => console.log("layout changed")}
+                onLayoutChange={(e) => console.log(e)}
                 zoomable={false}
                 fit={true}
-                nodes={nodes}
-                edges={edges}
-                maxHeight={885}
-                maxWidth={1000}
+                nodes={graph.nodes}
+                edges={graph.edges}
                 readonly={true}
                 direction="RIGHT"
                 defaultPosition={CanvasPosition.LEFT}
+                node={(props) => <CustomNode {...props} />}
               />
             </TransformComponent>
           </TransformWrapper>
         </div>
       </div>
     </div>
+  );
+}
+
+function CustomNode(props: NodeProps) {
+  const nodeContent = useRef<HTMLDivElement>(null);
+  const setNodeHeight = useGraph((state) => state.setNodeHeight);
+  useEffect(() => {
+    const neededHeight = nodeContent.current!.scrollHeight;
+    setNodeHeight(props.properties.id, neededHeight);
+  }, []);
+  return (
+    <foreignObject
+      width={props.width}
+      height={props.height}
+      x={props.x}
+      y={props.y}
+    >
+      <div
+        ref={nodeContent}
+        className="fixed w-full rounded border bg-white p-4"
+      >
+        <h4 className="text-lg font-semibold">test heading</h4>
+        {props.properties.text}
+      </div>
+    </foreignObject>
   );
 }
 
