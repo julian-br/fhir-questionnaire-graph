@@ -2,7 +2,7 @@ import { Canvas, CanvasPosition } from "reaflow";
 import CustomNode from "./CustomNode";
 import { createContext } from "react";
 import GraphContainer from "./GraphContainer";
-import { Questionnaire } from "fhir/r4";
+import { Questionnaire, QuestionnaireItem } from "fhir/r4";
 import { useState } from "react";
 import {
   createEdgesFromQuestionnaire,

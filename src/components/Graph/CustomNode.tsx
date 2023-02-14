@@ -1,32 +1,41 @@
 import { NodeProps } from "reaflow";
 import { useRef, useEffect } from "react";
-import { useContext } from "react";
+import { QuestionnaireItem } from "fhir/r4";
 
 interface CustomNodeProps extends NodeProps {
   onRender: (newHeight: number) => void;
 }
 
-export default function CustomNode(props: CustomNodeProps) {
-  const nodeContent = useRef<HTMLDivElement>(null);
+export default function CustomNode({
+  width,
+  height,
+  x,
+  y,
+  properties: nodeData,
+  onRender,
+}: CustomNodeProps) {
+  const nodeElement = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const neededHeight = nodeContent.current!.offsetHeight;
-    props.onRender(neededHeight);
+    const nodeDiv = nodeElement.current;
+    if (nodeDiv !== null) {
+      const requiredHeight = nodeDiv.offsetHeight;
+      onRender(requiredHeight);
+    }
   }, []);
 
+  const itemData: QuestionnaireItem = nodeData.data;
+
   return (
-    <foreignObject
-      width={props.width}
-      height={props.height}
-      x={props.x}
-      y={props.y}
-    >
+    <foreignObject width={width} height={height} x={x} y={y}>
       <div
-        ref={nodeContent}
+        ref={nodeElement}
         className="fixed w-full rounded border bg-white p-4"
       >
-        <h4 className="text-lg font-semibold">heading</h4>
-        {props.properties.text}
+        <div className="flex">
+          <span className="mr-2 font-semibold">{itemData.prefix}</span>
+          <p>{itemData.text}</p>
+        </div>
       </div>
     </foreignObject>
   );
