@@ -1,4 +1,5 @@
 import { QuestionnaireItem } from "fhir/r4";
+import { NodeData } from "reaflow";
 
 export function createEdgesFromQuestionnaire(item: QuestionnaireItem) {
   if (item.type === "group" && item.item !== undefined) {
@@ -18,11 +19,13 @@ export function createEdgesFromQuestionnaire(item: QuestionnaireItem) {
   return [];
 }
 
-export function createNodesFromQuestionnaire(item: QuestionnaireItem) {
+export function createNodesFromQuestionnaire(
+  item: QuestionnaireItem
+): NodeData<QuestionnaireItem>[] {
   if (item.type === "group" && item.item !== undefined) {
     return item.item.map((question) => ({
       id: question.linkId,
-      text: question.text ?? "",
+      data: question,
       width: 400,
     }));
   }
@@ -30,7 +33,7 @@ export function createNodesFromQuestionnaire(item: QuestionnaireItem) {
   return [
     {
       id: item.linkId,
-      text: item.text ?? "",
+      data: item,
       width: 400,
     },
   ];
