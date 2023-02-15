@@ -2,6 +2,7 @@ import { QuestionnaireItem } from "fhir/r4";
 import { NodeData } from "reaflow";
 
 export function createEdgesFromQuestionnaire(item: QuestionnaireItem) {
+  console.log("edges");
   if (item.type === "group" && item.item !== undefined) {
     const nestedQuestions = item.item.filter(
       (question) => question.enableWhen !== undefined
@@ -22,6 +23,7 @@ export function createEdgesFromQuestionnaire(item: QuestionnaireItem) {
 export function createNodesFromQuestionnaire(
   item: QuestionnaireItem
 ): NodeData<QuestionnaireItem>[] {
+  console.log("nodes");
   if (item.type === "group" && item.item !== undefined) {
     return item.item.map((question) => ({
       id: question.linkId,
