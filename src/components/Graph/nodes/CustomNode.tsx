@@ -38,22 +38,29 @@ export default function CustomNode({
     <foreignObject width={width} height={height} x={x} y={y}>
       <div ref={nodeElement} className="fixed w-full">
         {isForeign && (
-          <div className="text-slate rounded border border-primary bg-secondary-light px-2 py-1">
-            <FontAwesomeIcon
-              icon={faCircleInfo}
-              className="mr-1 text-primary"
-            />
-            <span>Question from: </span>
-            <a className="font-medium text-primary underline">
-              {itemData?.foreignItemGroupId}
-            </a>
-          </div>
+          <ForeignItemNotification
+            foreignItemGroupId={itemData?.foreignItemGroupId!}
+          />
         )}
         <div className="w-full rounded border border-slate-300 bg-white  p-4">
           {itemData !== undefined && <DefaultNode itemData={itemData} />}
         </div>
       </div>
     </foreignObject>
+  );
+}
+
+function ForeignItemNotification({
+  foreignItemGroupId,
+}: {
+  foreignItemGroupId: string;
+}) {
+  return (
+    <div className="text-slate rounded border border-primary bg-secondary-light px-2 py-1">
+      <FontAwesomeIcon icon={faCircleInfo} className="mr-1 text-primary" />
+      <span>Question from: </span>
+      <a className="font-medium text-primary">{foreignItemGroupId}</a>
+    </div>
   );
 }
 
