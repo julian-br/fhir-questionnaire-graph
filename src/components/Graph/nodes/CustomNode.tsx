@@ -67,8 +67,17 @@ function ForeignItemNotification({
 function DefaultNode({ itemData }: { itemData: QuestionnaireItemNodeData }) {
   return (
     <div className="w-full">
-      <span className="mr-2 font-semibold text-primary">{itemData.prefix}</span>
-      {itemData.text}
+      <p className="pb-2">
+        {itemData.prefix !== undefined && (
+          <span className="mr-2 font-semibold text-primary">
+            {itemData.prefix}
+          </span>
+        )}
+        <span>{itemData.text}</span>
+      </p>
+      <span className="p rounded-full border bg-secondary-light py-1 px-2 text-sm font-semibold text-primary">
+        {itemData.type}
+      </span>
     </div>
   );
 }
