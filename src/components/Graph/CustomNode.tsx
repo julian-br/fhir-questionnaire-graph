@@ -3,7 +3,7 @@ import { useRef, useEffect } from "react";
 import { QuestionnaireItem } from "fhir/r4";
 
 interface CustomNodeProps extends NodeProps {
-  onRender: (newHeight: number) => void;
+  onRenderToDom: (newHeight: number) => void;
 }
 
 export default function CustomNode({
@@ -12,7 +12,7 @@ export default function CustomNode({
   x,
   y,
   properties: nodeData,
-  onRender,
+  onRenderToDom,
 }: CustomNodeProps) {
   const nodeElement = useRef<HTMLDivElement>(null);
 
@@ -20,7 +20,7 @@ export default function CustomNode({
     const nodeDiv = nodeElement.current;
     if (nodeDiv !== null) {
       const requiredHeight = nodeDiv.offsetHeight;
-      onRender(requiredHeight);
+      onRenderToDom(requiredHeight);
     }
   }, []);
 
