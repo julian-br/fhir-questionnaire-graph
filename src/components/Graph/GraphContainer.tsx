@@ -1,14 +1,26 @@
 import { ReactNode } from "react";
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import {
+  TransformWrapper,
+  TransformComponent,
+  ReactZoomPanPinchRef,
+} from "react-zoom-pan-pinch";
+import { useRef, useEffect, memo } from "react";
 
 interface GraphContainerProps {
   children: ReactNode;
 }
 
 export default function GraphContainer({ children }: GraphContainerProps) {
+  const transformWrapperRef = useRef<ReactZoomPanPinchRef>(null);
+
+  useEffect(() => {
+    transformWrapperRef.current?.resetTransform();
+  }, [children]);
+
   return (
-    <div className="bg-slate-100">
+    <div className="h-full bg-slate-100">
       <TransformWrapper
+        ref={transformWrapperRef}
         wheel={{ step: 0.2 }}
         limitToBounds={false}
         doubleClick={{
