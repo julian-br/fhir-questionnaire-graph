@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant: keyof typeof variantClassMap;
   size?: keyof typeof sizeClassMap;
   children?: ReactNode;
@@ -26,7 +26,7 @@ export default function Button({
   size,
   children,
   ...reactButtonProps
-}: Props) {
+}: ButtonProps) {
   const variantClasses = variantClassMap[variant];
 
   // apply no sizing if the variant is custom

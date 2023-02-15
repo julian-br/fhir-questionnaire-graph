@@ -1,6 +1,6 @@
 import { Canvas, CanvasPosition } from "reaflow";
 import CustomNode from "./CustomNode";
-import { createContext } from "react";
+import { createContext, useEffect } from "react";
 import GraphContainer from "./GraphContainer";
 import { Questionnaire, QuestionnaireItem } from "fhir/r4";
 import { useState } from "react";
@@ -11,16 +11,25 @@ import {
 
 interface GraphProps {
   questionnaire: Questionnaire;
-  activeItemId: number;
+  activeItemId: string;
 }
 export default function Graph({ questionnaire, activeItemId }: GraphProps) {
-  const currentGroup = questionnaire.item![activeItemId];
+  const activeItem = questionnaire.item!.find(
+    (item) => item.linkId === activeItemId
+  )!;
 
-  const [nodes, setNodes] = useState(
-    createNodesFromQuestionnaire(currentGroup)
-  );
-  const edges = createEdgesFromQuestionnaire(currentGroup);
+  const [nodes, setNodes] = useState(createNodesFromQuestionnaire(activeItem));
+  const edges = createEdgesFromQuestionnaire(activeItem);
 
+  useEffect(() => {
+    const activeItem = questionnaire.item!.find(
+      (item) => item.linkId === activeItemId
+    )!;
+
+    setNodes(createNodesFromQuestionnaire(activeItem));
+  }, [activeItemId]);
+
+  console.log(nodes, activeItem);
   function updateNodeHeight(nodeId: string, newHeight: number) {
     setNodes((prevNodes) =>
       prevNodes.map((node) => {
