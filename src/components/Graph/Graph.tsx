@@ -1,4 +1,9 @@
-import { Canvas, CanvasPosition, ElkCanvasLayoutOptions } from "reaflow";
+import {
+  Canvas,
+  CanvasPosition,
+  ElkCanvasLayoutOptions,
+  ElkRoot,
+} from "reaflow";
 import CustomNode from "./CustomNode";
 import GraphContainer from "./GraphContainer";
 import { Questionnaire } from "fhir/r4";
@@ -10,21 +15,26 @@ interface GraphProps {
 }
 
 //elk layout options: https://www.eclipse.org/elk/reference/options.html
-const LAYOUT_OPTIONS = {
+const LAYOUT_OPTIONS: ElkCanvasLayoutOptions = {
   "elk.layered.considerModelOrder.strategy": "NODES_AND_EDGES",
 };
 
 export default function Graph({ questionnaire, activeItemId }: GraphProps) {
-  const { nodes, edges, updateNodeHeight } = useGraph(
-    questionnaire,
-    activeItemId
-  );
+  const { nodes, edges, updateNodeHeight, canvasSize, updateCanvasSize } =
+    useGraph(questionnaire, activeItemId);
+
+  function handleLayoutChange(root: ElkRoot) {
+    updateCanvasSize(root.width, root.height);
+  }
 
   return (
     <GraphContainer>
       <Canvas
-        zoomable={false}
+        zoomable={false} // zoom gets handled by the graph container
         fit={true}
+        onLayoutChange={handleLayoutChange}
+        maxWidth={canvasSize.width}
+        maxHeight={canvasSize.height}
         nodes={nodes}
         edges={edges}
         readonly={true}
