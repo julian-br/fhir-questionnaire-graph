@@ -6,11 +6,11 @@ import {
 } from "reaflow";
 import CustomNode from "./CustomNode";
 import GraphContainer from "./GraphContainer";
-import { Questionnaire } from "fhir/r4";
 import useGraph from "../../hooks/useGraph";
+import { FHIRQuestionnaire } from "../../fhir-questionnaire/FHIRQuestionnaire";
 
 interface GraphProps {
-  questionnaire: Questionnaire;
+  questionnaire: FHIRQuestionnaire;
   activeItemId: string;
 }
 

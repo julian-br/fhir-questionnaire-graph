@@ -1,7 +1,7 @@
-import { Questionnaire, QuestionnaireItem } from "fhir/r4";
+import { QuestionnaireItem } from "fhir/r4";
 import { EdgeData, NodeData } from "reaflow";
 import { useState, useEffect } from "react";
-import { findItemInQuestionnaire } from "../utils/questionnaireUtils";
+import { FHIRQuestionnaire } from "../fhir-questionnaire/FHIRQuestionnaire";
 
 const INITIAL_CANVAS_WIDTH = 2000;
 const INITIAL_CANVAS_HEIGHT = 2000;
@@ -9,7 +9,7 @@ const INITIAL_CANVAS_HEIGHT = 2000;
 const NODE_WIDTH = 350;
 
 export default function useGraph(
-  questionnaire: Questionnaire,
+  questionnaire: FHIRQuestionnaire,
   activeItemId: string
 ) {
   const [nodes, setNodes] = useState<NodeData<QuestionnaireItem>[]>();
@@ -20,12 +20,12 @@ export default function useGraph(
   });
 
   useEffect(() => {
-    const activeItem = questionnaire.item!.find(
-      (item) => item.linkId === activeItemId
-    )!;
+    const activeItem = questionnaire.getItemByLinkId(activeItemId);
 
-    setNodes(createNodesFromQuestionnaireItem(questionnaire, activeItem));
-    setEdges(createEdgesFromQuestionnaireItem(activeItem));
+    if (activeItem !== undefined) {
+      setNodes(createNodesFromQuestionnaireItem(questionnaire, activeItem));
+      setEdges(createEdgesFromQuestionnaireItem(activeItem));
+    }
   }, [activeItemId]);
 
   function updateNodeHeight(nodeId: string, newHeight: number) {
@@ -88,37 +88,15 @@ function createEdgesFromQuestionnaireItem(item: QuestionnaireItem): EdgeData[] {
 
 // TODO: refactor
 function createNodesFromQuestionnaireItem(
-  questionnaire: Questionnaire,
+  questionnaire: FHIRQuestionnaire,
   item: QuestionnaireItem
 ): NodeData<QuestionnaireItem>[] {
   const itemIsValidGroup = item.type === "group" && item.item !== undefined;
   if (itemIsValidGroup) {
-    const nestedItems = item.item!;
-
-    const dependendItemsDependencyLinkId = nestedItems
-      .filter((nestedItem) => nestedItem.enableWhen !== undefined)
-      .map((dependItem) => dependItem.enableWhen![0].question);
-
-    const foreignDependendItemsLinkIds = dependendItemsDependencyLinkId.filter(
-      (dependItemId) =>
-        nestedItems.find((nestedItem) => nestedItem.linkId === dependItemId) ===
-        undefined
+    const nestedItems = questionnaire.getItemsOfGroupItem(item.linkId)!;
+    const foreignItems = questionnaire.getForeignDependendItemsOfGroup(
+      item.linkId
     );
-
-    const uiqueForeignDependendItemsLinkIds = new Set(
-      foreignDependendItemsLinkIds
-    );
-    const foreignItems: QuestionnaireItem[] = [];
-    uiqueForeignDependendItemsLinkIds.forEach((foreignDependendItemId) => {
-      const item = findItemInQuestionnaire(
-        questionnaire,
-        foreignDependendItemId
-      );
-
-      if (item !== undefined) {
-        foreignItems.push(item);
-      }
-    });
 
     const foreignItemsNodes = foreignItems.map((t, index) => ({
       id: t.linkId,

@@ -5,7 +5,9 @@ import data from "../assets/fhir-questionnaire-example.json";
 import { Questionnaire } from "fhir/r4";
 import { useState } from "react";
 import QuestionnaireItemsNav from "../components/QuestionnaireItemsNav";
+import { FHIRQuestionnaire } from "../fhir-questionnaire/FHIRQuestionnaire";
 const questionnaireData = data as Questionnaire;
+const fhirQuestionnaire = new FHIRQuestionnaire(questionnaireData);
 
 export default function QuestionnaireGraphPage() {
   const [activeItemId, setActiveItemId] = useState(
@@ -27,7 +29,7 @@ export default function QuestionnaireGraphPage() {
         </SideBar>
         <div className="w-full">
           <Graph
-            questionnaire={questionnaireData}
+            questionnaire={fhirQuestionnaire}
             activeItemId={activeItemId}
           />
         </div>
