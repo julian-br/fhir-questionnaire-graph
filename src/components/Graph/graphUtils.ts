@@ -26,7 +26,7 @@ export function createNodesFromQuestionnaire(
     return item.item.map((question) => ({
       id: question.linkId,
       data: question,
-      width: 400,
+      width: 350,
     }));
   }
 
@@ -34,7 +34,7 @@ export function createNodesFromQuestionnaire(
     {
       id: item.linkId,
       data: item,
-      width: 400,
+      width: 350,
     },
   ];
 }

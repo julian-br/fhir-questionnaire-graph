@@ -1,25 +1,41 @@
 import Graph from "./components/Graph/Graph";
 import data from "./assets/fhir-questionnaire-example.json";
 import { Questionnaire } from "fhir/r4";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDiagramProject } from "@fortawesome/free-solid-svg-icons";
+import SideBar from "./components/SideBar";
 
 const questionnaireData = data as Questionnaire;
 
 function App() {
   return (
     <div className="flex h-screen flex-col overflow-hidden">
-      <h1 className="border-b py-4 text-3xl font-semibold">
-        <span className="ml-3 font-bold text-blue-600">FHIR TREE</span>
+      <h1 className="flex items-center border-b py-4 pl-3 text-3xl">
+        <div className="ml-3">
+          <FontAwesomeIcon
+            className="mt-2 h-8 text-primary"
+            icon={faDiagramProject}
+          />
+          <span className="ml-3 font-semibold">Questionnaire Tree</span>
+        </div>
       </h1>
       <div className="flex flex-grow">
-        <div className="border-slate-60 w-96 border-r">
-          <div className="pl-3 pt-5 text-2xl font-medium">Sidebar</div>
-          <div className="py-2 pl-3 ">entry</div>
-          <div className="bg-blue-500 py-2 pl-3 font-medium text-blue-50">
-            entry
+        <SideBar>
+          <div>
+            <h5 className="text-slate-900pl-5 pl-5 text-xl font-semibold">
+              Groups
+            </h5>
+            <div className="mt-2 flex-col gap-2">
+              <div className="py-2 pl-5">Gruppe 1</div>
+              <div className="bg-primary py-2 pl-5 font-semibold text-white">
+                Gruppe 2
+              </div>
+              <div className="py-2 pl-5">Gruppe 3</div>
+              <div className="py-2 pl-5">Gruppe 4</div>
+            </div>
           </div>
-          <div className="pl-3 pt-1 ">entry</div>
-        </div>
-        <div className="w-5/6">
+        </SideBar>
+        <div className="w-full">
           <Graph questionnaire={questionnaireData} activeItemId={6} />
         </div>
       </div>
