@@ -23,20 +23,25 @@ export class FHIRQuestionnaire {
     return this.data;
   }
 
+  /**
+   *
+   * @returns all root items of the questionnaire
+   */
   getAllRootItems() {
     return this.rootItems;
   }
 
+  /**
+   *
+   * @returns the item matching the linkId | undefined if the item does not exits
+   */
   getItemByLinkId(itemLinkId: string) {
     return this.itemsMap.get(itemLinkId);
   }
 
-  getItemsOfGroupItem(groupItemLinkId: string) {
+  getNestedItems(groupItemLinkId: string) {
     const item = this.getItemByLinkId(groupItemLinkId);
     if (item?.type !== "group") {
-      console.warn(
-        `the passed item with the linkId ${groupItemLinkId} is no group.`
-      );
       return [];
     }
     return item.item!;
@@ -50,7 +55,7 @@ export class FHIRQuestionnaire {
     return item.item!.filter((item) => item.enableWhen !== undefined);
   }
 
-  getForeignDependendItemsOfGroup(groupItemLinkId: string) {
+  getForeignDependendNestedItems(groupItemLinkId: string) {
     if (!this.itemIsGroupItem(groupItemLinkId)) {
       return [];
     }
@@ -73,28 +78,21 @@ export class FHIRQuestionnaire {
     return Array.from(uniqueForeignItems.values());
   }
 
-  private itemBelongsToGroup(
-    dependencyLinkId: string,
-    groupItemLinkId: string
-  ) {
+  private itemBelongsToGroup(itemLinkId: string, groupItemLinkId: string) {
     if (!this.itemIsGroupItem(groupItemLinkId)) {
       return false;
     }
-    const allNestedItems = this.getItemsOfGroupItem(groupItemLinkId);
+    const allNestedItems = this.getNestedItems(groupItemLinkId);
 
     return (
-      allNestedItems.find(
-        (nestedItem) => nestedItem.linkId === dependencyLinkId
-      ) !== undefined
+      allNestedItems.find((nestedItem) => nestedItem.linkId === itemLinkId) !==
+      undefined
     );
   }
 
   private itemIsGroupItem(itemLinkId: string) {
     const item = this.getItemByLinkId(itemLinkId);
     if (item?.type !== "group") {
-      console.warn(
-        `the passed item with the linkId ${itemLinkId} is no groupItem`
-      );
       return false;
     }
     return true;

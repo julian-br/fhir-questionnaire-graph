@@ -32,10 +32,10 @@ export default function CustomNode({
         ref={nodeElement}
         className="fixed w-full rounded border bg-white p-4"
       >
-        <div className="flex">
+        <p>
           <span className="mr-2 font-semibold">{itemData.prefix}</span>
-          <p>{itemData.text}</p>
-        </div>
+          {itemData.text}
+        </p>
       </div>
     </foreignObject>
   );
