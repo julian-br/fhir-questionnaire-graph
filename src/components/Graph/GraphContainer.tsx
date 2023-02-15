@@ -11,10 +11,11 @@ export default function GraphContainer({ children }: GraphContainerProps) {
       <TransformWrapper
         wheel={{ step: 0.2 }}
         limitToBounds={false}
-        panning={{ velocityDisabled: true }}
         doubleClick={{
           disabled: true,
         }}
+        minScale={0.6}
+        maxScale={1.5}
       >
         <TransformComponent
           wrapperStyle={{
