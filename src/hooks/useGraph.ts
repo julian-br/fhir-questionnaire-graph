@@ -1,9 +1,12 @@
 import { Questionnaire, QuestionnaireItem } from "fhir/r4";
 import { EdgeData, NodeData } from "reaflow";
 import { useState, useEffect } from "react";
+import { findItemInQuestionnaire } from "../utils/questionnaireUtils";
 
 const INITIAL_CANVAS_WIDTH = 2000;
 const INITIAL_CANVAS_HEIGHT = 2000;
+
+const NODE_WIDTH = 350;
 
 export default function useGraph(
   questionnaire: Questionnaire,
@@ -21,7 +24,7 @@ export default function useGraph(
       (item) => item.linkId === activeItemId
     )!;
 
-    setNodes(createNodesFromQuestionnaireItem(activeItem));
+    setNodes(createNodesFromQuestionnaireItem(questionnaire, activeItem));
     setEdges(createEdgesFromQuestionnaireItem(activeItem));
   }, [activeItemId]);
 
@@ -63,17 +66,19 @@ export default function useGraph(
   };
 }
 
-function createEdgesFromQuestionnaireItem(item: QuestionnaireItem) {
-  if (item.type === "group" && item.item !== undefined) {
-    const nestedQuestions = item.item.filter(
+function createEdgesFromQuestionnaireItem(item: QuestionnaireItem): EdgeData[] {
+  const itemIsValidGroup = item.type === "group" && item.item !== undefined;
+  if (itemIsValidGroup) {
+    const nestedItems = item.item!;
+    const dependendItems = nestedItems.filter(
       (question) => question.enableWhen !== undefined
     );
 
-    return nestedQuestions.map((nestedQuestion) => {
+    return dependendItems.map((dependendItem) => {
       return {
-        id: nestedQuestion.linkId,
-        from: nestedQuestion.enableWhen![0].question,
-        to: nestedQuestion.linkId,
+        id: dependendItem.linkId,
+        from: dependendItem.enableWhen![0].question,
+        to: dependendItem.linkId,
       };
     });
   }
@@ -81,22 +86,64 @@ function createEdgesFromQuestionnaireItem(item: QuestionnaireItem) {
   return [];
 }
 
+// TODO: refactor
 function createNodesFromQuestionnaireItem(
+  questionnaire: Questionnaire,
   item: QuestionnaireItem
 ): NodeData<QuestionnaireItem>[] {
-  if (item.type === "group" && item.item !== undefined) {
-    return item.item.map((question) => ({
-      id: question.linkId,
-      data: question,
-      width: 350,
+  const itemIsValidGroup = item.type === "group" && item.item !== undefined;
+  if (itemIsValidGroup) {
+    const nestedItems = item.item!;
+
+    const dependendItemsDependencyLinkId = nestedItems
+      .filter((nestedItem) => nestedItem.enableWhen !== undefined)
+      .map((dependItem) => dependItem.enableWhen![0].question);
+
+    const foreignDependendItemsLinkIds = dependendItemsDependencyLinkId.filter(
+      (dependItemId) =>
+        nestedItems.find((nestedItem) => nestedItem.linkId === dependItemId) ===
+        undefined
+    );
+
+    console.log(foreignDependendItemsLinkIds);
+
+    const uiqueForeignDependendItemsLinkIds = new Set(
+      foreignDependendItemsLinkIds
+    );
+    const foreignItems: QuestionnaireItem[] = [];
+    uiqueForeignDependendItemsLinkIds.forEach((foreignDependendItemId) => {
+      const item = findItemInQuestionnaire(
+        questionnaire,
+        foreignDependendItemId
+      );
+
+      if (item !== undefined) {
+        foreignItems.push(item);
+      }
+    });
+
+    console.log(foreignItems);
+
+    const foreignItemsNodes = foreignItems.map((t, index) => ({
+      id: t.linkId,
+      data: t,
+      width: NODE_WIDTH,
     }));
+
+    const nestedItemsNodes = nestedItems.map((nestedItems) => ({
+      id: nestedItems.linkId,
+      data: nestedItems,
+      width: NODE_WIDTH,
+    }));
+
+    return [...nestedItemsNodes, ...foreignItemsNodes];
   }
 
   return [
     {
       id: item.linkId,
       data: item,
-      width: 350,
+      width: NODE_WIDTH,
     },
   ];
 }
