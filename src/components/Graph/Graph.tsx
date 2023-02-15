@@ -4,7 +4,7 @@ import {
   ElkCanvasLayoutOptions,
   ElkRoot,
 } from "reaflow";
-import CustomNode from "./CustomNode";
+import CustomNode from "./nodes/CustomNode";
 import GraphContainer from "./GraphContainer";
 import useGraph from "../../hooks/useGraph";
 import { FHIRQuestionnaire } from "../../fhir-questionnaire/FHIRQuestionnaire";

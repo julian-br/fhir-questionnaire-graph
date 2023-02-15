@@ -33,43 +33,42 @@ export class FHIRQuestionnaire {
 
   /**
    *
-   * @returns the item matching the linkId | undefined if the item does not exits
+   * @returns the item matching the Id | undefined if the item does not exits
    */
-  getItemByLinkId(itemLinkId: string) {
-    return this.itemsMap.get(itemLinkId);
+  getItemById(itemId: string) {
+    return this.itemsMap.get(itemId);
   }
 
-  getNestedItems(groupItemLinkId: string) {
-    const item = this.getItemByLinkId(groupItemLinkId);
+  getNestedItems(groupId: string) {
+    const item = this.getItemById(groupId);
     if (item?.type !== "group") {
       return [];
     }
     return item.item!;
   }
 
-  getNestedItemsWithDependency(groupItemLinkId: string) {
-    if (!this.itemIsGroupItem(groupItemLinkId)) {
+  getNestedItemsWithDependency(groupId: string) {
+    if (!this.itemIsGroup(groupId)) {
       return [];
     }
-    const item = this.getItemByLinkId(groupItemLinkId)!;
+    const item = this.getItemById(groupId)!;
     return item.item!.filter((item) => item.enableWhen !== undefined);
   }
 
-  getForeignDependendNestedItems(groupItemLinkId: string) {
-    if (!this.itemIsGroupItem(groupItemLinkId)) {
+  getForeignDependendNestedItems(groupId: string) {
+    if (!this.itemIsGroup(groupId)) {
       return [];
     }
-    const itemsWithDependency =
-      this.getNestedItemsWithDependency(groupItemLinkId);
+    const itemsWithDependency = this.getNestedItemsWithDependency(groupId);
     const uniqueForeignItems = new Set<QuestionnaireItem>();
 
     itemsWithDependency.forEach((item) => {
       const dependencyId = item.enableWhen![0].question;
       const dependencyIsForeign = !this.itemBelongsToGroup(
         dependencyId,
-        groupItemLinkId
+        groupId
       );
-      const dependencyItem = this.getItemByLinkId(dependencyId);
+      const dependencyItem = this.getItemById(dependencyId);
       if (dependencyIsForeign && dependencyItem !== undefined) {
         uniqueForeignItems.add(dependencyItem);
       }
@@ -78,20 +77,33 @@ export class FHIRQuestionnaire {
     return Array.from(uniqueForeignItems.values());
   }
 
-  private itemBelongsToGroup(itemLinkId: string, groupItemLinkId: string) {
-    if (!this.itemIsGroupItem(groupItemLinkId)) {
+  getGroupIdOfItem(itemId: string) {
+    for (const rootItem of this.rootItems) {
+      if (this.itemIsGroup(rootItem.linkId)) {
+        for (const nestedItem of rootItem.item!) {
+          if (nestedItem.linkId === itemId) {
+            return nestedItem.linkId;
+          }
+        }
+      }
+    }
+    return itemId;
+  }
+
+  private itemBelongsToGroup(itemId: string, groupId: string) {
+    if (!this.itemIsGroup(groupId)) {
       return false;
     }
-    const allNestedItems = this.getNestedItems(groupItemLinkId);
+    const allNestedItems = this.getNestedItems(groupId);
 
     return (
-      allNestedItems.find((nestedItem) => nestedItem.linkId === itemLinkId) !==
+      allNestedItems.find((nestedItem) => nestedItem.linkId === itemId) !==
       undefined
     );
   }
 
-  private itemIsGroupItem(itemLinkId: string) {
-    const item = this.getItemByLinkId(itemLinkId);
+  private itemIsGroup(itemId: string) {
+    const item = this.getItemById(itemId);
     if (item?.type !== "group") {
       return false;
     }

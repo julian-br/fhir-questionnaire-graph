@@ -2,6 +2,7 @@ import { QuestionnaireItem } from "fhir/r4";
 import { EdgeData, NodeData } from "reaflow";
 import { useState, useEffect } from "react";
 import { FHIRQuestionnaire } from "../fhir-questionnaire/FHIRQuestionnaire";
+import { QuestionnaireItemNodeData } from "../components/Graph/nodes/CustomNode";
 
 const INITIAL_CANVAS_WIDTH = 2000;
 const INITIAL_CANVAS_HEIGHT = 2000;
@@ -20,7 +21,7 @@ export default function useGraph(
   });
 
   useEffect(() => {
-    const activeItem = questionnaire.getItemByLinkId(activeItemId);
+    const activeItem = questionnaire.getItemById(activeItemId);
 
     if (activeItem !== undefined) {
       setNodes(createNodes(questionnaire, activeItemId));
@@ -66,21 +67,21 @@ export default function useGraph(
   };
 }
 
-function createNodes(
-  questionnaire: FHIRQuestionnaire,
-  itemLinkId: string
-): NodeData<QuestionnaireItem>[] {
+function createNodes(questionnaire: FHIRQuestionnaire, itemLinkId: string) {
   const nestedItems = questionnaire.getNestedItems(itemLinkId);
 
   if (nestedItems.length === 0) {
-    const item = questionnaire.getItemByLinkId(itemLinkId);
+    const item = questionnaire.getItemById(itemLinkId);
     return [createNodeFromItem(item!)];
   }
 
   const foreignItems = questionnaire.getForeignDependendNestedItems(itemLinkId);
-  const foreignItemsNodes = foreignItems.map((foreignItem) =>
-    createNodeFromItem(foreignItem, true)
-  );
+  const foreignItemsNodes = foreignItems.map((foreignItem) => {
+    const foreignItemGroupId = questionnaire.getGroupIdOfItem(
+      foreignItem.linkId
+    );
+    return createNodeFromItem(foreignItem, true, foreignItemGroupId);
+  });
 
   const nestedItemsNodes = nestedItems.map((nestedItem) =>
     createNodeFromItem(nestedItem)
@@ -91,11 +92,17 @@ function createNodes(
 
 function createNodeFromItem(
   item: QuestionnaireItem,
-  isForeign: boolean = false
-) {
+  isForeign: boolean = false,
+  foreignItemGroupId?: string
+): NodeData<QuestionnaireItemNodeData> {
+  console.log(foreignItemGroupId);
   return {
     id: item.linkId,
-    data: item,
+    data: {
+      ...item,
+      isForeign,
+      foreignItemGroupId,
+    },
     width: NODE_WIDTH,
   };
 }
