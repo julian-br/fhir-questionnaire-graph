@@ -1,20 +1,28 @@
 import { QuestionnaireItem } from "fhir/r4";
+import { useLocation, useRoute } from "wouter";
+import { encodeURLParam } from "../utils/urlParam";
 import Button from "./common/Button";
 
 interface QuestionnaireItemsNavProps {
   items: QuestionnaireItem[];
   activeItemId: string;
   className?: string;
-  onItemClick: (itemId: string) => void;
 }
 
 export default function QuestionnaireItemsNav({
   items,
   activeItemId,
-  onItemClick,
   className,
 }: QuestionnaireItemsNavProps) {
+  const [, setLocation] = useLocation();
+  const [, params] = useRoute("/graph/:questionnaireId/:itemLinkId");
   const amountOfItems = items.length;
+
+  function changeLocation(itemLinkId: string) {
+    setLocation(
+      `/graph/${params?.questionnaireId}/${encodeURLParam(itemLinkId)}`
+    );
+  }
 
   return (
     <nav className={className}>
@@ -23,7 +31,7 @@ export default function QuestionnaireItemsNav({
         {items.map((item) => (
           <QuestionnaireItemsNavEntry
             key={item.linkId}
-            onClick={() => onItemClick(item.linkId)}
+            onClick={() => changeLocation(item.linkId)}
             isActive={item.linkId === activeItemId}
             prefix={item.prefix ?? ""}
             title={item.linkId}

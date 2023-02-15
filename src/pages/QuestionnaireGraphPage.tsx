@@ -3,17 +3,18 @@ import Navbar from "../components/Navbar";
 import SideBar from "../components/SideBar";
 import data from "../assets/fhir-questionnaire-example.json";
 import { Questionnaire } from "fhir/r4";
-import { useState } from "react";
 import QuestionnaireItemsNav from "../components/QuestionnaireItemsNav";
 import { FHIRQuestionnaire } from "../fhir-questionnaire/FHIRQuestionnaire";
 const questionnaireData = data as Questionnaire;
 const fhirQuestionnaire = new FHIRQuestionnaire(questionnaireData);
 
-export default function QuestionnaireGraphPage() {
-  const [activeItemId, setActiveItemId] = useState(
-    questionnaireData.item![0].linkId
-  );
-
+export default function QuestionnaireGraphPage({
+  questionnaireId,
+  itemLinkId,
+}: {
+  questionnaireId: string;
+  itemLinkId: string;
+}) {
   return (
     <>
       <Navbar />
@@ -21,17 +22,13 @@ export default function QuestionnaireGraphPage() {
         <SideBar>
           <div>
             <QuestionnaireItemsNav
-              onItemClick={(clickedItemId) => setActiveItemId(clickedItemId)}
               items={questionnaireData.item!}
-              activeItemId={activeItemId}
+              activeItemId={itemLinkId}
             />
           </div>
         </SideBar>
         <div className="w-full">
-          <Graph
-            questionnaire={fhirQuestionnaire}
-            activeItemId={activeItemId}
-          />
+          <Graph questionnaire={fhirQuestionnaire} activeItemId={itemLinkId} />
         </div>
       </main>
     </>

@@ -13,21 +13,22 @@ export default function useGraph(
   questionnaire: FHIRQuestionnaire,
   activeItemId: string
 ) {
-  const [nodes, setNodes] = useState<NodeData<QuestionnaireItem>[]>();
-  const [edges, setEdges] = useState<EdgeData[]>();
+  const [nodes, setNodes] = useState<NodeData<QuestionnaireItem>[]>(
+    createNodes(questionnaire, activeItemId)
+  );
+  const [edges, setEdges] = useState<EdgeData[]>(
+    createEdges(questionnaire, activeItemId)
+  );
+
+  useEffect(() => {
+    setNodes(createNodes(questionnaire, activeItemId));
+    setEdges(createEdges(questionnaire, activeItemId));
+  }, [questionnaire, activeItemId]);
+
   const [canvasSize, setCanvasSize] = useState({
     width: INITIAL_CANVAS_WIDTH,
     height: INITIAL_CANVAS_HEIGHT,
   });
-
-  useEffect(() => {
-    const activeItem = questionnaire.getItemById(activeItemId);
-
-    if (activeItem !== undefined) {
-      setNodes(createNodes(questionnaire, activeItemId));
-      setEdges(createEdges(questionnaire, activeItemId));
-    }
-  }, [activeItemId]);
 
   function updateNodeHeight(nodeId: string, newHeight: number) {
     setNodes((prevNodes) =>
@@ -95,7 +96,6 @@ function createNodeFromItem(
   isForeign: boolean = false,
   foreignItemGroupId?: string
 ): NodeData<QuestionnaireItemNodeData> {
-  console.log(foreignItemGroupId);
   return {
     id: item.linkId,
     data: {
