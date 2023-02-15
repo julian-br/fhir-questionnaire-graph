@@ -105,8 +105,6 @@ function createNodesFromQuestionnaireItem(
         undefined
     );
 
-    console.log(foreignDependendItemsLinkIds);
-
     const uiqueForeignDependendItemsLinkIds = new Set(
       foreignDependendItemsLinkIds
     );
@@ -121,8 +119,6 @@ function createNodesFromQuestionnaireItem(
         foreignItems.push(item);
       }
     });
-
-    console.log(foreignItems);
 
     const foreignItemsNodes = foreignItems.map((t, index) => ({
       id: t.linkId,
