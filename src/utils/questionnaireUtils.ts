@@ -8,23 +8,8 @@ export function findItemInQuestionnaire(
     return undefined;
   }
 
-  for (const item of questionnaire.item) {
-    const result = findItemInItem(item, itemLinkId);
-    if (result !== undefined) {
-      return result;
-    }
-  }
-}
-
-function findItemInItem(item: QuestionnaireItem, itemLinkId: string) {
-  if (item.linkId === itemLinkId) {
-    return item;
-  }
-
-  const subGroups = item.item;
-  if (subGroups !== undefined) {
-    for (const item of subGroups) {
-      findItemInItem(item, itemLinkId);
-    }
-  }
+  const allItemsFlatMap = questionnaire.item.flatMap(
+    (item) => item.item ?? item
+  );
+  return allItemsFlatMap.find((item) => item?.linkId === itemLinkId);
 }
