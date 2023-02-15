@@ -9,7 +9,6 @@ const questionnaireData = data as Questionnaire;
 const fhirQuestionnaire = new FHIRQuestionnaire(questionnaireData);
 
 export default function QuestionnaireGraphPage({
-  questionnaireId,
   itemLinkId,
 }: {
   questionnaireId: string;

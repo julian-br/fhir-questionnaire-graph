@@ -4,7 +4,7 @@ import {
   TransformComponent,
   ReactZoomPanPinchRef,
 } from "react-zoom-pan-pinch";
-import { useRef, useEffect, memo } from "react";
+import { useRef, useEffect } from "react";
 
 interface GraphContainerProps {
   children: ReactNode;
