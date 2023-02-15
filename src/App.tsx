@@ -1,6 +1,7 @@
 import QuestionnaireGraphPage from "./pages/QuestionnaireGraphPage";
 import { Route } from "wouter";
 import IndexPage from "./pages/IndexPage";
+import { decodeURLParam } from "./utils/urlParam";
 
 function App() {
   return (
@@ -8,8 +9,13 @@ function App() {
       <Route path="">
         <IndexPage />
       </Route>
-      <Route path="/graph">
-        <QuestionnaireGraphPage />
+      <Route path="/graph/:questionnaireId/:itemLinkId">
+        {(params: { questionnaireId: string; itemLinkId: string }) => (
+          <QuestionnaireGraphPage
+            questionnaireId={decodeURLParam(params.questionnaireId)}
+            itemLinkId={decodeURLParam(params.itemLinkId)}
+          />
+        )}
       </Route>
     </div>
   );
