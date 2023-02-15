@@ -30,10 +30,12 @@ export default function CustomNode({
     <foreignObject width={width} height={height} x={x} y={y}>
       <div
         ref={nodeElement}
-        className="fixed w-full rounded border bg-white p-4"
+        className="fixed w-full rounded border border-slate-300 bg-white p-4"
       >
         <p>
-          <span className="mr-2 font-semibold">{itemData.prefix}</span>
+          <span className="mr-2 font-semibold text-primary">
+            {itemData.prefix}
+          </span>
           {itemData.text}
         </p>
       </div>

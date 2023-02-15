@@ -18,15 +18,14 @@ export default function QuestionnaireItemsNav({
 
   return (
     <nav className={className}>
-      <h3 className="ml-5 mb-3 text-xl font-medium">
-        Groups ({amountOfItems})
-      </h3>
+      <h3 className="ml-5 mb-3 text-xl font-medium">Items ({amountOfItems})</h3>
       <div className="flex h-[700px] flex-col overflow-auto">
         {items.map((item) => (
-          <NavEntry
+          <QuestionnaireItemsNavEntry
             key={item.linkId}
             onClick={() => onItemClick(item.linkId)}
             isActive={item.linkId === activeItemId}
+            prefix={item.prefix ?? ""}
             title={item.linkId}
           />
         ))}
@@ -35,14 +34,16 @@ export default function QuestionnaireItemsNav({
   );
 }
 
-function NavEntry({
+function QuestionnaireItemsNavEntry({
   title,
   isActive,
   onClick,
+  prefix,
 }: {
   title: string;
   isActive: boolean;
   onClick: () => void;
+  prefix: string;
 }) {
   return (
     <Button
@@ -54,7 +55,10 @@ function NavEntry({
           : "hover:bg-secondary-light hover:text-primary"
       }`}
     >
-      {title}
+      <p>
+        <strong className="mr-2">{prefix}</strong>
+        {title}
+      </p>
     </Button>
   );
 }
