@@ -23,8 +23,8 @@ export default function useGraph(
     const activeItem = questionnaire.getItemByLinkId(activeItemId);
 
     if (activeItem !== undefined) {
-      setNodes(createNodesFromQuestionnaireItem(questionnaire, activeItem));
-      setEdges(createEdgesFromQuestionnaireItem(activeItem));
+      setNodes(createNodes(questionnaire, activeItemId));
+      setEdges(createEdges(questionnaire, activeItemId));
     }
   }, [activeItemId]);
 
@@ -66,58 +66,52 @@ export default function useGraph(
   };
 }
 
-function createEdgesFromQuestionnaireItem(item: QuestionnaireItem): EdgeData[] {
-  const itemIsValidGroup = item.type === "group" && item.item !== undefined;
-  if (itemIsValidGroup) {
-    const nestedItems = item.item!;
-    const dependendItems = nestedItems.filter(
-      (question) => question.enableWhen !== undefined
-    );
+function createNodes(
+  questionnaire: FHIRQuestionnaire,
+  itemLinkId: string
+): NodeData<QuestionnaireItem>[] {
+  const nestedItems = questionnaire.getNestedItems(itemLinkId);
 
-    return dependendItems.map((dependendItem) => {
-      return {
-        id: dependendItem.linkId,
-        from: dependendItem.enableWhen![0].question,
-        to: dependendItem.linkId,
-      };
-    });
+  if (nestedItems.length === 0) {
+    const item = questionnaire.getItemByLinkId(itemLinkId);
+    return [createNodeFromItem(item!)];
   }
 
-  return [];
+  const foreignItems = questionnaire.getForeignDependendNestedItems(itemLinkId);
+  const foreignItemsNodes = foreignItems.map((foreignItem) =>
+    createNodeFromItem(foreignItem, true)
+  );
+
+  const nestedItemsNodes = nestedItems.map((nestedItem) =>
+    createNodeFromItem(nestedItem)
+  );
+
+  return [...nestedItemsNodes, ...foreignItemsNodes];
 }
 
-// TODO: refactor
-function createNodesFromQuestionnaireItem(
+function createNodeFromItem(
+  item: QuestionnaireItem,
+  isForeign: boolean = false
+) {
+  return {
+    id: item.linkId,
+    data: item,
+    width: NODE_WIDTH,
+  };
+}
+
+function createEdges(
   questionnaire: FHIRQuestionnaire,
-  item: QuestionnaireItem
-): NodeData<QuestionnaireItem>[] {
-  const itemIsValidGroup = item.type === "group" && item.item !== undefined;
-  if (itemIsValidGroup) {
-    const nestedItems = questionnaire.getItemsOfGroupItem(item.linkId)!;
-    const foreignItems = questionnaire.getForeignDependendItemsOfGroup(
-      item.linkId
-    );
+  itemLinkId: string
+): EdgeData[] {
+  const nestedItemsWithDependency =
+    questionnaire.getNestedItemsWithDependency(itemLinkId);
 
-    const foreignItemsNodes = foreignItems.map((t, index) => ({
-      id: t.linkId,
-      data: t,
-      width: NODE_WIDTH,
-    }));
-
-    const nestedItemsNodes = nestedItems.map((nestedItems) => ({
-      id: nestedItems.linkId,
-      data: nestedItems,
-      width: NODE_WIDTH,
-    }));
-
-    return [...nestedItemsNodes, ...foreignItemsNodes];
-  }
-
-  return [
-    {
-      id: item.linkId,
-      data: item,
-      width: NODE_WIDTH,
-    },
-  ];
+  return nestedItemsWithDependency.map((itemWithDependency) => {
+    return {
+      id: itemWithDependency.linkId,
+      from: itemWithDependency.enableWhen![0].question,
+      to: itemWithDependency.linkId,
+    };
+  });
 }
