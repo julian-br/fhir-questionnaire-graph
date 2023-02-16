@@ -1,6 +1,6 @@
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { QuestionnaireItem } from "fhir/r4";
+import { QuestionnaireItem, QuestionnaireItemAnswerOption } from "fhir/r4";
 import { Handle, Position, NodeProps } from "reactflow";
 import NodeContainer from "./NodeContainer";
 
@@ -12,9 +12,7 @@ interface NodeDataItem {
   itemData: QuestionnaireItem;
 }
 
-interface NodeDataAnswerOption {
-  test: string;
-}
+interface NodeDataAnswerOption extends QuestionnaireItemAnswerOption {}
 
 export function DefaultNode({ data }: NodeProps<NodeDataItem>) {
   const itemData = data.itemData;

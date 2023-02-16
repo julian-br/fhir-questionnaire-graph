@@ -59,7 +59,7 @@ export class FHIRQuestionnaire {
     return item.item!.filter((item) => item.enableWhen !== undefined);
   }
 
-  getForeignDependendNestedItems(groupId: string) {
+  getForeignItems(groupId: string) {
     if (!this.itemIsGroup(groupId)) {
       return [];
     }
