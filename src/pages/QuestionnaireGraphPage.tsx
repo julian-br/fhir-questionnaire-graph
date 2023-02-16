@@ -27,7 +27,6 @@ export default function QuestionnaireGraphPage({
           </div>
         </SideBar>
         <div className="w-full">
-          {/* <Graph questionnaire={fhirQuestionnaire} activeItemId={itemLinkId} /> */}
           <Flow
             questionnaire={fhirQuestionnaire}
             activeItemId={itemLinkId}

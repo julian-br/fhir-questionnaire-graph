@@ -31,7 +31,9 @@ export function calcGraphLayout(nodes: Node[], edges: Edge[]): Layout {
     const nodeWithPosition = dagreGraph.node(node.id);
 
     if (!node.width || !node.height) {
-      throw new Error();
+      throw new Error(
+        `node with the id ${node.id} has no set width and height`
+      );
     }
 
     // We are shifting the dagre node position (anchor=center center) to the top left

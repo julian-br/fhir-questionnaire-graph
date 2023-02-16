@@ -1,19 +1,12 @@
 import { useEffect, useMemo } from "react";
 import ReactFlow, {
   ConnectionLineType,
-  useNodesState,
-  useEdgesState,
   useNodes,
   useEdges,
   useNodesInitialized,
-  Handle,
-  Position,
-  Edge,
 } from "reactflow";
 import "reactflow/dist/style.css";
-import { initialNodes, initialEdges } from "./nodes-edges";
-import { calcGraphLayout } from "./calcGraphLayout";
-import { createEdges, createNodes } from "./calcFlowNodes";
+import { calcGraphLayout, Layout } from "./calcGraphLayout";
 import { FHIRQuestionnaire } from "../../fhir-questionnaire/FHIRQuestionnaire";
 import { CustomNode } from "./nodes/CustomNode";
 import useGraph from "../../hooks/useGraph";
