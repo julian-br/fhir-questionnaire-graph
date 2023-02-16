@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import ReactFlow, {
   ConnectionLineType,
   useNodes,
   useEdges,
   useNodesInitialized,
+  ReactFlowInstance,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { calcGraphLayout, Layout } from "../calcGraphLayout";
@@ -23,10 +24,21 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
     activeItemId
   );
 
+  const reactFlowInstanceRef = useRef<ReactFlowInstance | null>(null);
+
+  function resetViewPort() {
+    if (reactFlowInstanceRef.current !== null) {
+      reactFlowInstanceRef.current.setViewport({ x: 0, y: 0, zoom: 1 });
+    }
+  }
+
   return (
     <div className={`h-full w-full bg-slate-50`}>
       <ReactFlow
-        className={`${isLayouted ? "opacity-100" : "opacity-0"}`} // prevent flickering
+        className={`${isLayouted ? "opacity-100" : "opacity-0"}`} // prevent flickering when layouting
+        onInit={(reactFlowInstance) => {
+          reactFlowInstanceRef.current = reactFlowInstance;
+        }}
         nodeTypes={nodeTypes}
         nodes={nodes}
         edges={edges}
@@ -36,7 +48,12 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
         nodesConnectable={false}
         edgesFocusable={false}
       >
-        <Layouter onLayout={setLayout} />
+        <Layouter
+          onLayout={(newLayout) => {
+            setLayout(newLayout);
+            resetViewPort();
+          }}
+        />
       </ReactFlow>
     </div>
   );
