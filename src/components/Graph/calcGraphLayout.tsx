@@ -7,7 +7,7 @@ export function calcGraphLayout(nodes: any[], edges: any[]) {
   dagreGraph.setGraph({ rankdir: "LR" });
 
   nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, { width: 200, height: node.height });
+    dagreGraph.setNode(node.id, { width: 350, height: node.height });
   });
 
   edges.forEach((edge) => {

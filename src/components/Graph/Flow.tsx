@@ -8,13 +8,29 @@ import ReactFlow, {
   useNodesInitialized,
 } from "reactflow";
 import "reactflow/dist/style.css";
-
 import { initialNodes, initialEdges } from "./nodes-edges";
 import { calcGraphLayout } from "./calcGraphLayout";
+import { createEdges, createNodes } from "./calcFlowNodes";
+import { FHIRQuestionnaire } from "../../fhir-questionnaire/FHIRQuestionnaire";
 
-export default function Flow() {
-  const [nodes, setNodes] = useNodesState(initialNodes);
-  const [edges] = useEdgesState(initialEdges);
+interface GraphProps {
+  questionnaire: FHIRQuestionnaire;
+  activeItemId: string;
+}
+
+export default function Flow({ questionnaire, activeItemId }: GraphProps) {
+  const [nodes, setNodes] = useNodesState(
+    createNodes(questionnaire, activeItemId)
+  );
+  const [edges, setEdges] = useEdgesState(
+    createEdges(questionnaire, activeItemId)
+  );
+
+  useEffect(() => {
+    console.log(createNodes(questionnaire, activeItemId));
+    setNodes(createNodes(questionnaire, activeItemId));
+    setEdges(createEdges(questionnaire, activeItemId));
+  }, [activeItemId]);
 
   return (
     <div className="relative h-full flex-grow">
@@ -28,7 +44,9 @@ export default function Flow() {
         nodesConnectable={false}
         edgesFocusable={false}
       >
-        <NodeLayouter onLayout={(layoutedNodes) => setNodes(layoutedNodes)} />
+        <NodeLayouter
+          onLayout={(layoutedNodes) => setNodes(layoutedNodes as any)}
+        />
       </ReactFlow>
     </div>
   );
