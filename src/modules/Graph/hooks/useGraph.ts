@@ -1,34 +1,28 @@
 import { QuestionnaireItem } from "fhir/r4";
 import { useEffect, useState } from "react";
 import { FHIRQuestionnaire } from "../../../fhir-questionnaire/FHIRQuestionnaire";
-import {
-  Edge,
-  Node,
-  useEdgesState,
-  useNodesInitialized,
-  useNodesState,
-} from "reactflow";
-import { Layout } from "../calcGraphLayout";
+import { Edge, useEdgesState, useNodesState } from "reactflow";
+import { Layout } from "../utils/calcGraphLayout";
 import { NodeData } from "../components/CustomNode";
-
-const NODE_WIDTH = 350;
+import { createNodesFromQuestionnaire } from "../utils/createNodesFromQuestionnaire";
+import { createEdgesFromQuestionnaire } from "../utils/createEdgesFromQuestionnaire";
 
 export default function useGraph(
   questionnaire: FHIRQuestionnaire,
   activeItemId: string
 ) {
   const [nodes, setNodes] = useNodesState<NodeData>(
-    createNodes(questionnaire, activeItemId)
+    createNodesFromQuestionnaire(questionnaire, activeItemId)
   );
   const [edges, setEdges] = useEdgesState<Edge>(
-    createEdges(questionnaire, activeItemId)
+    createEdgesFromQuestionnaire(questionnaire, activeItemId)
   );
   const [isLayouted, setIsLayouted] = useState(false);
 
   useEffect(() => {
     setIsLayouted(false);
-    setNodes(createNodes(questionnaire, activeItemId));
-    setEdges(createEdges(questionnaire, activeItemId));
+    setNodes(createNodesFromQuestionnaire(questionnaire, activeItemId));
+    setEdges(createEdgesFromQuestionnaire(questionnaire, activeItemId));
   }, [activeItemId, questionnaire]);
 
   function setLayout(layout: Layout) {
@@ -43,68 +37,4 @@ export default function useGraph(
     setLayout,
     isLayouted,
   };
-}
-
-export function createNodes(
-  questionnaire: FHIRQuestionnaire,
-  itemLinkId: string
-) {
-  const nestedItems = questionnaire.getNestedItems(itemLinkId);
-
-  if (nestedItems.length === 0) {
-    const item = questionnaire.getItemById(itemLinkId);
-    return [createNodeFromItem(item!)];
-  }
-
-  const foreignItems = questionnaire.getForeignDependendNestedItems(itemLinkId);
-  const foreignItemsNodes = foreignItems.map((foreignItem) => {
-    const foreignItemGroupId = questionnaire.getGroupIdOfItem(
-      foreignItem.linkId
-    );
-    return createNodeFromItem(foreignItem, true, foreignItemGroupId);
-  });
-
-  const nestedItemsNodes = nestedItems.map((nestedItem) =>
-    createNodeFromItem(nestedItem)
-  );
-
-  return [...nestedItemsNodes, ...foreignItemsNodes];
-}
-
-function createNodeFromItem(
-  item: QuestionnaireItem,
-  isForeign: boolean = false,
-  foreignItemGroupId?: string
-): Node<NodeData> {
-  return {
-    id: item.linkId,
-    width: NODE_WIDTH,
-    data: {
-      isForeign,
-      foreignItemGroupId,
-      itemData: item,
-    },
-    type: "custom",
-    position: {
-      x: NaN,
-      y: NaN,
-    },
-  };
-}
-
-export function createEdges(
-  questionnaire: FHIRQuestionnaire,
-  itemLinkId: string
-) {
-  const nestedItemsWithDependency =
-    questionnaire.getNestedItemsWithDependency(itemLinkId);
-
-  return nestedItemsWithDependency.map((itemWithDependency) => {
-    return {
-      id:
-        itemWithDependency.linkId + itemWithDependency.enableWhen![0].question,
-      source: itemWithDependency.enableWhen![0].question,
-      target: itemWithDependency.linkId,
-    };
-  });
 }
