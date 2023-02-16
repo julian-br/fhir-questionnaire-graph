@@ -9,6 +9,7 @@ import ReactFlow, {
   useReactFlow,
   Edge,
   useEdges,
+  useNodesInitialized,
 } from "reactflow";
 import dagre from "dagre";
 import "reactflow/dist/style.css";
@@ -55,21 +56,21 @@ const getLayoutedElements = (nodes, edges) => {
 ); */
 
 const Flow = () => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChanged] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   return (
     <div className="relative h-full flex-grow">
-      <ReactFlowProvider>
-        <ReactFlow
-          className="bg-slate-100"
-          nodes={nodes}
-          edges={edges}
-          connectionLineType={ConnectionLineType.SmoothStep}
-          fitView={true}
-        ></ReactFlow>
+      <ReactFlow
+        className="bg-slate-100"
+        onNodesChange={onNodesChanged}
+        nodes={nodes}
+        edges={edges}
+        connectionLineType={ConnectionLineType.SmoothStep}
+        fitView={false}
+      >
         <NodeLayouter onLayout={(layoutedNodes) => setNodes(layoutedNodes)} />
-      </ReactFlowProvider>
+      </ReactFlow>
     </div>
   );
 };
@@ -79,33 +80,16 @@ const NodeLayouter = ({
 }: {
   onLayout: (layoutedNodes: Node[]) => void;
 }) => {
-  const nodesHook = useStore((state) => state.getNodes());
-  const edgesHook = useEdges();
+  const nodes = useNodes();
+  const edges = useEdges();
+  const nodesInitialized = useNodesInitialized();
 
-  /* console.log("rerender", nodesHook); */
   useEffect(() => {
-    const isRendered = nodesHook.every(
-      (node) => node.width !== undefined && node.height !== undefined
-    );
-    const isLayouted = nodesHook.every(
-      (node) => !isNaN(node.position.x) && !isNaN(node.position.y)
-    );
-    /* console.log(
-      "layoutEffect",
-      nodesHook,
-      "rendered:",
-      isRendered,
-      "la:",
-      isLayouted
-    ); */
-
-    if (isRendered && !isLayouted) {
-      console.log("...layouting");
-      onLayout(getLayoutedElements(nodesHook, edgesHook).nodes as Node[]);
+    if (nodesInitialized === true) {
     }
-    /* console.log(getLayoutedElements(nodesHook, edgesHook)); */
-    /* onLayout(getLayoutedElements(nodesHook, edgesHook).nodes as Node[]); */
-  }, [nodesHook]);
+    console.log("...layouting");
+    onLayout(getLayoutedElements(nodes, edges).nodes as Node[]);
+  }, [nodesInitialized]);
 
   return <></>;
 };
