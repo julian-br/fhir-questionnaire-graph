@@ -5,19 +5,14 @@ import { Edge, Node, useEdgesState, useNodesState } from "reactflow";
 
 const NODE_WIDTH = 350;
 
-interface Layout {
-  layoutedNodes: Node[];
-  layoutedEdges: Edge[];
-}
-
 export default function useGraph(
   questionnaire: FHIRQuestionnaire,
   activeItemId: string
 ) {
-  const [nodes, setNodes] = useNodesState(
+  const [nodes, setNodes] = useNodesState<Node[]>(
     createNodes(questionnaire, activeItemId)
   );
-  const [edges, setEdges] = useEdgesState(
+  const [edges, setEdges] = useEdgesState<Edge[]>(
     createEdges(questionnaire, activeItemId)
   );
 
