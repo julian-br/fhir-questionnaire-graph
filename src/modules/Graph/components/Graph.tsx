@@ -9,7 +9,7 @@ import ReactFlow, {
   Background,
 } from "reactflow";
 import "reactflow/dist/style.css";
-import { calcGraphLayout, Layout } from "../calcGraphLayout";
+import { calcGraphLayout, Layout } from "../utils/calcGraphLayout";
 import { FHIRQuestionnaire } from "../../../fhir-questionnaire/FHIRQuestionnaire";
 import { CustomNode } from "./CustomNode";
 import useGraph from "../hooks/useGraph";
