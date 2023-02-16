@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import ReactFlow, {
   ConnectionLineType,
   useNodes,
@@ -15,17 +15,15 @@ interface GraphProps {
   questionnaire: FHIRQuestionnaire;
   activeItemId: string;
 }
+const nodeTypes = { custom: CustomNode };
 
 export default function Graph({ questionnaire, activeItemId }: GraphProps) {
   const { nodes, edges, setLayout } = useGraph(questionnaire, activeItemId);
 
-  const nodeTypes = useMemo(() => ({ custom: CustomNode }), []);
-
   return (
-    <div className="relative h-full flex-grow">
+    <div className="h-full w-full bg-slate-50">
       <ReactFlow
         nodeTypes={nodeTypes}
-        className="bg-slate-100"
         nodes={nodes}
         edges={edges}
         connectionLineType={ConnectionLineType.SmoothStep}
@@ -47,8 +45,11 @@ function Layouter({ onLayout }: { onLayout: (layout: Layout) => void }) {
 
   useEffect(() => {
     if (nodesInitialized === true) {
-      console.log("...layouting");
-      onLayout(calcGraphLayout([...nodes], [...edges]));
+      calcGraphLayout([...nodes], [...edges]).then((newLayout) =>
+        onLayout(newLayout)
+      );
+      /* onLayout(calcGraphLayout([...nodes], [...edges]));
+      calcGraphLayoutElk([...nodes], [...edges]); */
     }
   }, [nodesInitialized]);
 
