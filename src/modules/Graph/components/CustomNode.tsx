@@ -13,7 +13,11 @@ export function CustomNode({ data }: NodeProps<NodeData>) {
   const itemData = data.itemData;
   return (
     <div>
-      <Handle className="invisible" type="target" position={Position.Left} />
+      <Handle
+        className="invisible translate-x-1"
+        type="target"
+        position={Position.Left}
+      />
       <div className="w-[350px] rounded border border-slate-300 bg-white p-4">
         {data.isForeign && (
           <ForeignItemNotification
@@ -34,7 +38,11 @@ export function CustomNode({ data }: NodeProps<NodeData>) {
           </span>
         </div>
       </div>
-      <Handle className="invisible" type="source" position={Position.Right} />
+      <Handle
+        className="invisible -translate-x-10"
+        type="source"
+        position={Position.Right}
+      />
     </div>
   );
 }

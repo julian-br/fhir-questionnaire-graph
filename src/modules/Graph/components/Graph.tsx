@@ -6,6 +6,7 @@ import ReactFlow, {
   useNodesInitialized,
   ReactFlowInstance,
   MiniMap,
+  Background,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { calcGraphLayout, Layout } from "../calcGraphLayout";
@@ -44,12 +45,12 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
         nodes={nodes}
         edges={edges}
         connectionLineType={ConnectionLineType.SmoothStep}
-        fitView={false}
         nodesDraggable={false}
         nodesConnectable={false}
         edgesFocusable={false}
         maxZoom={1.5}
       >
+        <Background />
         <Layouter
           onLayout={(newLayout) => {
             setLayout(newLayout);
