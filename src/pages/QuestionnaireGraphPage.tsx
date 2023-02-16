@@ -1,10 +1,10 @@
-import Graph from "../components/Graph/Graph";
 import Navbar from "../components/Navbar";
 import SideBar from "../components/SideBar";
 import data from "../assets/fhir-questionnaire-example.json";
 import { Questionnaire } from "fhir/r4";
 import QuestionnaireItemsNav from "../components/QuestionnaireItemsNav";
 import { FHIRQuestionnaire } from "../fhir-questionnaire/FHIRQuestionnaire";
+import Graph from "../modules/Graph/components/Graph";
 const questionnaireData = data as Questionnaire;
 const fhirQuestionnaire = new FHIRQuestionnaire(questionnaireData);
 
