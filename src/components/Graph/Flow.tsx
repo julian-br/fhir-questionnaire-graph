@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import ReactFlow, {
   ConnectionLineType,
   useNodesState,
@@ -6,12 +6,17 @@ import ReactFlow, {
   useNodes,
   useEdges,
   useNodesInitialized,
+  Handle,
+  Position,
+  Edge,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { initialNodes, initialEdges } from "./nodes-edges";
 import { calcGraphLayout } from "./calcGraphLayout";
 import { createEdges, createNodes } from "./calcFlowNodes";
 import { FHIRQuestionnaire } from "../../fhir-questionnaire/FHIRQuestionnaire";
+import { CustomNode } from "./nodes/CustomNode";
+import useGraph from "../../hooks/useGraph";
 
 interface GraphProps {
   questionnaire: FHIRQuestionnaire;
@@ -19,22 +24,14 @@ interface GraphProps {
 }
 
 export default function Flow({ questionnaire, activeItemId }: GraphProps) {
-  const [nodes, setNodes] = useNodesState(
-    createNodes(questionnaire, activeItemId)
-  );
-  const [edges, setEdges] = useEdgesState(
-    createEdges(questionnaire, activeItemId)
-  );
+  const { nodes, edges, setLayout } = useGraph(questionnaire, activeItemId);
 
-  useEffect(() => {
-    console.log(createNodes(questionnaire, activeItemId));
-    setNodes(createNodes(questionnaire, activeItemId));
-    setEdges(createEdges(questionnaire, activeItemId));
-  }, [activeItemId]);
+  const nodeTypes = useMemo(() => ({ custom: CustomNode }), []);
 
   return (
     <div className="relative h-full flex-grow">
       <ReactFlow
+        nodeTypes={nodeTypes}
         className="bg-slate-100"
         nodes={nodes}
         edges={edges}
@@ -44,19 +41,13 @@ export default function Flow({ questionnaire, activeItemId }: GraphProps) {
         nodesConnectable={false}
         edgesFocusable={false}
       >
-        <NodeLayouter
-          onLayout={(layoutedNodes) => setNodes(layoutedNodes as any)}
-        />
+        <Layouter onLayout={setLayout} />
       </ReactFlow>
     </div>
   );
 }
 
-function NodeLayouter({
-  onLayout,
-}: {
-  onLayout: (layoutedNodes: Node[]) => void;
-}) {
+function Layouter({ onLayout }: { onLayout: (layout: Layout) => void }) {
   const nodes = useNodes();
   const edges = useEdges();
   const nodesInitialized = useNodesInitialized();
@@ -64,7 +55,7 @@ function NodeLayouter({
   useEffect(() => {
     if (nodesInitialized === true) {
       console.log("...layouting");
-      onLayout(calcGraphLayout(nodes, edges).nodes);
+      onLayout(calcGraphLayout(nodes, edges));
     }
   }, [nodesInitialized]);
 

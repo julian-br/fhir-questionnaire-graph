@@ -40,14 +40,16 @@ function createNodeFromItem(
 ): Node {
   return {
     id: item.linkId,
+    width: 200,
     data: {
-      label: item.prefix + item.text,
+      itemData: item,
     },
     /* data: {
       ...item,
       isForeign,
       foreignItemGroupId,
     }, */
+    type: "custom",
     position: {
       x: NaN,
       y: NaN,
@@ -63,10 +65,14 @@ export function createEdges(
     questionnaire.getNestedItemsWithDependency(itemLinkId);
 
   return nestedItemsWithDependency.map((itemWithDependency) => {
-    return {
-      id: itemWithDependency.linkId,
+    const edge = {
+      id:
+        itemWithDependency.linkId + itemWithDependency.enableWhen![0].question,
       source: itemWithDependency.enableWhen![0].question,
       target: itemWithDependency.linkId,
     };
+
+    console.log(edge);
+    return edge;
   });
 }

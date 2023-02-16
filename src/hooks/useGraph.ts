@@ -1,73 +1,49 @@
 import { QuestionnaireItem } from "fhir/r4";
-import { EdgeData, NodeData } from "reaflow";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { FHIRQuestionnaire } from "../fhir-questionnaire/FHIRQuestionnaire";
-import { QuestionnaireItemNodeData } from "../components/Graph/nodes/CustomNode";
-
-const INITIAL_CANVAS_WIDTH = 2000;
-const INITIAL_CANVAS_HEIGHT = 2000;
+import { Edge, Node, useEdgesState, useNodesState } from "reactflow";
 
 const NODE_WIDTH = 350;
+
+interface Layout {
+  layoutedNodes: Node[];
+  layoutedEdges: Edge[];
+}
 
 export default function useGraph(
   questionnaire: FHIRQuestionnaire,
   activeItemId: string
 ) {
-  const [nodes, setNodes] = useState<NodeData<QuestionnaireItem>[]>(
+  const [nodes, setNodes] = useNodesState(
     createNodes(questionnaire, activeItemId)
   );
-  const [edges, setEdges] = useState<EdgeData[]>(
+  const [edges, setEdges] = useEdgesState(
     createEdges(questionnaire, activeItemId)
   );
-  const [canvasSize, setCanvasSize] = useState({
-    width: INITIAL_CANVAS_WIDTH,
-    height: INITIAL_CANVAS_HEIGHT,
-  });
 
   useEffect(() => {
+    console.log(createNodes(questionnaire, activeItemId));
     setNodes(createNodes(questionnaire, activeItemId));
     setEdges(createEdges(questionnaire, activeItemId));
-  }, [questionnaire, activeItemId]);
+  }, [activeItemId, questionnaire]);
 
-  function updateNodeHeight(nodeId: string, newHeight: number) {
-    setNodes((prevNodes) =>
-      prevNodes?.map((node) => {
-        if (node.id === nodeId) {
-          return { ...node, height: newHeight };
-        }
-        return node;
-      })
-    );
-  }
-
-  function updateCanvasSize(
-    newWitdh: number | undefined,
-    newHeight: number | undefined
-  ) {
-    // an update of the canvas size is not neccesary until every node has a set height
-    const everyNodeHasASetHeight = nodes?.every(
-      (node) => node.height !== undefined
-    );
-
-    if (
-      newWitdh !== undefined &&
-      newHeight !== undefined &&
-      everyNodeHasASetHeight
-    ) {
-      setCanvasSize({ width: newWitdh, height: newHeight });
-    }
+  function setLayout(layout: Layout) {
+    console.log(layout);
+    setNodes(layout.nodes);
+    setEdges(layout.edges);
   }
 
   return {
-    canvasSize,
     nodes,
     edges,
-    updateNodeHeight,
-    updateCanvasSize,
+    setLayout,
   };
 }
 
-function createNodes(questionnaire: FHIRQuestionnaire, itemLinkId: string) {
+export function createNodes(
+  questionnaire: FHIRQuestionnaire,
+  itemLinkId: string
+) {
   const nestedItems = questionnaire.getNestedItems(itemLinkId);
 
   if (nestedItems.length === 0) {
@@ -94,30 +70,39 @@ function createNodeFromItem(
   item: QuestionnaireItem,
   isForeign: boolean = false,
   foreignItemGroupId?: string
-): NodeData<QuestionnaireItemNodeData> {
+): Node {
   return {
     id: item.linkId,
+    width: NODE_WIDTH,
     data: {
-      ...item,
       isForeign,
       foreignItemGroupId,
+      itemData: item,
     },
-    width: NODE_WIDTH,
+    type: "custom",
+    position: {
+      x: NaN,
+      y: NaN,
+    },
   };
 }
 
-function createEdges(
+export function createEdges(
   questionnaire: FHIRQuestionnaire,
   itemLinkId: string
-): EdgeData[] {
+) {
   const nestedItemsWithDependency =
     questionnaire.getNestedItemsWithDependency(itemLinkId);
 
   return nestedItemsWithDependency.map((itemWithDependency) => {
-    return {
-      id: itemWithDependency.linkId,
-      from: itemWithDependency.enableWhen![0].question,
-      to: itemWithDependency.linkId,
+    const edge = {
+      id:
+        itemWithDependency.linkId + itemWithDependency.enableWhen![0].question,
+      source: itemWithDependency.enableWhen![0].question,
+      target: itemWithDependency.linkId,
     };
+
+    console.log(edge);
+    return edge;
   });
 }

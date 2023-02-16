@@ -4,7 +4,12 @@ const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
 
 export function calcGraphLayout(nodes: any[], edges: any[]) {
-  dagreGraph.setGraph({ rankdir: "LR" });
+  dagreGraph.setGraph({
+    rankdir: "LR",
+    nodesep: 20,
+    ranksep: 180,
+    ranker: "tight-tree",
+  });
 
   nodes.forEach((node) => {
     dagreGraph.setNode(node.id, { width: 350, height: node.height });
