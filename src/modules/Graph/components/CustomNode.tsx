@@ -1,28 +1,36 @@
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Handle, Position } from "reactflow";
+import { QuestionnaireItem } from "fhir/r4";
+import { Handle, Position, NodeProps } from "reactflow";
 
-export function CustomNode({ data }) {
+export interface NodeData {
+  isForeign: boolean;
+  foreignItemGroupId?: string;
+  itemData: QuestionnaireItem;
+}
+
+export function CustomNode({ data }: NodeProps<NodeData>) {
+  const itemData = data.itemData;
   return (
-    <div className="relativ">
+    <div>
       <Handle className="invisible" type="target" position={Position.Left} />
       <div className="w-[350px] rounded border border-slate-300 bg-white p-4">
         {data.isForeign && (
           <ForeignItemNotification
-            foreignItemGroupId={data.foreignItemGroupId}
+            foreignItemGroupId={data.foreignItemGroupId ?? ""}
           />
         )}
         <div className="w-full">
           <p className="pb-2">
-            {data.itemData.prefix !== undefined && (
+            {itemData.prefix !== undefined && (
               <span className="mr-2 font-semibold text-primary">
-                {data.itemData.prefix}
+                {itemData.prefix}
               </span>
             )}
-            <span>{data.itemData.text}</span>
+            <span>{itemData.text}</span>
           </p>
           <span className="p rounded-full border border-secondary bg-secondary-light py-1 px-2 text-sm font-semibold text-primary">
-            {data.itemData.type}
+            {itemData.type}
           </span>
         </div>
       </div>

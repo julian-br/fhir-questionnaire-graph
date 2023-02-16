@@ -1,11 +1,39 @@
 import { QuestionnaireItem } from "fhir/r4";
-import { Edge, Node } from "reactflow";
-import { FHIRQuestionnaire } from "../../fhir-questionnaire/FHIRQuestionnaire";
-
-const INITIAL_CANVAS_WIDTH = 2000;
-const INITIAL_CANVAS_HEIGHT = 2000;
+import { useEffect } from "react";
+import { FHIRQuestionnaire } from "../../../fhir-questionnaire/FHIRQuestionnaire";
+import { Edge, Node, useEdgesState, useNodesState } from "reactflow";
+import { Layout } from "../calcGraphLayout";
+import { NodeData } from "../components/CustomNode";
 
 const NODE_WIDTH = 350;
+
+export default function useGraph(
+  questionnaire: FHIRQuestionnaire,
+  activeItemId: string
+) {
+  const [nodes, setNodes] = useNodesState<NodeData>(
+    createNodes(questionnaire, activeItemId)
+  );
+  const [edges, setEdges] = useEdgesState<Edge>(
+    createEdges(questionnaire, activeItemId)
+  );
+
+  useEffect(() => {
+    setNodes(createNodes(questionnaire, activeItemId));
+    setEdges(createEdges(questionnaire, activeItemId));
+  }, [activeItemId, questionnaire]);
+
+  function setLayout(layout: Layout) {
+    setNodes(layout.layoutedNodes);
+    setEdges(layout.layoutedEdges);
+  }
+
+  return {
+    nodes,
+    edges,
+    setLayout,
+  };
+}
 
 export function createNodes(
   questionnaire: FHIRQuestionnaire,
@@ -37,18 +65,15 @@ function createNodeFromItem(
   item: QuestionnaireItem,
   isForeign: boolean = false,
   foreignItemGroupId?: string
-): Node {
+): Node<NodeData> {
   return {
     id: item.linkId,
-    width: 200,
+    width: NODE_WIDTH,
     data: {
-      itemData: item,
-    },
-    /* data: {
-      ...item,
       isForeign,
       foreignItemGroupId,
-    }, */
+      itemData: item,
+    },
     type: "custom",
     position: {
       x: NaN,
@@ -60,19 +85,16 @@ function createNodeFromItem(
 export function createEdges(
   questionnaire: FHIRQuestionnaire,
   itemLinkId: string
-): Edge[] {
+) {
   const nestedItemsWithDependency =
     questionnaire.getNestedItemsWithDependency(itemLinkId);
 
   return nestedItemsWithDependency.map((itemWithDependency) => {
-    const edge = {
+    return {
       id:
         itemWithDependency.linkId + itemWithDependency.enableWhen![0].question,
       source: itemWithDependency.enableWhen![0].question,
       target: itemWithDependency.linkId,
     };
-
-    console.log(edge);
-    return edge;
   });
 }

@@ -2,7 +2,6 @@ import dagre from "dagre";
 import { Edge, Node } from "reactflow";
 
 const dagreGraph = new dagre.graphlib.Graph();
-dagreGraph.setDefaultEdgeLabel(() => ({}));
 
 export interface Layout {
   layoutedNodes: Node[];
@@ -10,6 +9,7 @@ export interface Layout {
 }
 
 export function calcGraphLayout(nodes: Node[], edges: Edge[]): Layout {
+  dagreGraph.setDefaultEdgeLabel(() => ({}));
   dagreGraph.setGraph({
     rankdir: "LR",
     nodesep: 20,

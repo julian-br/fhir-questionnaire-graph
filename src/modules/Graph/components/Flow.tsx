@@ -6,10 +6,10 @@ import ReactFlow, {
   useNodesInitialized,
 } from "reactflow";
 import "reactflow/dist/style.css";
-import { calcGraphLayout, Layout } from "./calcGraphLayout";
-import { FHIRQuestionnaire } from "../../fhir-questionnaire/FHIRQuestionnaire";
-import { CustomNode } from "./nodes/CustomNode";
-import useGraph from "../../hooks/useGraph";
+import { calcGraphLayout, Layout } from "../calcGraphLayout";
+import { FHIRQuestionnaire } from "../../../fhir-questionnaire/FHIRQuestionnaire";
+import { CustomNode } from "./CustomNode";
+import useGraph from "../hooks/useGraph";
 
 interface GraphProps {
   questionnaire: FHIRQuestionnaire;
