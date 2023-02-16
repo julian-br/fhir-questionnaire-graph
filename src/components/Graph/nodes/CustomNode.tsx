@@ -37,12 +37,12 @@ export default function CustomNode({
   return (
     <foreignObject width={width} height={height} x={x} y={y}>
       <div ref={nodeElement} className="fixed w-full">
-        {isForeign && (
-          <ForeignItemNotification
-            foreignItemGroupId={itemData?.foreignItemGroupId!}
-          />
-        )}
         <div className="w-full rounded border border-slate-300 bg-white  p-4">
+          {isForeign && (
+            <ForeignItemNotification
+              foreignItemGroupId={itemData?.foreignItemGroupId!}
+            />
+          )}
           {itemData !== undefined && <DefaultNode itemData={itemData} />}
         </div>
       </div>
@@ -56,10 +56,10 @@ function ForeignItemNotification({
   foreignItemGroupId: string;
 }) {
   return (
-    <div className="text-slate rounded border border-primary bg-secondary-light px-2 py-1">
-      <FontAwesomeIcon icon={faCircleInfo} className="mr-1 text-primary" />
-      <span>Question from: </span>
-      <a className="font-medium text-primary">{foreignItemGroupId}</a>
+    <div className="mb-2 rounded border border-amber-600 bg-amber-50 px-2 py-1 text-sm text-amber-600">
+      <FontAwesomeIcon icon={faCircleInfo} className="mr-1" />
+      <span>from Item: </span>
+      <a className="font-medium ">{foreignItemGroupId}</a>
     </div>
   );
 }
@@ -75,7 +75,7 @@ function DefaultNode({ itemData }: { itemData: QuestionnaireItemNodeData }) {
         )}
         <span>{itemData.text}</span>
       </p>
-      <span className="p rounded-full border bg-secondary-light py-1 px-2 text-sm font-semibold text-primary">
+      <span className="p rounded-full border border-secondary bg-secondary-light py-1 px-2 text-sm font-semibold text-primary">
         {itemData.type}
       </span>
     </div>
