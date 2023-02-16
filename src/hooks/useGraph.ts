@@ -19,16 +19,15 @@ export default function useGraph(
   const [edges, setEdges] = useState<EdgeData[]>(
     createEdges(questionnaire, activeItemId)
   );
+  const [canvasSize, setCanvasSize] = useState({
+    width: INITIAL_CANVAS_WIDTH,
+    height: INITIAL_CANVAS_HEIGHT,
+  });
 
   useEffect(() => {
     setNodes(createNodes(questionnaire, activeItemId));
     setEdges(createEdges(questionnaire, activeItemId));
   }, [questionnaire, activeItemId]);
-
-  const [canvasSize, setCanvasSize] = useState({
-    width: INITIAL_CANVAS_WIDTH,
-    height: INITIAL_CANVAS_HEIGHT,
-  });
 
   function updateNodeHeight(nodeId: string, newHeight: number) {
     setNodes((prevNodes) =>

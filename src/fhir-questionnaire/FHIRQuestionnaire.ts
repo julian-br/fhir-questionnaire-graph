@@ -36,15 +36,19 @@ export class FHIRQuestionnaire {
    * @returns the item matching the Id | undefined if the item does not exits
    */
   getItemById(itemId: string) {
-    return this.itemsMap.get(itemId);
+    const matchingItem = this.itemsMap.get(itemId);
+    if (matchingItem === undefined) {
+      throw new Error(`no item with the linkId ${itemId}`);
+    }
+    return matchingItem;
   }
 
   getNestedItems(groupId: string) {
-    const item = this.getItemById(groupId);
-    if (item?.type !== "group") {
-      return [];
+    if (this.itemIsGroup(groupId)) {
+      const item = this.getItemById(groupId);
+      return item!.item!;
     }
-    return item.item!;
+    return [];
   }
 
   getNestedItemsWithDependency(groupId: string) {
@@ -82,7 +86,7 @@ export class FHIRQuestionnaire {
       if (this.itemIsGroup(rootItem.linkId)) {
         for (const nestedItem of rootItem.item!) {
           if (nestedItem.linkId === itemId) {
-            return nestedItem.linkId;
+            return rootItem.linkId;
           }
         }
       }
