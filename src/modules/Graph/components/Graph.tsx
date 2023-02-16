@@ -18,11 +18,15 @@ interface GraphProps {
 const nodeTypes = { custom: CustomNode };
 
 export default function Graph({ questionnaire, activeItemId }: GraphProps) {
-  const { nodes, edges, setLayout } = useGraph(questionnaire, activeItemId);
+  const { nodes, edges, setLayout, isLayouted } = useGraph(
+    questionnaire,
+    activeItemId
+  );
 
   return (
-    <div className="h-full w-full bg-slate-50">
+    <div className={`h-full w-full bg-slate-50`}>
       <ReactFlow
+        className={`${isLayouted ? "opacity-100" : "opacity-0"}`} // prevent flickering
         nodeTypes={nodeTypes}
         nodes={nodes}
         edges={edges}

@@ -1,7 +1,13 @@
 import { QuestionnaireItem } from "fhir/r4";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FHIRQuestionnaire } from "../../../fhir-questionnaire/FHIRQuestionnaire";
-import { Edge, Node, useEdgesState, useNodesState } from "reactflow";
+import {
+  Edge,
+  Node,
+  useEdgesState,
+  useNodesInitialized,
+  useNodesState,
+} from "reactflow";
 import { Layout } from "../calcGraphLayout";
 import { NodeData } from "../components/CustomNode";
 
@@ -17,8 +23,10 @@ export default function useGraph(
   const [edges, setEdges] = useEdgesState<Edge>(
     createEdges(questionnaire, activeItemId)
   );
+  const [isLayouted, setIsLayouted] = useState(false);
 
   useEffect(() => {
+    setIsLayouted(false);
     setNodes(createNodes(questionnaire, activeItemId));
     setEdges(createEdges(questionnaire, activeItemId));
   }, [activeItemId, questionnaire]);
@@ -26,12 +34,14 @@ export default function useGraph(
   function setLayout(layout: Layout) {
     setNodes(layout.layoutedNodes);
     setEdges(layout.layoutedEdges);
+    setIsLayouted(true);
   }
 
   return {
     nodes,
     edges,
     setLayout,
+    isLayouted,
   };
 }
 
