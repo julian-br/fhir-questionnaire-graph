@@ -23,7 +23,7 @@ function Brand() {
         icon={faDiagramProject}
       />
       <span className="ml-3 text-2xl font-semibold text-slate-800">
-        Questionnaire Tree
+        Questionnaire Graph
       </span>
     </div>
   );

@@ -16,7 +16,7 @@ interface GraphProps {
   activeItemId: string;
 }
 
-export default function Flow({ questionnaire, activeItemId }: GraphProps) {
+export default function Graph({ questionnaire, activeItemId }: GraphProps) {
   const { nodes, edges, setLayout } = useGraph(questionnaire, activeItemId);
 
   const nodeTypes = useMemo(() => ({ custom: CustomNode }), []);
@@ -48,7 +48,7 @@ function Layouter({ onLayout }: { onLayout: (layout: Layout) => void }) {
   useEffect(() => {
     if (nodesInitialized === true) {
       console.log("...layouting");
-      onLayout(calcGraphLayout(nodes, edges));
+      onLayout(calcGraphLayout([...nodes], [...edges]));
     }
   }, [nodesInitialized]);
 

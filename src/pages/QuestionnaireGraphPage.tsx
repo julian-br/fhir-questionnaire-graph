@@ -4,7 +4,7 @@ import data from "../assets/fhir-questionnaire-example.json";
 import { Questionnaire } from "fhir/r4";
 import QuestionnaireItemsNav from "../components/QuestionnaireItemsNav";
 import { FHIRQuestionnaire } from "../fhir-questionnaire/FHIRQuestionnaire";
-import Flow from "../modules/Graph/components/Flow";
+import Graph from "../modules/Graph/components/Graph";
 const questionnaireData = data as Questionnaire;
 const fhirQuestionnaire = new FHIRQuestionnaire(questionnaireData);
 
@@ -27,10 +27,7 @@ export default function QuestionnaireGraphPage({
           </div>
         </SideBar>
         <div className="w-full">
-          <Flow
-            questionnaire={fhirQuestionnaire}
-            activeItemId={itemLinkId}
-          ></Flow>
+          <Graph questionnaire={fhirQuestionnaire} activeItemId={itemLinkId} />
         </div>
       </main>
     </>
