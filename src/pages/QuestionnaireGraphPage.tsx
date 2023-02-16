@@ -4,7 +4,7 @@ import data from "../assets/fhir-questionnaire-example.json";
 import { Questionnaire } from "fhir/r4";
 import QuestionnaireItemsNav from "../components/QuestionnaireItemsNav";
 import { FHIRQuestionnaire } from "../fhir-questionnaire/FHIRQuestionnaire";
-import Flow from "../components/Graph/Flow";
+import Flow from "../modules/Graph/Flow";
 const questionnaireData = data as Questionnaire;
 const fhirQuestionnaire = new FHIRQuestionnaire(questionnaireData);
 
