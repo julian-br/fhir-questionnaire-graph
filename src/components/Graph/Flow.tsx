@@ -86,9 +86,9 @@ const NodeLayouter = ({
 
   useEffect(() => {
     if (nodesInitialized === true) {
+      console.log("...layouting");
+      onLayout(getLayoutedElements(nodes, edges).nodes as Node[]);
     }
-    console.log("...layouting");
-    onLayout(getLayoutedElements(nodes, edges).nodes as Node[]);
   }, [nodesInitialized]);
 
   return <></>;
