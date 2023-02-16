@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { FHIRQuestionnaire } from "../../../fhir-questionnaire/FHIRQuestionnaire";
 import { Edge, useEdgesState, useNodesState } from "reactflow";
 import { Layout } from "../utils/calcGraphLayout";
-import { NodeData } from "../components/CustomNode";
+import { NodeData } from "../components/DefaultNode";
 import { createNodesFromQuestionnaire } from "../utils/createNodesFromQuestionnaire";
 import { createEdgesFromQuestionnaire } from "../utils/createEdgesFromQuestionnaire";
 

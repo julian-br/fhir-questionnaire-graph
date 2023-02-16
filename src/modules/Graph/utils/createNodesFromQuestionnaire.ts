@@ -1,7 +1,7 @@
 import { QuestionnaireItem } from "fhir/r4";
 import { Node } from "reactflow";
 import { FHIRQuestionnaire } from "../../../fhir-questionnaire/FHIRQuestionnaire";
-import { NodeData } from "../components/CustomNode";
+import { NodeData } from "../components/DefaultNode";
 
 const NODE_WIDTH = 350;
 
@@ -44,7 +44,7 @@ function createNodeFromItem(
       foreignItemGroupId,
       itemData: item,
     },
-    type: "custom",
+    type: "customDefault",
     position: {
       x: NaN,
       y: NaN,
