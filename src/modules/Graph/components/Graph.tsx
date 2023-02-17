@@ -7,6 +7,7 @@ import ReactFlow, {
   ReactFlowInstance,
   MiniMap,
   Background,
+  Controls,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { calcGraphLayout, Layout } from "../utils/calcGraphLayout";
@@ -56,6 +57,11 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
         minZoom={0.5}
       >
         <Background />
+        <Controls
+          showInteractive={false}
+          position="top-right"
+          className="rounded bg-white"
+        />
         <Layouter
           onLayout={(newLayout) => {
             setLayout(newLayout);
