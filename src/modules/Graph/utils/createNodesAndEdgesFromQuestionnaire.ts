@@ -1,8 +1,8 @@
 import { QuestionnaireItem, QuestionnaireItemAnswerOption } from "fhir/r4";
 import { Edge, Node } from "reactflow";
 import { FHIRQuestionnaire } from "../../../fhir-questionnaire/FHIRQuestionnaire";
-import { AnswerNodeData } from "../components/AnswerOptionNode";
-import { DefaultNodeData } from "../components/DefaultNode";
+import { AnswerNodeData } from "../components/nodes/AnswerOptionNode";
+import { DefaultNodeData } from "../components/nodes/ItemNode";
 
 export type NodeData = DefaultNodeData | AnswerNodeData;
 
@@ -63,7 +63,7 @@ function createNodeForItem(
       foreignItemGroupId,
       itemData: item,
     },
-    type: "customDefault",
+    type: "item",
     position: POSITION,
   };
 }

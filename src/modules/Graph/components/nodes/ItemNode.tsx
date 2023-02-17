@@ -10,7 +10,7 @@ export interface DefaultNodeData {
   itemData: QuestionnaireItem;
 }
 
-export function DefaultNode({ data }: NodeProps<DefaultNodeData>) {
+export function ItemNode({ data }: NodeProps<DefaultNodeData>) {
   const itemData = data.itemData;
   return (
     <NodeContainer>

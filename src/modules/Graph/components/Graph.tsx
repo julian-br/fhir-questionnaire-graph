@@ -11,16 +11,16 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import { calcGraphLayout, Layout } from "../utils/calcGraphLayout";
 import { FHIRQuestionnaire } from "../../../fhir-questionnaire/FHIRQuestionnaire";
-import { DefaultNode } from "./DefaultNode";
+import { ItemNode } from "./nodes/ItemNode";
 import useGraph from "../hooks/useGraph";
-import AnswerOptionNode from "./AnswerOptionNode";
+import AnswerOptionNode from "./nodes/AnswerOptionNode";
 
 interface GraphProps {
   questionnaire: FHIRQuestionnaire;
   activeItemId: string;
 }
 const nodeTypes = {
-  customDefault: DefaultNode,
+  item: ItemNode,
   answerOption: AnswerOptionNode,
 };
 
