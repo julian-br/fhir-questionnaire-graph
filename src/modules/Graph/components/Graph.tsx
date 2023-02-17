@@ -53,6 +53,7 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
         nodesConnectable={false}
         edgesFocusable={false}
         maxZoom={1.5}
+        minZoom={0.5}
       >
         <Background />
         <Layouter
@@ -76,8 +77,6 @@ function Layouter({ onLayout }: { onLayout: (layout: Layout) => void }) {
       calcGraphLayout([...nodes], [...edges]).then((newLayout) =>
         onLayout(newLayout)
       );
-      /* onLayout(calcGraphLayout([...nodes], [...edges]));
-      calcGraphLayoutElk([...nodes], [...edges]); */
     }
   }, [nodesInitialized]);
 

@@ -20,7 +20,8 @@ function Brand() {
     <div className="flex items-center">
       <FontAwesomeIcon className="h-8 text-primary" icon={faDiagramProject} />
       <span className="ml-3 text-2xl font-semibold text-slate-700">
-        <strong className="font-bold"> FHIR</strong> Questionnaire Graph
+        <strong className="mr-2 font-bold">FHIR</strong>
+        Questionnaire Graph
       </span>
     </div>
   );
