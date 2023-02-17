@@ -43,6 +43,23 @@ export class FHIRQuestionnaire {
     return matchingItem;
   }
 
+  /**
+   * gets all relevant items for an item
+   * this means all nested items and also all foreign items the items is dependend on
+   * if the item has no nested items the itself gets returned
+   */
+  getRelevantItemsForItem(itemLinkId: string) {
+    const item = this.getItemById(itemLinkId);
+    if (item.item === undefined) {
+      return [item];
+    }
+
+    const nestedItems = item.item;
+    const foreignItems = this.getForeignItems(item.linkId);
+
+    return nestedItems.concat(foreignItems);
+  }
+
   getNestedItems(groupId: string) {
     if (this.itemIsGroup(groupId)) {
       const item = this.getItemById(groupId);
@@ -59,7 +76,7 @@ export class FHIRQuestionnaire {
     return item.item!.filter((item) => item.enableWhen !== undefined);
   }
 
-  getForeignDependendNestedItems(groupId: string) {
+  getForeignItems(groupId: string) {
     if (!this.itemIsGroup(groupId)) {
       return [];
     }
