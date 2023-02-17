@@ -18,10 +18,7 @@ function Navbar({ children }: NavbarProps) {
 function Brand() {
   return (
     <div className="flex items-center">
-      <FontAwesomeIcon
-        className="mt-2 h-8 text-primary"
-        icon={faDiagramProject}
-      />
+      <FontAwesomeIcon className="h-8 text-primary" icon={faDiagramProject} />
       <span className="ml-3 text-2xl font-semibold text-slate-700">
         <strong className="font-bold"> FHIR</strong> Questionnaire Graph
       </span>
