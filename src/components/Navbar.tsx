@@ -22,8 +22,8 @@ function Brand() {
         className="mt-2 h-8 text-primary"
         icon={faDiagramProject}
       />
-      <span className="ml-3 text-2xl font-semibold text-slate-800">
-        Questionnaire Graph
+      <span className="ml-3 text-2xl font-semibold text-slate-700">
+        <strong className="font-bold"> FHIR</strong> Questionnaire Graph
       </span>
     </div>
   );
