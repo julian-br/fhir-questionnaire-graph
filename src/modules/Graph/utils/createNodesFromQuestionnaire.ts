@@ -1,7 +1,10 @@
 import { QuestionnaireItem, QuestionnaireItemAnswerOption } from "fhir/r4";
 import { Node } from "reactflow";
 import { FHIRQuestionnaire } from "../../../fhir-questionnaire/FHIRQuestionnaire";
-import { NodeData } from "../components/DefaultNode";
+import { AnswerNodeData } from "../components/AnswerOptionNode";
+import { DefaultNodeData } from "../components/DefaultNode";
+
+export type NodeData = DefaultNodeData | AnswerNodeData;
 
 // this position will be overwritten as soon as the Graph is layouted
 const POSITION = {
@@ -43,8 +46,9 @@ export function createNodesFromQuestionnaire(
 
   const answerOptionsNodes: Node[] = [];
   itemsWithAnswerOption.forEach((item) => {
-    const createdNodes = createNodesFromAnswerOptions(item.answerOption!);
-    answerOptionsNodes.push(...createdNodes);
+    answerOptionsNodes.push(
+      ...createNodesFromAnswerOptions(item.answerOption!)
+    );
   });
 
   return [...nestedItemsNodes, ...foreignItemsNodes, ...answerOptionsNodes];

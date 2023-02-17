@@ -19,7 +19,9 @@ export function createEdgesFromQuestionnaire(
   const allItems = nestedItems.concat(foreignItems);
   allItems.forEach((item) => {
     if (item.answerOption !== undefined) {
-      edges.push(...createEdgesForAnswerOptions([], item.linkId!));
+      edges.push(
+        ...createEdgesForAnswerOptions(item.answerOption, item.linkId!)
+      );
     }
   });
 

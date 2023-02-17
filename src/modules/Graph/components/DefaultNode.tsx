@@ -1,20 +1,16 @@
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { QuestionnaireItem, QuestionnaireItemAnswerOption } from "fhir/r4";
-import { Handle, Position, NodeProps } from "reactflow";
+import { QuestionnaireItem } from "fhir/r4";
+import { NodeProps } from "reactflow";
 import NodeContainer from "./NodeContainer";
 
-export type NodeData = NodeDataItem | NodeDataAnswerOption;
-
-interface NodeDataItem {
+export interface DefaultNodeData {
   isForeign: boolean;
   foreignItemGroupId?: string;
   itemData: QuestionnaireItem;
 }
 
-interface NodeDataAnswerOption extends QuestionnaireItemAnswerOption {}
-
-export function DefaultNode({ data }: NodeProps<NodeDataItem>) {
+export function DefaultNode({ data }: NodeProps<DefaultNodeData>) {
   const itemData = data.itemData;
   return (
     <NodeContainer>
