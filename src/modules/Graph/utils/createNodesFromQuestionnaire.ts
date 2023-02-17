@@ -3,8 +3,6 @@ import { Node } from "reactflow";
 import { FHIRQuestionnaire } from "../../../fhir-questionnaire/FHIRQuestionnaire";
 import { NodeData } from "../components/DefaultNode";
 
-const NODE_WIDTH = 350;
-
 // this position will be overwritten as soon as the Graph is layouted
 const POSITION = {
   x: NaN,
@@ -19,7 +17,10 @@ export function createNodesFromQuestionnaire(
   const itemIsGroup = nestedItems.length !== 0;
   if (!itemIsGroup) {
     const item = questionnaire.getItemById(itemLinkId);
-    return [createNodeFromItem(item)];
+    return [
+      createNodeFromItem(item),
+      ...createNodesFromAnswerOptions(item.answerOption ?? []),
+    ];
   }
 
   const nestedItemsNodes = nestedItems.map((nestedItem) =>
@@ -36,19 +37,15 @@ export function createNodesFromQuestionnaire(
 
   const allItems = nestedItems.concat(foreignItems);
 
-  const itemsOfTypeChoice = allItems.filter(
-    (item) => item.type === "choice" || item.type === "open-choice"
+  const itemsWithAnswerOption = allItems.filter(
+    (item) => item.answerOption !== undefined
   );
 
-  const answerOptionsNodes: any[] = [];
-  itemsOfTypeChoice.forEach((item) => {
-    const createdNodes = createNodesFromAnswerOptions(
-      item.answerOption!,
-      item.linkId
-    );
+  const answerOptionsNodes: Node[] = [];
+  itemsWithAnswerOption.forEach((item) => {
+    const createdNodes = createNodesFromAnswerOptions(item.answerOption!);
     answerOptionsNodes.push(...createdNodes);
   });
-  console.log(answerOptionsNodes);
 
   return [...nestedItemsNodes, ...foreignItemsNodes, ...answerOptionsNodes];
 }
@@ -60,7 +57,7 @@ function createNodeFromItem(
 ): Node<NodeData> {
   return {
     id: item.linkId,
-    width: NODE_WIDTH,
+    width: NaN,
     data: {
       isForeign,
       foreignItemGroupId,
@@ -72,16 +69,16 @@ function createNodeFromItem(
 }
 
 function createNodesFromAnswerOptions(
-  answerOptions: QuestionnaireItemAnswerOption[],
-  itemLinkId: string
+  answerOptions: QuestionnaireItemAnswerOption[]
 ) {
   return answerOptions.map((answerOption) => ({
-    id: itemLinkId + answerOption.id,
-    width: NODE_WIDTH,
+    id: answerOption.id!,
+    width: NaN,
+
     data: {
       ...answerOption,
     },
-    type: "default",
+    type: "answerOption",
     position: POSITION,
   }));
 }

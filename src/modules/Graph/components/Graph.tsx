@@ -13,12 +13,16 @@ import { calcGraphLayout, Layout } from "../utils/calcGraphLayout";
 import { FHIRQuestionnaire } from "../../../fhir-questionnaire/FHIRQuestionnaire";
 import { DefaultNode } from "./DefaultNode";
 import useGraph from "../hooks/useGraph";
+import AnswerOptionNode from "./AnswerOptionNode";
 
 interface GraphProps {
   questionnaire: FHIRQuestionnaire;
   activeItemId: string;
 }
-const nodeTypes = { customDefault: DefaultNode };
+const nodeTypes = {
+  customDefault: DefaultNode,
+  answerOption: AnswerOptionNode,
+};
 
 export default function Graph({ questionnaire, activeItemId }: GraphProps) {
   const { nodes, edges, setLayout, isLayouted } = useGraph(
