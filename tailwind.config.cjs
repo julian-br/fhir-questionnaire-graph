@@ -12,6 +12,9 @@ module.exports = {
         'secondary': ' hsla(226, 50%, 54%, 0.25)',
         'secondary-light': 'hsla(226, 50%, 54%, 0.1)',
       },
+      fontFamily: {
+        'inter': ['Inter', 'sans-serif'],
+      }
     },
   },
   plugins: [],

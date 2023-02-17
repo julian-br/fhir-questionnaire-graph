@@ -5,7 +5,7 @@ import { decodeURLParam } from "./utils/urlParam";
 
 function App() {
   return (
-    <div className="flex h-screen flex-col overflow-hidden">
+    <div className="flex h-screen flex-col overflow-hidden font-inter text-slate-700">
       <Route path="">
         <IndexPage />
       </Route>
