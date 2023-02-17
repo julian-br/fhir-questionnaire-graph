@@ -1,11 +1,11 @@
 import { Edge, Node } from "reactflow";
-import ELK from "elkjs/lib/elk.bundled.js";
+import ELK, { ElkNode } from "elkjs/lib/elk.bundled.js";
 
 const LAYOUT_OPTIONS = {
   "elk.algorithm": "layered",
   "elk.direction": "RIGHT", // direction of the graph
   "elk.layered.considerModelOrder.strategy": "NODES_AND_EDGES", // keep order of nodes
-  "elk.layered.nodePlacement.bk.fixedAlignment": "BALANCED", //balance the tree, e.g root note is vertically centered
+  "elk.layered.nodePlacement.bk.fixedAlignment": "BALANCED", // balance the tree, e.g root note is vertically centered
   "elk.layered.spacing.nodeNodeBetweenLayers": "200", // space between different hierachy layers
   "elk.separateConnectedComponents": "false", // don't allign nodes of the same hierachy layer horizontally
 };
@@ -20,7 +20,7 @@ export async function calcGraphLayout(
   edges: Edge[]
 ): Promise<Layout> {
   const elk = new ELK();
-  const graphData = {
+  const graphData: ElkNode = {
     id: "root",
     layoutOptions: LAYOUT_OPTIONS,
     children: nodes.map((node) => ({

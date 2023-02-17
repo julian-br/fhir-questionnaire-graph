@@ -3,6 +3,7 @@ import { Edge, Node } from "reactflow";
 import { FHIRQuestionnaire } from "../../../fhir-questionnaire/FHIRQuestionnaire";
 import { AnswerNodeData } from "../components/nodes/AnswerOptionNode";
 import { DefaultNodeData } from "../components/nodes/ItemNode";
+import { findCorrespondingAnswerOptions } from "./findCorrespondingAnswerOptions";
 
 export type NodeData = DefaultNodeData | AnswerNodeData;
 
@@ -40,9 +41,26 @@ export function createNodesAndEdgesFromQuestionnaire(
       nodes.push(createNodeForItem(item));
     }
 
+    // create edges for dependencies
     const itemHasDepenedency = item.enableWhen !== undefined;
-    if (itemHasDepenedency) {
-      const dependencyId = item.enableWhen![0].question;
+    if (!itemHasDepenedency) {
+      continue;
+    }
+
+    const dependencyId = item.enableWhen![0].question;
+    const dependencyItem = questionnaire.getItemById(dependencyId);
+    const dependecyIsAnswerOption = dependencyItem.answerOption !== undefined;
+
+    if (dependecyIsAnswerOption) {
+      const correspondingOptions = findCorrespondingAnswerOptions(
+        dependencyItem.answerOption!,
+        item.enableWhen!
+      );
+
+      correspondingOptions.forEach((option) =>
+        edges.push(createEdgeForItem(option.id!, item.linkId))
+      );
+    } else {
       edges.push(createEdgeForItem(dependencyId, item.linkId));
     }
   }
@@ -92,7 +110,7 @@ function createNodesForAnswerOptions(
 
 function createEdgeForItem(sourceLinkId: string, targetLinkId: string) {
   return {
-    id: sourceLinkId + targetLinkId,
+    id: generateEdgeId(sourceLinkId, targetLinkId),
     source: sourceLinkId,
     target: targetLinkId,
   };
@@ -103,8 +121,15 @@ function createEdgesForAnswerOptions(
   itemLinkId: string
 ) {
   return answerOptions.map((answerOption) => ({
-    id: itemLinkId + answerOption.id!,
+    id: generateEdgeId(itemLinkId, answerOption.id!),
     source: itemLinkId,
     target: answerOption.id!,
   }));
+}
+
+/**
+ * generates a unique id for each edge
+ */
+function generateEdgeId(sourceLinkId: string, targetLinkId: string) {
+  return sourceLinkId + targetLinkId + Math.random(); // add random number to prevent duplicate edge ids
 }
