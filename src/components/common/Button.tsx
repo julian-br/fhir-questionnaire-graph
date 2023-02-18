@@ -13,7 +13,7 @@ const variantClassMap = {
     "bg-secondary-light text-primary font-bold hover:bg-secondary active:bg-secondary-light",
   danger:
     "bg-danger text-white font-semibold hover:bg-danger-light active:bg-danger",
-  custom: "",
+  custom: "focus:outline-none  focus:ring-1 focus:ring-primary",
 } as const;
 
 const sizeClassMap = {
@@ -37,7 +37,7 @@ export default function Button({
     <button
       {...reactButtonProps}
       type={reactButtonProps.type ?? "button"}
-      className={`focus-visible:outline-none focus-visible:ring-2 ${variantClasses} ${sizeClasses} ${reactButtonProps.className}`}
+      className={`${variantClasses} ${sizeClasses} ${reactButtonProps.className}`}
     >
       {children}
     </button>
