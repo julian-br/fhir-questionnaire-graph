@@ -32,7 +32,7 @@ export default function CustomEdge({ data, ...edgeData }: EdgeProps) {
 
 function EdgeLabel({ text }: { text: string }) {
   return (
-    <div className=" rounded border bg-white px-3 py-1 text-xs font-bold text-primary">
+    <div className=" rounded border border-slate-400 bg-white px-3 py-1 text-xs font-bold text-primary">
       {text}
     </div>
   );
