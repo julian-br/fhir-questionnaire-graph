@@ -51,14 +51,12 @@ function ForeignItemLink({
       to={`/graph/${params?.questionnaireId}/${encodeURLParam(
         foreignItemGroupId
       )}`}
-      className="group mb-2 block truncate rounded border border-amber-400 bg-amber-50 px-2 py-1 text-sm text-amber-600"
+      title={foreignItemGroupId}
+      className="group mb-2 block truncate rounded border border-amber-400 bg-amber-50 px-2 py-2 text-sm text-amber-600 hover:border-amber-500"
     >
       <FontAwesomeIcon icon={faCircleInfo} className="mr-1" />
       <span>from Item: </span>
-      <span
-        className="font-semibold group-hover:font-bold group-hover:underline"
-        title={foreignItemGroupId}
-      >
+      <span className="font-semibold group-hover:font-bold group-hover:underline">
         {foreignItemGroupId}
       </span>
     </Link>

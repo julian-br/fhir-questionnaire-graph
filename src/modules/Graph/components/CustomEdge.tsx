@@ -24,7 +24,10 @@ export default function CustomEdge({ data, ...edgeData }: EdgeProps) {
               transform: `translate(${labelX}px,${labelY}px) translate(-50%, -50%)`,
             }}
           >
-            <EdgeLabel text={edgeData.label!.toString()} />
+            <EdgeLabel
+              selected={edgeData.selected ?? false}
+              text={edgeData.label!.toString()}
+            />
           </div>
         </EdgeLabelRenderer>
       )}
@@ -32,9 +35,13 @@ export default function CustomEdge({ data, ...edgeData }: EdgeProps) {
   );
 }
 
-function EdgeLabel({ text }: { text: string }) {
+function EdgeLabel({ text, selected }: { text: string; selected: boolean }) {
   return (
-    <div className=" rounded border border-slate-400 bg-white px-3 py-1 text-xs font-bold text-primary">
+    <div
+      className={`rounded border  bg-white px-3 py-1 text-xs font-bold text-primary ${
+        selected ? "border-primary-highlight" : "border-slate-400"
+      }`}
+    >
       {text}
     </div>
   );
