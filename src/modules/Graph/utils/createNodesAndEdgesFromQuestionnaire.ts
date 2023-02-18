@@ -5,6 +5,7 @@ import { AnswerNodeData } from "../components/nodes/AnswerOptionNode";
 import { ForeignItemNodeData } from "../components/nodes/ForeignItemNode";
 import { ItemNodeData } from "../components/nodes/ItemNode";
 import { findCorrespondingAnswerOptions } from "./findCorrespondingAnswerOptions";
+import { getEnabledWhenValue } from "./getEnableWhenValue";
 
 //TODO: refactor
 
@@ -81,7 +82,11 @@ export function createNodesAndEdgesFromQuestionnaire(
         edges.push(createEdgeForItem(option.id!, item.linkId))
       );
     } else {
-      edges.push(createEdgeForItem(dependencyId, item.linkId));
+      const labelText =
+        item.enableWhen![0].operator +
+        "" +
+        getEnabledWhenValue(item.enableWhen![0]);
+      edges.push(createEdgeForItem(dependencyId, item.linkId, labelText));
     }
   }
 
@@ -140,11 +145,16 @@ function createNodesForAnswerOptions(
   });
 }
 
-function createEdgeForItem(sourceLinkId: string, targetLinkId: string): Edge {
+function createEdgeForItem(
+  sourceItemLinkId: string,
+  targetLinkId: string,
+  label?: string
+): Edge {
   return {
-    id: IdGenerator.generateEdgeId(sourceLinkId, targetLinkId),
-    source: IdGenerator.generateNodeId(sourceLinkId),
+    id: IdGenerator.generateEdgeId(sourceItemLinkId, targetLinkId),
+    source: IdGenerator.generateNodeId(sourceItemLinkId),
     target: IdGenerator.generateNodeId(targetLinkId),
+    label: label,
   };
 }
 
