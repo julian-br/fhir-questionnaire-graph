@@ -26,7 +26,7 @@ export default function TextInput({
         {...htmlInputProps}
         onChange={(e) => handleInput(e.target.value)}
         type="text"
-        className="block w-full rounded-md border border-slate-300 bg-slate-50 py-2 px-2 text-sm placeholder:text-slate-300 focus:border-primary-light"
+        className="block w-full rounded-md border border-slate-300 bg-slate-50 py-2 px-2 placeholder:text-slate-400 focus:outline-none  focus:ring-1 focus:ring-primary"
       />
     </div>
   );
