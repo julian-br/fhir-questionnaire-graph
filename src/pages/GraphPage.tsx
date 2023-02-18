@@ -8,7 +8,8 @@ import Graph from "../modules/Graph/components/Graph";
 const questionnaireData = data as Questionnaire;
 const fhirQuestionnaire = new FHIRQuestionnaire(questionnaireData);
 
-export default function QuestionnaireGraphPage({
+export const GRAPH_PAGE_ROUTE = "/graph/:questionnaireId/:itemLinkId";
+export default function GraphPage({
   itemLinkId,
 }: {
   questionnaireId: string;

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { QuestionnaireItem } from "fhir/r4";
 import { NodeProps } from "reactflow";
 import { Link, useRoute } from "wouter";
+import { GRAPH_PAGE_ROUTE } from "../../../../pages/GraphPage";
 import { encodeURLParam } from "../../../../utils/urlParam";
 import NodeContainer from "./NodeContainer";
 
@@ -46,7 +47,7 @@ function ForeignItemNotification({
 }: {
   foreignItemGroupId: string;
 }) {
-  const [, params] = useRoute("/graph/:questionnaireId/:itemLinkId");
+  const [_, params] = useRoute(GRAPH_PAGE_ROUTE);
   return (
     <Link
       to={`/graph/${params?.questionnaireId}/${encodeURLParam(
