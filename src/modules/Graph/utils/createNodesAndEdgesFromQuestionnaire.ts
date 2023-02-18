@@ -122,7 +122,7 @@ function createNodesForAnswerOptions(
   });
 }
 
-function createEdgeForItem(sourceLinkId: string, targetLinkId: string) {
+function createEdgeForItem(sourceLinkId: string, targetLinkId: string): Edge {
   return {
     id: generateEdgeId(sourceLinkId, targetLinkId),
     source: sourceLinkId,
@@ -133,7 +133,7 @@ function createEdgeForItem(sourceLinkId: string, targetLinkId: string) {
 function createEdgesForAnswerOptions(
   answerOptions: QuestionnaireItemAnswerOption[],
   itemLinkId: string
-) {
+): Edge[] {
   return answerOptions.map((answerOption) => ({
     id: generateEdgeId(itemLinkId, answerOption.id!),
     source: itemLinkId,
