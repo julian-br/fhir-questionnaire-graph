@@ -7,6 +7,8 @@ import ReactFlow, {
   ReactFlowInstance,
   Background,
   Controls,
+  getConnectedEdges,
+  Node,
 } from "reactflow";
 import "reactflow/dist/base.css";
 import { calcGraphLayout, Layout } from "../utils/calcGraphLayout";
@@ -32,10 +34,14 @@ const edgeTypes = {
 };
 
 export default function Graph({ questionnaire, activeItemId }: GraphProps) {
-  const { nodes, edges, setLayout, isLayouted } = useGraph(
-    questionnaire,
-    activeItemId
-  );
+  const {
+    nodes,
+    edges,
+    setLayout,
+    isLayouted,
+    highlightEdges,
+    unhighlightEdges,
+  } = useGraph(questionnaire, activeItemId);
 
   const reactFlowInstanceRef = useRef<ReactFlowInstance | null>(null);
 
@@ -45,6 +51,28 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
     }
   }
 
+  function handleNodeMouseEnter(
+    event: React.MouseEvent<Element, MouseEvent>,
+    node: Node
+  ) {
+    if (node.type === "foreignItem") {
+      return;
+    }
+    const connectedEdges = getConnectedEdges([node], edges);
+    highlightEdges(connectedEdges);
+  }
+
+  function handleNodeMouseLeave(
+    event: React.MouseEvent<Element, MouseEvent>,
+    node: Node
+  ) {
+    if (node.type === "foreignItem") {
+      return;
+    }
+    const connectedEdges = getConnectedEdges([node], edges);
+    unhighlightEdges(connectedEdges);
+  }
+
   return (
     <div className={`h-full w-full bg-slate-50`}>
       <ReactFlow
@@ -52,6 +80,8 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
         onInit={(reactFlowInstance) => {
           reactFlowInstanceRef.current = reactFlowInstance;
         }}
+        onNodeMouseEnter={handleNodeMouseEnter}
+        onNodeMouseLeave={handleNodeMouseLeave}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         nodes={nodes}

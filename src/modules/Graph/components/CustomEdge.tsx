@@ -10,7 +10,9 @@ export default function CustomEdge({ data, ...edgeData }: EdgeProps) {
     <>
       <path
         id={edgeData.id}
-        className="react-flow__edge-path stroke-slate-400"
+        className={`fill-none ${
+          edgeData.selected ? "stroke-primary-highlight" : "stroke-slate-400"
+        }`}
         d={edgePath}
         markerEnd={edgeData.markerEnd}
       />

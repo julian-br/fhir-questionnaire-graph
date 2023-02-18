@@ -18,7 +18,7 @@ export default function ForeignItemNode({
   const itemData = data.itemData;
   return (
     <NodeContainer>
-      <div className="w-80 rounded border border-slate-300 bg-slate-50 p-4 text-slate-400">
+      <div className="w-80 rounded border border-slate-300 bg-slate-50 p-4 text-slate-400 ">
         <ForeignItemNotification
           foreignItemGroupId={data.foreignItemGroupId ?? ""}
         />
@@ -54,7 +54,6 @@ function ForeignItemNotification({
         foreignItemGroupId
       )}`}
       className="mb-2 block truncate rounded border border-amber-400 bg-amber-50 px-2 py-1 text-sm text-amber-600"
-      onClick={() => console.log("test")}
     >
       <FontAwesomeIcon icon={faCircleInfo} className="mr-1" />
       <span>from Item: </span>

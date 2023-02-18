@@ -1,4 +1,3 @@
-import { QuestionnaireItem } from "fhir/r4";
 import { useEffect, useState } from "react";
 import { FHIRQuestionnaire } from "../../../fhir-questionnaire/FHIRQuestionnaire";
 import { Edge, useEdgesState, useNodesState } from "reactflow";
@@ -38,10 +37,34 @@ export default function useGraph(
     setIsLayouted(true);
   }
 
+  function highlightEdges(edgesToHightlight: Edge[]) {
+    setEdges((prevEdges) =>
+      prevEdges.map((edge) => {
+        if (edgesToHightlight.includes(edge)) {
+          return { ...edge, selected: true };
+        }
+        return edge;
+      })
+    );
+  }
+
+  function unhighlightEdges(edgesToUnhightlight: Edge[]) {
+    setEdges((prevEdges) =>
+      prevEdges.map((edge) => {
+        if (edgesToUnhightlight.includes(edge)) {
+          return { ...edge, selected: false };
+        }
+        return edge;
+      })
+    );
+  }
+
   return {
     nodes,
     edges,
     setLayout,
     isLayouted,
+    highlightEdges,
+    unhighlightEdges,
   };
 }
