@@ -15,6 +15,7 @@ import { ItemNode } from "./nodes/ItemNode";
 import useGraph from "../hooks/useGraph";
 import AnswerOptionNode from "./nodes/AnswerOptionNode";
 import ForeignItemNode from "./nodes/ForeignItemNode";
+import CustomEdge from "./CustomEdge";
 
 interface GraphProps {
   questionnaire: FHIRQuestionnaire;
@@ -24,6 +25,10 @@ const nodeTypes = {
   item: ItemNode,
   answerOption: AnswerOptionNode,
   foreignItem: ForeignItemNode,
+};
+
+const edgeTypes = {
+  custom: CustomEdge,
 };
 
 export default function Graph({ questionnaire, activeItemId }: GraphProps) {
@@ -48,6 +53,7 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
           reactFlowInstanceRef.current = reactFlowInstance;
         }}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         nodes={nodes}
         edges={edges}
         connectionLineType={ConnectionLineType.SmoothStep}
