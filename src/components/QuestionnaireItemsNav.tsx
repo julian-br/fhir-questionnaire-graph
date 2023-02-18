@@ -12,7 +12,6 @@ interface QuestionnaireItemsNavProps {
 export default function QuestionnaireItemsNav({
   items,
   activeItemId,
-  className,
 }: QuestionnaireItemsNavProps) {
   const [, setLocation] = useLocation();
   const [, params] = useRoute("/graph/:questionnaireId/:itemLinkId");
@@ -25,16 +24,18 @@ export default function QuestionnaireItemsNav({
   }
 
   return (
-    <nav className={className}>
-      <h3 className="ml-5 mb-1 text-lg font-medium">Items ({amountOfItems})</h3>
-      <div className="h-100 flex flex-col overflow-auto">
+    <nav>
+      <h3 className="text-normal mb-1 ml-3 font-semibold">
+        Items ({amountOfItems})
+      </h3>
+      <div className="h-100 mt-3 flex w-80 flex-col overflow-auto">
         {items.map((item) => (
           <QuestionnaireItemsNavEntry
             key={item.linkId}
             onClick={() => changeLocation(item.linkId)}
             isActive={item.linkId === activeItemId}
-            prefix={item.prefix ?? ""}
-            title={item.linkId}
+            prefix={item.prefix}
+            title={item.text ?? ""}
           />
         ))}
       </div>
@@ -51,21 +52,21 @@ function QuestionnaireItemsNavEntry({
   title: string;
   isActive: boolean;
   onClick: () => void;
-  prefix: string;
+  prefix?: string;
 }) {
   return (
     <Button
       onClick={onClick}
       variant="custom"
-      className={`px-5  text-left text-xs font-medium  ${
+      className={`overflow-hidden  truncate rounded-lg px-4 text-left text-xs font-medium ${
         isActive
           ? "bg-primary py-3 font-extrabold text-white"
           : "py-2 text-slate-500 hover:bg-secondary-light hover:text-primary"
       }`}
     >
-      <p>
-        <strong className="mr-2">{prefix}</strong>
-        {title}
+      <p className="truncate">
+        {prefix !== undefined && <strong className="mr-1">{prefix}</strong>}
+        <span title={title}>{title}</span>
       </p>
     </Button>
   );
