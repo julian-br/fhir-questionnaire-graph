@@ -2,6 +2,8 @@ import { QuestionnaireItem } from "fhir/r4";
 import { useLocation, useRoute } from "wouter";
 import { encodeURLParam } from "../utils/urlParam";
 import Button from "./common/Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLayerGroup } from "@fortawesome/free-solid-svg-icons";
 
 interface QuestionnaireItemsNavProps {
   items: QuestionnaireItem[];
@@ -17,7 +19,7 @@ export default function QuestionnaireItemsNav({
   const [, params] = useRoute("/graph/:questionnaireId/:itemLinkId");
   const amountOfItems = items.length;
 
-  function changeLocation(itemLinkId: string) {
+  function navigateToItem(itemLinkId: string) {
     setLocation(
       `/graph/${params?.questionnaireId}/${encodeURLParam(itemLinkId)}`
     );
@@ -25,14 +27,18 @@ export default function QuestionnaireItemsNav({
 
   return (
     <nav>
-      <h3 className="text-normal mb-1 ml-3 font-semibold">
+      <h3 className="mb-2 ml-2 text-lg font-semibold text-slate-600">
+        <FontAwesomeIcon
+          icon={faLayerGroup}
+          className="mr-2 h-5 text-slate-500"
+        />
         Items ({amountOfItems})
       </h3>
-      <div className="h-100 mt-3 flex w-80 flex-col overflow-auto">
+      <div className="h-100 mt-1 flex w-80 flex-col overflow-auto">
         {items.map((item) => (
           <QuestionnaireItemsNavEntry
             key={item.linkId}
-            onClick={() => changeLocation(item.linkId)}
+            onClick={() => navigateToItem(item.linkId)}
             isActive={item.linkId === activeItemId}
             prefix={item.prefix}
             title={item.text ?? ""}
@@ -58,7 +64,7 @@ function QuestionnaireItemsNavEntry({
     <Button
       onClick={onClick}
       variant="custom"
-      className={`overflow-hidden  truncate rounded-lg px-4 text-left text-xs font-medium ${
+      className={`rounded-lg px-4 text-left text-[0.76rem] font-medium ${
         isActive
           ? "bg-primary py-3 font-extrabold text-white"
           : "py-2 text-slate-500 hover:bg-secondary-light hover:text-primary"

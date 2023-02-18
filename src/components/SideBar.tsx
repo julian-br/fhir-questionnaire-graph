@@ -21,7 +21,7 @@ export default function SideBar({ children }: Props) {
           onClick={toggleIsOpen}
           variant="custom"
           className={`${
-            isOpen ? "ml-auto mr-4" : "mx-auto"
+            isOpen ? "ml-auto mr-2" : "mx-auto"
           }   rounded-lg px-2 py-1 text-lg font-bold text-slate-400 hover:bg-secondary-light hover:text-primary`}
         >
           <FontAwesomeIcon className="h-6" icon={faBars} />
