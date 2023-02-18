@@ -1,17 +1,17 @@
-import QuestionnaireGraphPage from "./pages/QuestionnaireGraphPage";
+import GraphPage, { GRAPH_PAGE_ROUTE } from "./pages/GraphPage";
 import { Route } from "wouter";
-import IndexPage from "./pages/IndexPage";
+import IndexPage, { INDEX_PAGE_ROUTE } from "./pages/IndexPage";
 import { decodeURLParam } from "./utils/urlParam";
 
 function App() {
   return (
     <div className="flex h-screen flex-col overflow-hidden font-inter text-slate-700">
-      <Route path="">
+      <Route path={INDEX_PAGE_ROUTE}>
         <IndexPage />
       </Route>
-      <Route path="/graph/:questionnaireId/:itemLinkId">
+      <Route path={GRAPH_PAGE_ROUTE}>
         {(params: { questionnaireId: string; itemLinkId: string }) => (
-          <QuestionnaireGraphPage
+          <GraphPage
             questionnaireId={decodeURLParam(params.questionnaireId)}
             itemLinkId={decodeURLParam(params.itemLinkId)}
           />
