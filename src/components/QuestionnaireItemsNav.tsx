@@ -34,7 +34,7 @@ export default function QuestionnaireItemsNav({
         />
         Items ({amountOfItems})
       </h3>
-      <div className="h-100 mt-1 flex w-80 flex-col overflow-auto">
+      <div className="h-100 mt-1 flex w-80 flex-col">
         {items.map((item) => (
           <QuestionnaireItemsNavEntry
             key={item.linkId}
@@ -64,7 +64,7 @@ function QuestionnaireItemsNavEntry({
     <Button
       onClick={onClick}
       variant="custom"
-      className={`rounded-lg px-4 text-left text-[0.76rem] font-medium ${
+      className={`w-full rounded-lg px-4 text-left text-[0.76rem] font-medium ${
         isActive
           ? "bg-primary py-3 font-extrabold text-white"
           : "py-2 text-slate-500 hover:bg-secondary-light hover:text-primary"
