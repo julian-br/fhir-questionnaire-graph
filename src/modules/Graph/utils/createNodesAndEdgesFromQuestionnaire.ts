@@ -6,6 +6,8 @@ import { ForeignItemNodeData } from "../components/nodes/ForeignItemNode";
 import { ItemNodeData } from "../components/nodes/ItemNode";
 import { findCorrespondingAnswerOptions } from "./findCorrespondingAnswerOptions";
 
+//TODO: refactor
+
 export type NodeData = ItemNodeData | AnswerNodeData | ForeignItemNodeData;
 
 // this position will be overwritten as soon as the Graph is layouted
@@ -14,11 +16,28 @@ const POSITION = {
   y: NaN,
 };
 
+class IdGenerator {
+  private static groupLinkId: string = "";
+
+  static setGroupLinkId(groupLinkId: string) {
+    this.groupLinkId = groupLinkId;
+  }
+
+  static generateEdgeId(sourceLinkId: string, targetLinkId: string) {
+    return sourceLinkId + targetLinkId + Math.random(); // add random number to prevent duplicate edge ids
+  }
+
+  static generateNodeId(itemLinkId: string) {
+    return itemLinkId + this.groupLinkId; // include groupLinkId in each node id to prevent wrong memoization from ReactFlow
+  }
+}
+
 export function createNodesAndEdgesFromQuestionnaire(
   questionnaire: FHIRQuestionnaire,
-  itemLinkId: string
+  groupLinkId: string
 ) {
-  const relevantItems = questionnaire.getRelevantItemsForItem(itemLinkId);
+  IdGenerator.setGroupLinkId(groupLinkId);
+  const relevantItems = questionnaire.getRelevantItemsForItem(groupLinkId);
 
   const nodes: Node<NodeData>[] = [];
   const edges: Edge[] = [];
@@ -35,9 +54,9 @@ export function createNodesAndEdgesFromQuestionnaire(
     }
 
     const itemGroupId = questionnaire.getGroupIdOfItem(item.linkId);
-    const itemIsForeign = itemGroupId !== itemLinkId;
+    const itemIsForeign = itemGroupId !== groupLinkId;
     if (itemIsForeign) {
-      nodes.push(createNodeForItem(item, true, itemGroupId));
+      nodes.push(createNodeForForeignItem(item, itemGroupId));
     } else {
       nodes.push(createNodeForItem(item));
     }
@@ -69,33 +88,32 @@ export function createNodesAndEdgesFromQuestionnaire(
   return [nodes, edges] as const;
 }
 
-function createNodeForItem(
-  item: QuestionnaireItem,
-  isForeign: boolean = false,
-  foreignItemGroupId?: string
-): Node<NodeData> {
-  if (isForeign) {
-    return {
-      id: item.linkId,
-      width: NaN,
-      data: {
-        foreignItemGroupId,
-        itemData: item,
-      },
-      /*     selectable: false, */
-      focusable: false,
-      type: "foreignItem",
-      position: POSITION,
-    };
-  }
-
+function createNodeForItem(item: QuestionnaireItem): Node<NodeData> {
   return {
-    id: item.linkId,
+    id: IdGenerator.generateNodeId(item.linkId),
     width: NaN,
     data: {
       itemData: item,
     },
     type: "item",
+    position: POSITION,
+  };
+}
+
+function createNodeForForeignItem(
+  item: QuestionnaireItem,
+  foreignItemGroupId: string
+) {
+  return {
+    id: IdGenerator.generateNodeId(item.linkId),
+    width: NaN,
+    data: {
+      foreignItemGroupId,
+      itemData: item,
+    },
+    /*     selectable: false, */
+    focusable: false,
+    type: "foreignItem",
     position: POSITION,
   };
 }
@@ -111,7 +129,7 @@ function createNodesForAnswerOptions(
     }
 
     return {
-      id: answerOption.id,
+      id: IdGenerator.generateNodeId(answerOption.id),
       width: NaN,
       data: {
         ...answerOption,
@@ -124,9 +142,9 @@ function createNodesForAnswerOptions(
 
 function createEdgeForItem(sourceLinkId: string, targetLinkId: string): Edge {
   return {
-    id: generateEdgeId(sourceLinkId, targetLinkId),
-    source: sourceLinkId,
-    target: targetLinkId,
+    id: IdGenerator.generateEdgeId(sourceLinkId, targetLinkId),
+    source: IdGenerator.generateNodeId(sourceLinkId),
+    target: IdGenerator.generateNodeId(targetLinkId),
   };
 }
 
@@ -135,15 +153,8 @@ function createEdgesForAnswerOptions(
   itemLinkId: string
 ): Edge[] {
   return answerOptions.map((answerOption) => ({
-    id: generateEdgeId(itemLinkId, answerOption.id!),
-    source: itemLinkId,
-    target: answerOption.id!,
+    id: IdGenerator.generateEdgeId(itemLinkId, answerOption.id!),
+    source: IdGenerator.generateNodeId(itemLinkId),
+    target: IdGenerator.generateNodeId(answerOption.id!),
   }));
-}
-
-/**
- * generates a unique id for each edge
- */
-function generateEdgeId(sourceLinkId: string, targetLinkId: string) {
-  return sourceLinkId + targetLinkId + Math.random(); // add random number to prevent duplicate edge ids
 }

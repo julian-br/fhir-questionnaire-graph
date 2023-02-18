@@ -44,9 +44,9 @@ export class FHIRQuestionnaire {
   }
 
   /**
-   * gets all relevant items for an item
-   * this means all nested items and also all foreign items the items is dependend on
-   * if the item has no nested items the itself gets returned
+   * Gets all relevant items for an item.
+   * This means all nested items and also all foreign items.
+   * If the item has no nested items the item itself gets returned.
    */
   getRelevantItemsForItem(itemLinkId: string) {
     const item = this.getItemById(itemLinkId);

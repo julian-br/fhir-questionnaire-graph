@@ -8,7 +8,7 @@ import ReactFlow, {
   Background,
   Controls,
 } from "reactflow";
-import "reactflow/dist/style.css";
+import "reactflow/dist/base.css";
 import { calcGraphLayout, Layout } from "../utils/calcGraphLayout";
 import { FHIRQuestionnaire } from "../../../fhir-questionnaire/FHIRQuestionnaire";
 import { ItemNode } from "./nodes/ItemNode";
