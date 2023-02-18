@@ -2,6 +2,8 @@ import { QuestionnaireItem } from "fhir/r4";
 import { useLocation, useRoute } from "wouter";
 import { encodeURLParam } from "../utils/urlParam";
 import Button from "./common/Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLayerGroup } from "@fortawesome/free-solid-svg-icons";
 
 interface QuestionnaireItemsNavProps {
   items: QuestionnaireItem[];
@@ -12,29 +14,34 @@ interface QuestionnaireItemsNavProps {
 export default function QuestionnaireItemsNav({
   items,
   activeItemId,
-  className,
 }: QuestionnaireItemsNavProps) {
   const [, setLocation] = useLocation();
   const [, params] = useRoute("/graph/:questionnaireId/:itemLinkId");
   const amountOfItems = items.length;
 
-  function changeLocation(itemLinkId: string) {
+  function navigateToItem(itemLinkId: string) {
     setLocation(
       `/graph/${params?.questionnaireId}/${encodeURLParam(itemLinkId)}`
     );
   }
 
   return (
-    <nav className={className}>
-      <h3 className="ml-5 mb-1 text-lg font-medium">Items ({amountOfItems})</h3>
-      <div className="h-100 flex flex-col overflow-auto">
+    <nav>
+      <h3 className="mb-2 ml-2 text-lg font-semibold text-slate-600">
+        <FontAwesomeIcon
+          icon={faLayerGroup}
+          className="mr-2 h-5 text-slate-500"
+        />
+        Items ({amountOfItems})
+      </h3>
+      <div className="h-100 mt-1 flex w-80 flex-col">
         {items.map((item) => (
           <QuestionnaireItemsNavEntry
             key={item.linkId}
-            onClick={() => changeLocation(item.linkId)}
+            onClick={() => navigateToItem(item.linkId)}
             isActive={item.linkId === activeItemId}
-            prefix={item.prefix ?? ""}
-            title={item.linkId}
+            prefix={item.prefix}
+            title={item.text ?? ""}
           />
         ))}
       </div>
@@ -51,21 +58,21 @@ function QuestionnaireItemsNavEntry({
   title: string;
   isActive: boolean;
   onClick: () => void;
-  prefix: string;
+  prefix?: string;
 }) {
   return (
     <Button
       onClick={onClick}
       variant="custom"
-      className={`px-5  text-left text-xs font-medium  ${
+      className={`w-full rounded-lg px-4 text-left text-[0.76rem] font-medium ${
         isActive
           ? "bg-primary py-3 font-extrabold text-white"
           : "py-2 text-slate-500 hover:bg-secondary-light hover:text-primary"
       }`}
     >
-      <p>
-        <strong className="mr-2">{prefix}</strong>
-        {title}
+      <p className="truncate">
+        {prefix !== undefined && <strong className="mr-1">{prefix}</strong>}
+        <span title={title}>{title}</span>
       </p>
     </Button>
   );
