@@ -10,13 +10,7 @@ export function ItemNode({ data }: NodeProps<ItemNodeData>) {
   const itemData = data.itemData;
   return (
     <NodeContainer>
-      <div
-        className={`w-80 rounded border   p-4 ${
-          false
-            ? " border-slate-300 bg-slate-50 text-slate-400"
-            : "border-secondary"
-        }`}
-      >
+      <div className="w-80 rounded border border-secondary p-4 hover:border-primary-highlight">
         <div className="w-full">
           <p className="pb-2">
             {itemData.prefix !== undefined && (
