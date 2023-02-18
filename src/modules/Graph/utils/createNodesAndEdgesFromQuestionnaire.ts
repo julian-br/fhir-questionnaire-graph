@@ -155,6 +155,7 @@ function createEdgeForItem(
     source: IdGenerator.generateNodeId(sourceItemLinkId),
     target: IdGenerator.generateNodeId(targetLinkId),
     label: label,
+    type: "custom",
   };
 }
 
@@ -166,5 +167,6 @@ function createEdgesForAnswerOptions(
     id: IdGenerator.generateEdgeId(itemLinkId, answerOption.id!),
     source: IdGenerator.generateNodeId(itemLinkId),
     target: IdGenerator.generateNodeId(answerOption.id!),
+    type: "custom",
   }));
 }
