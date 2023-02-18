@@ -1,5 +1,3 @@
-import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { QuestionnaireItem } from "fhir/r4";
 import { NodeProps } from "reactflow";
 import NodeContainer from "./NodeContainer";
