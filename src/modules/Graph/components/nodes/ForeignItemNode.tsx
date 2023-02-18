@@ -19,9 +19,7 @@ export default function ForeignItemNode({
   return (
     <NodeContainer>
       <div className="w-80 rounded border border-slate-300 bg-slate-50 p-4 text-slate-400 ">
-        <ForeignItemNotification
-          foreignItemGroupId={data.foreignItemGroupId ?? ""}
-        />
+        <ForeignItemLink foreignItemGroupId={data.foreignItemGroupId ?? ""} />
         <div className="w-full">
           <p className="pb-2">
             {itemData.prefix !== undefined && (
@@ -42,7 +40,7 @@ export default function ForeignItemNode({
   );
 }
 
-function ForeignItemNotification({
+function ForeignItemLink({
   foreignItemGroupId,
 }: {
   foreignItemGroupId: string;
@@ -53,11 +51,14 @@ function ForeignItemNotification({
       to={`/graph/${params?.questionnaireId}/${encodeURLParam(
         foreignItemGroupId
       )}`}
-      className="mb-2 block truncate rounded border border-amber-400 bg-amber-50 px-2 py-1 text-sm text-amber-600"
+      className="group mb-2 block truncate rounded border border-amber-400 bg-amber-50 px-2 py-1 text-sm text-amber-600"
     >
       <FontAwesomeIcon icon={faCircleInfo} className="mr-1" />
       <span>from Item: </span>
-      <span className="font-semibold underline" title={foreignItemGroupId}>
+      <span
+        className="font-semibold group-hover:font-bold group-hover:underline"
+        title={foreignItemGroupId}
+      >
         {foreignItemGroupId}
       </span>
     </Link>
