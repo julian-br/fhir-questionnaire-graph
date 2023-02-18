@@ -2,6 +2,8 @@ import {
   QuestionnaireItemAnswerOption,
   QuestionnaireItemEnableWhen,
 } from "fhir/r4";
+import { getAnswerOptionValue } from "./getAnswerOptionValue";
+import { getEnabledWhenValue } from "./getEnableWhenValue";
 
 export function findCorrespondingAnswerOptions(
   answerOptions: QuestionnaireItemAnswerOption[],
@@ -52,23 +54,5 @@ function compareValuesWithFHIROperator(
     default:
       console.warn(`the operator ${operator} is not supported yet`);
       return false;
-  }
-}
-
-function getEnabledWhenValue(enableWhen: QuestionnaireItemEnableWhen) {
-  let key: keyof typeof enableWhen;
-  for (key in enableWhen) {
-    if (key.includes("answer")) {
-      return enableWhen[key]?.toString();
-    }
-  }
-}
-
-function getAnswerOptionValue(answerOption: QuestionnaireItemAnswerOption) {
-  let key: keyof typeof answerOption;
-  for (key in answerOption) {
-    if (key.includes("value")) {
-      return answerOption[key]?.toString();
-    }
   }
 }
