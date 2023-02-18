@@ -26,8 +26,8 @@ export default function QuestionnaireItemsNav({
 
   return (
     <nav className={className}>
-      <h3 className="ml-5 mb-3 text-xl font-medium">Items ({amountOfItems})</h3>
-      <div className="flex h-[700px] flex-col overflow-auto">
+      <h3 className="ml-5 mb-1 text-lg font-medium">Items ({amountOfItems})</h3>
+      <div className="h-100 flex flex-col overflow-auto">
         {items.map((item) => (
           <QuestionnaireItemsNavEntry
             key={item.linkId}
@@ -57,10 +57,10 @@ function QuestionnaireItemsNavEntry({
     <Button
       onClick={onClick}
       variant="custom"
-      className={`px-5 py-2 text-left text-sm  ${
+      className={`px-5  text-left text-xs font-medium  ${
         isActive
-          ? "bg-primary font-semibold text-white"
-          : "hover:bg-secondary-light hover:text-primary"
+          ? "bg-primary py-3 font-extrabold text-white"
+          : "py-2 text-slate-500 hover:bg-secondary-light hover:text-primary"
       }`}
     >
       <p>
