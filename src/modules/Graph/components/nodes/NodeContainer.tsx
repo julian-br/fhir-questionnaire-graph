@@ -13,9 +13,9 @@ export default function NodeContainer({ children }: NodeContainerProps) {
         type="target"
         position={Position.Left}
       />
-      <div className="rounded border border-slate-300 bg-white">{children}</div>
+      <div className=" bg-white">{children}</div>
       <Handle
-        className="invisible -translate-x-10"
+        className="invisible -translate-x-12"
         type="source"
         position={Position.Right}
       />

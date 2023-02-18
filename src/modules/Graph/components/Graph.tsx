@@ -5,7 +5,6 @@ import ReactFlow, {
   useEdges,
   useNodesInitialized,
   ReactFlowInstance,
-  MiniMap,
   Background,
   Controls,
 } from "reactflow";
@@ -15,6 +14,7 @@ import { FHIRQuestionnaire } from "../../../fhir-questionnaire/FHIRQuestionnaire
 import { ItemNode } from "./nodes/ItemNode";
 import useGraph from "../hooks/useGraph";
 import AnswerOptionNode from "./nodes/AnswerOptionNode";
+import ForeignItemNode from "./nodes/ForeignItemNode";
 
 interface GraphProps {
   questionnaire: FHIRQuestionnaire;
@@ -23,6 +23,7 @@ interface GraphProps {
 const nodeTypes = {
   item: ItemNode,
   answerOption: AnswerOptionNode,
+  foreignItem: ForeignItemNode,
 };
 
 export default function Graph({ questionnaire, activeItemId }: GraphProps) {

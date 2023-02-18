@@ -2,10 +2,11 @@ import { QuestionnaireItem, QuestionnaireItemAnswerOption } from "fhir/r4";
 import { Edge, Node } from "reactflow";
 import { FHIRQuestionnaire } from "../../../fhir-questionnaire/FHIRQuestionnaire";
 import { AnswerNodeData } from "../components/nodes/AnswerOptionNode";
-import { DefaultNodeData } from "../components/nodes/ItemNode";
+import { ForeignItemNodeData } from "../components/nodes/ForeignItemNode";
+import { ItemNodeData } from "../components/nodes/ItemNode";
 import { findCorrespondingAnswerOptions } from "./findCorrespondingAnswerOptions";
 
-export type NodeData = DefaultNodeData | AnswerNodeData;
+export type NodeData = ItemNodeData | AnswerNodeData | ForeignItemNodeData;
 
 // this position will be overwritten as soon as the Graph is layouted
 const POSITION = {
@@ -73,12 +74,25 @@ function createNodeForItem(
   isForeign: boolean = false,
   foreignItemGroupId?: string
 ): Node<NodeData> {
+  if (isForeign) {
+    return {
+      id: item.linkId,
+      width: NaN,
+      data: {
+        foreignItemGroupId,
+        itemData: item,
+      },
+      /*     selectable: false, */
+      focusable: false,
+      type: "foreignItem",
+      position: POSITION,
+    };
+  }
+
   return {
     id: item.linkId,
     width: NaN,
     data: {
-      isForeign,
-      foreignItemGroupId,
       itemData: item,
     },
     type: "item",

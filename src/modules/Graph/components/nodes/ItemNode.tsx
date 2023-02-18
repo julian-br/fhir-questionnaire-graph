@@ -4,22 +4,21 @@ import { QuestionnaireItem } from "fhir/r4";
 import { NodeProps } from "reactflow";
 import NodeContainer from "./NodeContainer";
 
-export interface DefaultNodeData {
-  isForeign: boolean;
-  foreignItemGroupId?: string;
+export interface ItemNodeData {
   itemData: QuestionnaireItem;
 }
 
-export function ItemNode({ data }: NodeProps<DefaultNodeData>) {
+export function ItemNode({ data }: NodeProps<ItemNodeData>) {
   const itemData = data.itemData;
   return (
     <NodeContainer>
-      <div className="w-80 p-4">
-        {data.isForeign && (
-          <ForeignItemNotification
-            foreignItemGroupId={data.foreignItemGroupId ?? ""}
-          />
-        )}
+      <div
+        className={`w-80 rounded border   p-4 ${
+          false
+            ? " border-slate-300 bg-slate-50 text-slate-400"
+            : "border-secondary"
+        }`}
+      >
         <div className="w-full">
           <p className="pb-2">
             {itemData.prefix !== undefined && (
@@ -29,25 +28,13 @@ export function ItemNode({ data }: NodeProps<DefaultNodeData>) {
             )}
             <span>{itemData.text}</span>
           </p>
-          <span className="p rounded-full border border-secondary bg-secondary-light py-1 px-2 text-sm font-semibold text-primary">
+          <span
+            className={`p rounded-full border border-secondary bg-secondary-light py-1 px-2 text-sm font-semibold text-primary`}
+          >
             {itemData.type}
           </span>
         </div>
       </div>
     </NodeContainer>
-  );
-}
-
-function ForeignItemNotification({
-  foreignItemGroupId,
-}: {
-  foreignItemGroupId: string;
-}) {
-  return (
-    <div className="mb-2 rounded border border-amber-400 bg-amber-50 px-2 py-1 text-sm text-amber-600">
-      <FontAwesomeIcon icon={faCircleInfo} className="mr-1" />
-      <span>from Item: </span>
-      <a className="font-medium ">{foreignItemGroupId}</a>
-    </div>
   );
 }
