@@ -38,7 +38,7 @@ export default function CustomEdge({ data, ...edgeData }: EdgeProps) {
 function EdgeLabel({ text, selected }: { text: string; selected: boolean }) {
   return (
     <div
-      className={`mb-3 px-3 py-1 text-xs font-bold  ${
+      className={`mb-4 text-sm font-bold  ${
         selected ? "text-primary-500" : "text-primary-700"
       }`}
     >

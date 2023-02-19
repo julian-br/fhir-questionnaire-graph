@@ -27,14 +27,14 @@ export default function QuestionnaireItemsNav({
 
   return (
     <nav className="border-box w-[21rem] select-none">
-      <h3 className="mb-2 ml-4 text-lg font-semibold text-slate-700">
+      <h3 className="mb-2 ml-6 text-lg font-semibold text-slate-700">
         <FontAwesomeIcon
           icon={faLayerGroup}
           className="mr-2 h-5 text-slate-600"
         />
         Items ({amountOfItems})
       </h3>
-      <div className="z-10 mt-1 max-h-[90vh] overflow-y-auto overflow-x-hidden px-3">
+      <div className="z-10 mt-1 ml-1 max-h-[90vh] overflow-y-auto overflow-x-hidden px-3">
         {items.map((item) => (
           <QuestionnaireItemsNavEntry
             key={item.linkId}
