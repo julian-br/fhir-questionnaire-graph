@@ -5,6 +5,7 @@ import { Questionnaire } from "fhir/r4";
 import QuestionnaireItemsNav from "../components/QuestionnaireItemsNav";
 import { FHIRQuestionnaire } from "../fhir-questionnaire/FHIRQuestionnaire";
 import Graph from "../modules/Graph/components/Graph";
+import TextInput from "../components/common/input/TextInput";
 const questionnaireData = data as Questionnaire;
 const fhirQuestionnaire = new FHIRQuestionnaire(questionnaireData);
 
@@ -18,6 +19,20 @@ export default function GraphPage({
   return (
     <>
       <Navbar />
+      <div className=" flex items-center justify-between border-b border-slate-300 bg-white px-7 pt-1 pb-2">
+        <div className="w-2/3 text-sm text-slate-600">
+          <span className="mr-1">Basis Anamnese beim Erwachsenen {">"}</span>
+          <span className="font-semibold text-primary-900">
+            {fhirQuestionnaire.getItemById(itemLinkId).text}
+          </span>
+        </div>
+        <div className="w-1/3 pl-20">
+          <TextInput
+            className="text-sm"
+            placeholder="search for item..."
+          ></TextInput>
+        </div>
+      </div>
       <main className="flex flex-grow">
         <SideBar>
           <div>
