@@ -17,13 +17,13 @@ export default function ForeignItemNode({
 }: NodeProps<ForeignItemNodeData>) {
   const itemData = data.itemData;
   return (
-    <NodeContainer>
-      <div className="w-80 rounded border border-slate-300 bg-slate-50 p-4 text-slate-400 ">
+    <NodeContainer variant="custom">
+      <div className="w-80 rounded-lg border-2 border-dashed border-slate-300  bg-slate-50 p-4 text-slate-400 ">
         <ForeignItemLink foreignItemGroupId={data.foreignItemGroupId ?? ""} />
         <div className="w-full">
           <p className="pb-2">
             {itemData.prefix !== undefined && (
-              <span className="mr-2 font-semibold text-primary">
+              <span className="mr-2 font-semibold text-slate-600">
                 {itemData.prefix}
               </span>
             )}
@@ -52,11 +52,11 @@ function ForeignItemLink({
         foreignItemGroupId
       )}`}
       title={foreignItemGroupId}
-      className="group mb-2 block truncate rounded border border-amber-400 bg-amber-50 px-2 py-2 text-sm text-amber-600 hover:border-amber-500"
+      className="group mb-2 block truncate rounded-lg border border-amber-400 bg-amber-50 px-2 py-2 text-sm text-amber-600 "
     >
       <FontAwesomeIcon icon={faCircleInfo} className="mr-1" />
       <span>from Item: </span>
-      <span className="font-semibold group-hover:font-bold group-hover:underline">
+      <span className="font-semibold group-hover:underline">
         {foreignItemGroupId}
       </span>
     </Link>

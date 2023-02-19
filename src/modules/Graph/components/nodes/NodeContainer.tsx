@@ -3,9 +3,19 @@ import { Handle, Position } from "reactflow";
 
 interface NodeContainerProps {
   children: ReactNode;
+  variant?: keyof typeof nodeContainerVariants;
 }
 
-export default function NodeContainer({ children }: NodeContainerProps) {
+const nodeContainerVariants = {
+  default:
+    "rounded-lg border border-slate-400 hover:border-2 hover:border-primary-400 z-20 box-content overflow-hidden",
+  custom: "",
+};
+
+export default function NodeContainer({
+  children,
+  variant,
+}: NodeContainerProps) {
   return (
     <div>
       <Handle
@@ -13,9 +23,11 @@ export default function NodeContainer({ children }: NodeContainerProps) {
         type="target"
         position={Position.Left}
       />
-      <div className=" bg-white">{children}</div>
+      <div className={nodeContainerVariants[variant ?? "default"]}>
+        {children}
+      </div>
       <Handle
-        className="invisible -translate-x-12"
+        className="invisible -translate-x-14"
         type="source"
         position={Position.Right}
       />

@@ -15,21 +15,19 @@ export default function SideBar({ children }: Props) {
   }
 
   return (
-    <nav className="relative border-r border-slate-200 ">
+    <nav className="relative border-r border-t border-slate-300 bg-slate-100">
       <div className="absolute flex w-full pt-5">
         <Button
           onClick={toggleIsOpen}
           variant="custom"
           className={`${
             isOpen ? "ml-auto mr-2" : "mx-auto"
-          }   rounded-lg px-2 py-1 text-lg font-bold text-slate-400 hover:bg-secondary-light hover:text-primary`}
+          }   rounded-lg px-2 py-1 text-lg font-bold text-slate-500 hover:bg-primary-100 hover:text-primary-600`}
         >
           <FontAwesomeIcon className="h-6" icon={faBars} />
         </Button>
       </div>
-      <div className={isOpen ? "mt-6 w-fit px-3" : "w-16"}>
-        {isOpen && children}
-      </div>
+      <div className={isOpen ? "mt-6" : "w-16"}>{isOpen && children}</div>
     </nav>
   );
 }

@@ -11,7 +11,7 @@ export default function CustomEdge({ data, ...edgeData }: EdgeProps) {
       <path
         id={edgeData.id}
         className={`fill-none ${
-          edgeData.selected ? "stroke-primary-highlight" : "stroke-slate-400"
+          edgeData.selected ? "stroke-primary-400 stroke-2" : "stroke-slate-400"
         }`}
         d={edgePath}
         markerEnd={edgeData.markerEnd}
@@ -38,8 +38,8 @@ export default function CustomEdge({ data, ...edgeData }: EdgeProps) {
 function EdgeLabel({ text, selected }: { text: string; selected: boolean }) {
   return (
     <div
-      className={`rounded border  bg-white px-3 py-1 text-xs font-bold text-primary ${
-        selected ? "border-primary-highlight" : "border-slate-400"
+      className={`mb-3 px-3 py-1 text-xs font-bold  ${
+        selected ? "text-primary-500" : "text-primary-700"
       }`}
     >
       {text}

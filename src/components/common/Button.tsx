@@ -7,13 +7,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClassMap = {
-  primary:
-    "bg-primary text-white font-semibold hover:bg-primary-light active:bg-primary focus:ring-primary-light",
-  secondary:
-    "bg-secondary-light text-primary font-bold hover:bg-secondary active:bg-secondary-light",
-  danger:
-    "bg-danger text-white font-semibold hover:bg-danger-light active:bg-danger",
-  custom: "focus:outline-none  focus:ring-1 focus:ring-primary",
+  primary: "bg-primary-600 text-white font-semibold hover:bg-primary-200",
+  custom: "",
 } as const;
 
 const sizeClassMap = {
@@ -37,7 +32,7 @@ export default function Button({
     <button
       {...reactButtonProps}
       type={reactButtonProps.type ?? "button"}
-      className={`${variantClasses} ${sizeClasses} ${reactButtonProps.className}`}
+      className={`focus-visible:outline-none  focus-visible:ring-2 focus-visible:ring-primary-300  ${variantClasses} ${sizeClasses} ${reactButtonProps.className}`}
     >
       {children}
     </button>
