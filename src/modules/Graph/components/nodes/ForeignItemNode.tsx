@@ -9,6 +9,7 @@ import NodeContainer from "./NodeContainer";
 
 export interface ForeignItemNodeData {
   foreignItemGroupId: string;
+  foreignItemGroupText?: string;
   itemData: QuestionnaireItem;
 }
 
@@ -19,7 +20,10 @@ export default function ForeignItemNode({
   return (
     <NodeContainer variant="custom">
       <div className="w-80 rounded-lg border-2 border-dashed border-slate-300  bg-slate-50 p-4 text-slate-400 ">
-        <ForeignItemLink foreignItemGroupId={data.foreignItemGroupId ?? ""} />
+        <ForeignItemLink
+          foreignItemGroupId={data.foreignItemGroupId}
+          foreignItemGroupText={data.foreignItemGroupText}
+        />
         <div className="w-full">
           <p className="pb-2">
             {itemData.prefix !== undefined && (
@@ -30,7 +34,7 @@ export default function ForeignItemNode({
             <span>{itemData.text}</span>
           </p>
           <span
-            className={`p rounded-full border border-slate-300 bg-slate-100 py-1 px-2 text-sm font-semibold text-slate-500`}
+            className={`p rounded-full border border-slate-300 bg-slate-100 py-1 px-2 text-xs font-semibold text-slate-500`}
           >
             {itemData.type}
           </span>
@@ -42,8 +46,10 @@ export default function ForeignItemNode({
 
 function ForeignItemLink({
   foreignItemGroupId,
+  foreignItemGroupText,
 }: {
   foreignItemGroupId: string;
+  foreignItemGroupText?: string;
 }) {
   const [_, params] = useRoute(GRAPH_PAGE_ROUTE);
   return (
@@ -51,13 +57,13 @@ function ForeignItemLink({
       to={`/graph/${params?.questionnaireId}/${encodeURLParam(
         foreignItemGroupId
       )}`}
-      title={foreignItemGroupId}
+      title={`${foreignItemGroupText} (${foreignItemGroupId})`}
       className="group mb-2 block truncate rounded-lg border border-amber-400 bg-amber-50 px-2 py-2 text-sm text-amber-600 "
     >
       <FontAwesomeIcon icon={faCircleInfo} className="mr-1" />
-      <span>from Item: </span>
+      <span>from: </span>
       <span className="font-semibold group-hover:underline">
-        {foreignItemGroupId}
+        {foreignItemGroupText ? foreignItemGroupText : foreignItemGroupId}
       </span>
     </Link>
   );

@@ -57,7 +57,10 @@ export function createNodesAndEdgesFromQuestionnaire(
     const itemGroupId = questionnaire.getGroupIdOfItem(item.linkId);
     const itemIsForeign = itemGroupId !== groupLinkId;
     if (itemIsForeign) {
-      nodes.push(createNodeForForeignItem(item, itemGroupId));
+      const foreignItemGroupText = questionnaire.getItemById(itemGroupId).text;
+      nodes.push(
+        createNodeForForeignItem(item, itemGroupId, foreignItemGroupText)
+      );
     } else {
       nodes.push(createNodeForItem(item));
     }
@@ -107,13 +110,15 @@ function createNodeForItem(item: QuestionnaireItem): Node<NodeData> {
 
 function createNodeForForeignItem(
   item: QuestionnaireItem,
-  foreignItemGroupId: string
-) {
+  foreignItemGroupId: string,
+  foreignItemGroupText?: string
+): Node<ForeignItemNodeData> {
   return {
     id: IdGenerator.generateNodeId(item.linkId),
     width: NaN,
     data: {
       foreignItemGroupId,
+      foreignItemGroupText,
       itemData: item,
     },
     /*     selectable: false, */
