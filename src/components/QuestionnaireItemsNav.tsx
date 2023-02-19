@@ -41,7 +41,8 @@ export default function QuestionnaireItemsNav({
             onClick={() => navigateToItem(item.linkId)}
             isActive={item.linkId === activeItemId}
             prefix={item.prefix}
-            title={item.text ?? ""}
+            text={item.text ?? ""}
+            itemId={item.linkId}
           />
         ))}
       </div>
@@ -50,15 +51,17 @@ export default function QuestionnaireItemsNav({
 }
 
 function QuestionnaireItemsNavEntry({
-  title,
+  text,
   isActive,
   onClick,
   prefix,
+  itemId,
 }: {
-  title: string;
+  text: string;
   isActive: boolean;
   onClick: () => void;
   prefix?: string;
+  itemId: string;
 }) {
   return (
     <Button
@@ -72,7 +75,7 @@ function QuestionnaireItemsNavEntry({
     >
       <p className="truncate">
         {prefix !== undefined && <strong className="mr-1">{prefix}</strong>}
-        <span title={title}>{title}</span>
+        <span title={`${text} (${itemId})`}>{text}</span>
       </p>
     </Button>
   );

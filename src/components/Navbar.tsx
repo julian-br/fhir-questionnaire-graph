@@ -8,7 +8,7 @@ interface NavbarProps {
 
 function Navbar({ children }: NavbarProps) {
   return (
-    <nav className="z-20 flex h-16 items-center border-b border-slate-300 bg-white px-7 py-3">
+    <nav className="z-20 flex items-center bg-primary-800 px-7 py-4 shadow-md">
       <Brand />
       {children}
     </nav>
@@ -17,12 +17,9 @@ function Navbar({ children }: NavbarProps) {
 
 function Brand() {
   return (
-    <div className="flex items-center">
-      <FontAwesomeIcon
-        className="h-8 text-primary-600"
-        icon={faDiagramProject}
-      />
-      <span className="ml-3 text-2xl font-semibold text-slate-700">
+    <div className="flex items-center text-primary-50">
+      <FontAwesomeIcon className="h-8 " icon={faDiagramProject} />
+      <span className="ml-3 text-2xl font-normal ">
         <strong className="mr-2 font-bold">FHIR</strong>
         Questionnaire Graph
       </span>
