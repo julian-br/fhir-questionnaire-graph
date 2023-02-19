@@ -7,11 +7,18 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'primary': 'hsla(226, 50%, 54%)',
-        'primary-highlight': 'hsla(226, 70%, 74%, 0.7)',
-        'primary-light': 'hsla(226, 50%,  54%, 0.4)',
-        'secondary': ' hsla(226, 50%, 54%, 0.25)',
-        'secondary-light': 'hsla(226, 50%, 54%, 0.1)',
+        'primary': {
+          '50': '#f2f6fc',
+          '100': '#e2ebf7',
+          '200': '#ccdcf1',
+          '300': '#a9c6e7',
+          '400': '#7fa7db',
+          '500': '#618ad0',
+          '600': '#4d71c3',
+          '700': '#435fb2',
+          '800': '#40559c',
+          '900': '#344574',
+        },
       },
       fontFamily: {
         'inter': ['Inter', 'sans-serif'],

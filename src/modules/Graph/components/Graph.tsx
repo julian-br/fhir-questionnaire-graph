@@ -93,7 +93,7 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
         maxZoom={1.5}
         minZoom={0.5}
       >
-        <Background />
+        <Background className="stroke-slate-300" />
         <Controls
           showInteractive={false}
           position="top-right"
