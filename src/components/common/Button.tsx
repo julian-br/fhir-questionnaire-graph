@@ -1,19 +1,19 @@
 import { ReactNode } from "react";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant: keyof typeof variantClassMap;
+  variant: keyof typeof buttonVariants;
   size?: keyof typeof sizeClassMap;
   children?: ReactNode;
 }
 
-const variantClassMap = {
+const buttonVariants = {
   primary: "bg-primary-600 text-white font-semibold hover:bg-primary-200",
   custom: "",
 } as const;
 
 const sizeClassMap = {
-  medium: "px-7 py-2 rounded-full",
-  large: "text-lg px-7 py-3 rounded-full",
+  medium: "px-7 py-2 h-fit rounded-full",
+  large: "text-lg px-7 py-2 h-fit rounded-full",
 } as const;
 
 export default function Button({
@@ -22,7 +22,7 @@ export default function Button({
   children,
   ...reactButtonProps
 }: ButtonProps) {
-  const variantClasses = variantClassMap[variant];
+  const variantClasses = buttonVariants[variant];
 
   // apply no sizing if the variant is custom
   const sizeClasses =
