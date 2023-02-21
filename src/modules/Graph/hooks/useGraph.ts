@@ -37,10 +37,10 @@ export default function useGraph(
     setIsLayouted(true);
   }
 
-  function highlightEdges(edgesToHightlight: Edge[]) {
+  function highlightEdges(edgesToHighlight: Edge[]) {
     setEdges((prevEdges) =>
       prevEdges.map((edge) => {
-        if (edgesToHightlight.includes(edge)) {
+        if (edgesToHighlight.includes(edge)) {
           return { ...edge, selected: true };
         }
         return edge;
@@ -48,10 +48,10 @@ export default function useGraph(
     );
   }
 
-  function unhighlightEdges(edgesToUnhightlight: Edge[]) {
+  function unhighlightEdges(edgesToUnhighlight: Edge[]) {
     setEdges((prevEdges) =>
       prevEdges.map((edge) => {
-        if (edgesToUnhightlight.includes(edge)) {
+        if (edgesToUnhighlight.includes(edge)) {
           return { ...edge, selected: false };
         }
         return edge;
