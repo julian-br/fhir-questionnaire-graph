@@ -26,15 +26,12 @@ export default function QuestionnaireItemsNav({
   }
 
   return (
-    <nav className="border-box w-[21rem] select-none">
-      <h3 className="mb-2 ml-6 text-lg font-semibold text-slate-700">
-        <FontAwesomeIcon
-          icon={faLayerGroup}
-          className="mr-2 h-5 text-slate-600"
-        />
-        Items ({amountOfItems})
+    <nav className="border-box w-[20rem] select-none">
+      <h3 className="mb-2 ml-6 text-base font-semibold text-slate-500">
+        <FontAwesomeIcon icon={faLayerGroup} className="mr-1 h-4 " />
+        <span className="text-slate-600"> Items ({amountOfItems})</span>
       </h3>
-      <div className="z-10 mt-1 ml-1 max-h-[90vh] overflow-y-auto overflow-x-hidden px-3">
+      <div className="z-10 mt-1 ml-1 max-h-[90vh] overflow-y-auto overflow-x-hidden pl-3 pr-5">
         {items.map((item) => (
           <QuestionnaireItemsNavEntry
             key={item.linkId}
@@ -67,10 +64,10 @@ function QuestionnaireItemsNavEntry({
     <Button
       onClick={onClick}
       variant="custom"
-      className={`z-20 block w-full rounded-lg px-4 text-left text-[0.76rem] font-medium  ${
+      className={`z-20 block w-full rounded-lg px-4 text-left text-xs ${
         isActive
-          ? "bg-primary-600 py-3 font-extrabold text-white"
-          : "py-2 text-slate-700 hover:bg-primary-100 hover:text-primary-600"
+          ? "bg-primary-200 py-3 font-bold text-primary-600"
+          : "py-2 font-medium text-slate-700 hover:bg-slate-200 hover:text-primary-600"
       }`}
     >
       <p className="truncate">

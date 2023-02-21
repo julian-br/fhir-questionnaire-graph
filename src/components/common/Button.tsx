@@ -32,7 +32,7 @@ export default function Button({
     <button
       {...reactButtonProps}
       type={reactButtonProps.type ?? "button"}
-      className={`focus-visible:outline-none  focus-visible:ring-2 focus-visible:ring-primary-300  ${variantClasses} ${sizeClasses} ${reactButtonProps.className}`}
+      className={`select-none  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300  ${variantClasses} ${sizeClasses} ${reactButtonProps.className}`}
     >
       {children}
     </button>
