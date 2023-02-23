@@ -21,12 +21,12 @@ export default function TextInput({
 
   return (
     <div className={`relative ${passedClassName ?? ""}`}>
-      <InputLabel>{label}</InputLabel>
+      {label !== undefined && <InputLabel>{label}</InputLabel>}
       <input
         {...htmlInputProps}
         onChange={(e) => handleInput(e.target.value)}
         type="text"
-        className="placeholder:text-slate-00 block w-full rounded-xl border border-slate-300 bg-slate-50 py-2 px-2 focus:border-primary-400  focus:outline-none focus:ring-1 focus:ring-primary-400"
+        className="block w-full rounded-xl border border-slate-300 bg-slate-50 py-2 px-3 placeholder:text-slate-400 focus:border-primary-400  focus:outline-none focus:ring-1 focus:ring-primary-400"
       />
     </div>
   );
