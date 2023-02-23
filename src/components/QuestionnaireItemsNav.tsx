@@ -27,9 +27,9 @@ export default function QuestionnaireItemsNav({
 
   return (
     <nav className="border-box w-[20rem] select-none">
-      <h3 className="mb-2 ml-6 text-base font-semibold text-slate-500">
+      <h3 className="mb-2 ml-6 text-base font-semibold text-primary-900">
         <FontAwesomeIcon icon={faLayerGroup} className="mr-1 h-4 " />
-        <span className="text-slate-600"> Items ({amountOfItems})</span>
+        <span className="text-primary-900"> Items ({amountOfItems})</span>
       </h3>
       <div className="z-10 mt-1 ml-1 max-h-[90vh] overflow-y-auto overflow-x-hidden pl-3 pr-5">
         {items.map((item) => (
@@ -64,7 +64,7 @@ function QuestionnaireItemsNavEntry({
     <Button
       onClick={onClick}
       variant="custom"
-      className={`z-20 block w-full rounded-lg px-4 text-left text-xs ${
+      className={`z-20 block w-full rounded-xl px-4 text-left text-xs ${
         isActive
           ? "bg-primary-200 py-3 font-bold text-primary-600"
           : "py-2 font-medium text-slate-700 hover:bg-slate-200 hover:text-primary-600"

@@ -22,7 +22,6 @@ export default function GraphPage({
   return (
     <>
       <Navbar />
-
       <main className="flex flex-grow">
         <SideBar>
           <div>
@@ -38,7 +37,7 @@ export default function GraphPage({
               <h4 className="text-sm font-normal text-slate-500">
                 {fhirQuestionnaire.getRawData().id}
               </h4>
-              <h4 className="mb-0 pb-0 font-semibold text-slate-700">
+              <h4 className="mb-0 pb-0 font-semibold text-primary-900">
                 <span> Basis Anamnese beim Erwachsenen</span>
                 <span className="font-normal text-slate-600">
                   {" >"} {fhirQuestionnaire.getItemById(itemLinkId).text}
@@ -47,7 +46,7 @@ export default function GraphPage({
             </div>
             <Button
               variant="custom"
-              className="w-96 rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-left text-sm text-slate-400 hover:border-2 hover:border-primary-300 hover:text-primary-500"
+              className="w-96 rounded-xl border border-slate-300 bg-slate-50 px-3 py-2 text-left text-sm text-slate-400 hover:border-2 hover:border-primary-300 hover:text-primary-500"
             >
               <FontAwesomeIcon
                 icon={faSearch}

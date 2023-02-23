@@ -14,19 +14,25 @@ export function ItemNode({ data }: NodeProps<ItemNodeData>) {
         <div className="w-full">
           <p className="pb-2">
             {itemData.prefix !== undefined && (
-              <span className="mr-2 font-semibold text-primary-700">
+              <span className="mr-2 font-semibold text-primary-800">
                 {itemData.prefix}
               </span>
             )}
-            <span>{itemData.text}</span>
+            <span className="text-slate-600">{itemData.text}</span>
           </p>
-          <span
-            className={`p rounded-full border border-primary-600 bg-primary-50 py-1 px-2 text-xs font-semibold text-primary-700`}
-          >
-            {itemData.type}
-          </span>
+          <TypeBadge type={itemData.type} />
         </div>
       </div>
     </NodeContainer>
+  );
+}
+
+function TypeBadge({ type }: { type: string }) {
+  return (
+    <span
+      className={`p rounded-full border border-primary-200 bg-primary-50 py-1 px-2 text-xs font-semibold text-primary-700`}
+    >
+      {type}
+    </span>
   );
 }

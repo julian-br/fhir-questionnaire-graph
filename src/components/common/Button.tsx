@@ -12,8 +12,8 @@ const buttonVariants = {
 } as const;
 
 const sizeClassMap = {
-  medium: "px-7 py-2 h-fit rounded-full",
-  large: "text-lg px-7 py-2 h-fit rounded-full",
+  medium: "px-7 py-2 h-fit rounded-xl",
+  large: "text-lg px-7 py-2 h-fit rounded-xl",
 } as const;
 
 export default function Button({

@@ -7,7 +7,7 @@ export interface AnswerNodeData extends QuestionnaireItemAnswerOption {}
 export default function AnswerOptionNode({ data }: NodeProps<AnswerNodeData>) {
   return (
     <NodeContainer>
-      <div className="w-48 bg-primary-100  p-2 text-sm text-primary-900">
+      <div className="w-48 bg-primary-100 p-2 text-sm text-primary-900">
         <p>{data.valueString}</p>
         {data.initialSelected === true && <InitalSelectedBadge />}
       </div>
