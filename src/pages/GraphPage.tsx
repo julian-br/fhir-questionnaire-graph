@@ -8,7 +8,9 @@ import Graph from "../modules/Graph/components/Graph";
 import Button from "../components/common/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { Dialog } from "@headlessui/react";
+import SearchForItemsComboxBox from "../components/SearchForItemsComboBox";
+import { useState } from "react";
+
 const questionnaireData = data as Questionnaire;
 const fhirQuestionnaire = new FHIRQuestionnaire(questionnaireData);
 
@@ -19,11 +21,16 @@ export default function GraphPage({
   questionnaireId: string;
   itemLinkId: string;
 }) {
+  const [showSearchForItemsComboBox, setShowSearchForItemsComboBox] =
+    useState(false);
+
   return (
     <>
       <Navbar>
         <Navbar.Controls>
-          <SearchForItemButton onClick={() => null} />
+          <SearchForItemButton
+            onClick={() => setShowSearchForItemsComboBox(true)}
+          />
         </Navbar.Controls>
       </Navbar>
       <main className="flex flex-grow">
@@ -38,38 +45,11 @@ export default function GraphPage({
         <Graph questionnaire={fhirQuestionnaire} activeItemId={itemLinkId} />
       </main>
 
-      <Dialog as="div" className="relative z-30" open onClose={() => null}>
-        <div className="fixed inset-0 bg-slate-900 bg-opacity-20 backdrop-blur-sm" />
-
-        <div className="fixed inset-0 z-40 overflow-y-auto">
-          <div className="relative flex h-full justify-center">
-            <Dialog.Panel className="relative mt-14 h-fit w-[30rem] rounded-xl font-inter opacity-100 shadow-xl">
-              <div className="relative">
-                <FontAwesomeIcon
-                  icon={faSearch}
-                  className="absolute top-1/2 ml-4 -translate-y-1/2 transform text-slate-400"
-                ></FontAwesomeIcon>
-                <input
-                  type="text"
-                  placeholder="search for items..."
-                  className="block w-full rounded-t-xl border-b py-4 pl-10 pr-3 placeholder:text-slate-500 focus:outline-none"
-                />
-              </div>
-              <div className="box-border h-fit overflow-y-auto rounded-b-xl bg-slate-100">
-                <div className="border-b bg-slate-100 py-4 px-4 font-semibold text-primary-500">
-                  Avatars
-                </div>
-                <div className="border-b bg-white py-4 px-4 font-semibold text-slate-600">
-                  Store Navigation
-                </div>
-                <div className="border-b bg-white py-4 px-4 font-semibold text-slate-600">
-                  Tabs
-                </div>
-              </div>
-            </Dialog.Panel>
-          </div>
-        </div>
-      </Dialog>
+      {showSearchForItemsComboBox && (
+        <SearchForItemsComboxBox
+          onClose={() => setShowSearchForItemsComboBox(false)}
+        />
+      )}
     </>
   );
 }
