@@ -15,7 +15,7 @@ export default function SideBar({ children }: Props) {
   }
 
   return (
-    <nav className="relative border-r border-slate-300 bg-slate-100">
+    <nav className="relative border-r border-slate-200 bg-slate-100 shadow-md">
       <div className="absolute flex w-full pt-5">
         <Button
           onClick={toggleIsOpen}

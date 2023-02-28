@@ -54,8 +54,9 @@ export function createNodesAndEdgesFromQuestionnaire(
       edges.push(...answerOptionEdges);
     }
 
-    const itemGroupId = questionnaire.getGroupIdOfItem(item.linkId);
-    const itemIsForeign = itemGroupId !== groupLinkId;
+    const itemGroupId = questionnaire.getGroupOfItem(item.linkId)?.linkId;
+    const itemIsForeign =
+      itemGroupId !== groupLinkId && itemGroupId !== undefined;
     if (itemIsForeign) {
       const foreignItemGroupText = questionnaire.getItemById(itemGroupId).text;
       nodes.push(
