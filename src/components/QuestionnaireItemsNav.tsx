@@ -4,6 +4,7 @@ import { encodeURLParam } from "../utils/urlParam";
 import Button from "./common/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLayerGroup } from "@fortawesome/free-solid-svg-icons";
+import { GRAPH_PAGE_ROUTE } from "../pages/GraphPage";
 
 interface QuestionnaireItemsNavProps {
   items: QuestionnaireItem[];
@@ -16,7 +17,7 @@ export default function QuestionnaireItemsNav({
   activeItemId,
 }: QuestionnaireItemsNavProps) {
   const [, setLocation] = useLocation();
-  const [, params] = useRoute("/graph/:questionnaireId/:itemLinkId");
+  const [, params] = useRoute(GRAPH_PAGE_ROUTE);
   const amountOfItems = items.length;
 
   function navigateToItem(itemLinkId: string) {

@@ -82,6 +82,7 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
         nodesDraggable={false}
         nodesConnectable={false}
         edgesFocusable={false}
+        zoomOnDoubleClick={false}
         maxZoom={1.5}
         minZoom={0.5}
       >

@@ -8,7 +8,7 @@ import Graph from "../modules/Graph/components/Graph";
 import Button from "../components/common/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import SearchForItemsComboxBox from "../components/SearchForItemsComboBox";
+import SearchForItemsDialog from "../components/SearchForItemsDialog";
 import { useState } from "react";
 
 const questionnaireData = data as Questionnaire;
@@ -46,7 +46,8 @@ export default function GraphPage({
       </main>
 
       {showSearchForItemsComboBox && (
-        <SearchForItemsComboxBox
+        <SearchForItemsDialog
+          questionnaire={fhirQuestionnaire}
           onClose={() => setShowSearchForItemsComboBox(false)}
         />
       )}
