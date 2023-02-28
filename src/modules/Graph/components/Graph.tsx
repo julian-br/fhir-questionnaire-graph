@@ -34,15 +34,7 @@ const edgeTypes = {
 };
 
 export default function Graph({ questionnaire, activeItemId }: GraphProps) {
-  const {
-    nodes,
-    edges,
-    setLayout,
-    isLayouted,
-    highlightEdges,
-    unhighlightEdges,
-  } = useGraph(questionnaire, activeItemId);
-
+  const graph = useGraph(questionnaire, activeItemId);
   const reactFlowInstanceRef = useRef<ReactFlowInstance | null>(null);
 
   function resetViewPort() {
@@ -58,8 +50,8 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
     if (node.type === "foreignItem") {
       return;
     }
-    const connectedEdges = getConnectedEdges([node], edges);
-    highlightEdges(connectedEdges);
+    const connectedEdges = getConnectedEdges([node], graph.edges);
+    graph.highlightEdges(connectedEdges);
   }
 
   function handleNodeMouseLeave(
@@ -69,14 +61,14 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
     if (node.type === "foreignItem") {
       return;
     }
-    const connectedEdges = getConnectedEdges([node], edges);
-    unhighlightEdges(connectedEdges);
+    const connectedEdges = getConnectedEdges([node], graph.edges);
+    graph.unhighlightEdges(connectedEdges);
   }
 
   return (
     <div className={`h-full w-full bg-slate-50`}>
       <ReactFlow
-        className={`${isLayouted ? "opacity-100" : "opacity-0"}`} // prevent flickering when layouting
+        className={`${graph.isLayouted ? "opacity-100" : "opacity-0"}`} // prevent flickering when layouting
         onInit={(reactFlowInstance) => {
           reactFlowInstanceRef.current = reactFlowInstance;
         }}
@@ -84,12 +76,13 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
         onNodeMouseLeave={handleNodeMouseLeave}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
-        nodes={nodes}
-        edges={edges}
+        nodes={graph.nodes}
+        edges={graph.edges}
         connectionLineType={ConnectionLineType.SmoothStep}
         nodesDraggable={false}
         nodesConnectable={false}
         edgesFocusable={false}
+        zoomOnDoubleClick={false}
         maxZoom={1.5}
         minZoom={0.5}
       >
@@ -101,7 +94,7 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
         />
         <Layouter
           onLayout={(newLayout) => {
-            setLayout(newLayout);
+            graph.setLayout(newLayout);
             resetViewPort();
           }}
         />
