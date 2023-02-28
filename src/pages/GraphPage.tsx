@@ -21,7 +21,7 @@ export default function GraphPage({
   questionnaireId: string;
   itemLinkId: string;
 }) {
-  const [showSearchForItemsComboBox, setShowSearchForItemsComboBox] =
+  const [showSearchForItemsDialog, setShowSearchForItemsDialog] =
     useState(false);
 
   return (
@@ -29,7 +29,7 @@ export default function GraphPage({
       <Navbar>
         <Navbar.Controls>
           <SearchForItemButton
-            onClick={() => setShowSearchForItemsComboBox(true)}
+            onClick={() => setShowSearchForItemsDialog(true)}
           />
         </Navbar.Controls>
       </Navbar>
@@ -45,10 +45,10 @@ export default function GraphPage({
         <Graph questionnaire={fhirQuestionnaire} activeItemId={itemLinkId} />
       </main>
 
-      {showSearchForItemsComboBox && (
+      {showSearchForItemsDialog && (
         <SearchForItemsDialog
           questionnaire={fhirQuestionnaire}
-          onClose={() => setShowSearchForItemsComboBox(false)}
+          onClose={() => setShowSearchForItemsDialog(false)}
         />
       )}
     </>
