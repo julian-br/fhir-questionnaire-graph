@@ -8,7 +8,7 @@ interface NodeContainerProps {
 
 const nodeContainerVariants = {
   default:
-    "rounded-lg border border-slate-300 hover:border-2 hover:border-primary-400 z-20 box-content overflow-hidden",
+    "rounded-xl border border-slate-300 hover:border-2 hover:border-primary-400 z-20 box-content overflow-hidden",
   custom: "",
 };
 

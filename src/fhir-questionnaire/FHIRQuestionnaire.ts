@@ -43,6 +43,10 @@ export class FHIRQuestionnaire {
     return matchingItem;
   }
 
+  getAllItems() {
+    return Array.from(this.itemsMap.values());
+  }
+
   /**
    * Gets all relevant items for an item.
    * This means all nested items and also all foreign items.
@@ -98,17 +102,16 @@ export class FHIRQuestionnaire {
     return Array.from(uniqueForeignItems.values());
   }
 
-  getGroupIdOfItem(itemId: string) {
+  getGroupOfItem(itemId: string) {
     for (const rootItem of this.rootItems) {
       if (this.itemIsGroup(rootItem.linkId)) {
         for (const nestedItem of rootItem.item!) {
           if (nestedItem.linkId === itemId) {
-            return rootItem.linkId;
+            return rootItem;
           }
         }
       }
     }
-    return itemId;
   }
 
   private itemBelongsToGroup(itemId: string, groupId: string) {
