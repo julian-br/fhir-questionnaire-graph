@@ -8,6 +8,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import SearchForItemsDialog from "../components/SearchForItemsDialog";
 import { useState } from "react";
 import { useQuestionnaire } from "../api/questionnaire";
+import ViewItemModal from "../components/ViewItemModal";
 
 export const GRAPH_PAGE_ROUTE = "/graph/:questionnaireId/:itemLinkId";
 
@@ -48,12 +49,15 @@ export default function GraphPage({
             </div>
           </SideBar>
           <Graph questionnaire={questionnaire} activeItemId={itemLinkId} />
+
           {showSearchForItemsDialog && (
             <SearchForItemsDialog
               questionnaire={questionnaire}
               onClose={() => setShowSearchForItemsDialog(false)}
             />
           )}
+
+          <ViewItemModal onClose={() => null} />
         </main>
       )}
     </>
