@@ -1,17 +1,21 @@
-import { Questionnaire } from "fhir/r4";
-import { Redirect, useLocation } from "wouter";
-import data from "../assets/fhir-questionnaire-example.json";
+import { Redirect } from "wouter";
+import { useQuestionnaires } from "../api/questionnaire";
 import { encodeURLParam } from "../utils/urlParam";
-const questionnaireData = data as Questionnaire;
 
 export const INDEX_PAGE_ROUTE = "";
 
 export default function IndexPage() {
+  const { isSuccess, data: questionnaires } = useQuestionnaires();
+
   return (
-    <Redirect
-      to={`/graph/${encodeURLParam(questionnaireData.id!)}/${encodeURLParam(
-        questionnaireData.item![0].linkId
-      )}`}
-    />
+    <main>
+      {isSuccess && (
+        <Redirect
+          to={`/graph/${encodeURLParam(questionnaires[0].id!)}/${encodeURLParam(
+            questionnaires[0].item![0].linkId
+          )}`}
+        />
+      )}
+    </main>
   );
 }
