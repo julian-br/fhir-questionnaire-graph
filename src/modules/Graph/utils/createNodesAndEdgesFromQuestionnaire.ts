@@ -1,6 +1,10 @@
-import { QuestionnaireItem, QuestionnaireItemAnswerOption } from "fhir/r4";
+import {
+  Questionnaire,
+  QuestionnaireItem,
+  QuestionnaireItemAnswerOption,
+} from "fhir/r4";
 import { Edge, Node } from "reactflow";
-import { FHIRQuestionnaire } from "../../../fhir-questionnaire/FHIRQuestionnaire";
+import { QuestionnaireHandler } from "../../../utils/QuestionnaireHandler";
 import { AnswerNodeData } from "../components/nodes/AnswerOptionNode";
 import { ForeignItemNodeData } from "../components/nodes/ForeignItemNode";
 import { ItemNodeData } from "../components/nodes/ItemNode";
@@ -34,11 +38,13 @@ class IdGenerator {
 }
 
 export function createNodesAndEdgesFromQuestionnaire(
-  questionnaire: FHIRQuestionnaire,
+  questionnaire: Questionnaire,
   groupLinkId: string
 ) {
   IdGenerator.setGroupLinkId(groupLinkId);
-  const relevantItems = questionnaire.getRelevantItemsForItem(groupLinkId);
+  const questionnaireHandler = new QuestionnaireHandler(questionnaire);
+  const relevantItems =
+    questionnaireHandler.getRelevantItemsForItem(groupLinkId);
 
   const nodes: Node<NodeData>[] = [];
   const edges: Edge[] = [];
@@ -54,11 +60,14 @@ export function createNodesAndEdgesFromQuestionnaire(
       edges.push(...answerOptionEdges);
     }
 
-    const itemGroupId = questionnaire.getGroupOfItem(item.linkId)?.linkId;
+    const itemGroupId = questionnaireHandler.getGroupOfItem(
+      item.linkId
+    )?.linkId;
     const itemIsForeign =
       itemGroupId !== groupLinkId && itemGroupId !== undefined;
     if (itemIsForeign) {
-      const foreignItemGroupText = questionnaire.getItemById(itemGroupId).text;
+      const foreignItemGroupText =
+        questionnaireHandler.getItemById(itemGroupId).text;
       nodes.push(
         createNodeForForeignItem(item, itemGroupId, foreignItemGroupText)
       );
@@ -73,7 +82,7 @@ export function createNodesAndEdgesFromQuestionnaire(
     }
 
     const dependencyId = item.enableWhen![0].question;
-    const dependencyItem = questionnaire.getItemById(dependencyId);
+    const dependencyItem = questionnaireHandler.getItemById(dependencyId);
     const dependecyIsAnswerOption = dependencyItem.answerOption !== undefined;
 
     if (dependecyIsAnswerOption) {

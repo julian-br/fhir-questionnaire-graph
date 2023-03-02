@@ -1,26 +1,29 @@
 import Navbar from "../components/Navbar";
 import SideBar from "../components/SideBar";
-import data from "../assets/fhir-questionnaire-example.json";
-import { Questionnaire } from "fhir/r4";
 import QuestionnaireItemsNav from "../components/QuestionnaireItemsNav";
-import { FHIRQuestionnaire } from "../fhir-questionnaire/FHIRQuestionnaire";
 import Graph from "../modules/Graph/components/Graph";
 import Button from "../components/common/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import SearchForItemsDialog from "../components/SearchForItemsDialog";
 import { useState } from "react";
-
-const questionnaireData = data as Questionnaire;
-const fhirQuestionnaire = new FHIRQuestionnaire(questionnaireData);
+import { useQuestionnaire } from "../api/questionnaire";
 
 export const GRAPH_PAGE_ROUTE = "/graph/:questionnaireId/:itemLinkId";
+
 export default function GraphPage({
   itemLinkId,
+  questionnaireId,
 }: {
   questionnaireId: string;
   itemLinkId: string;
 }) {
+  const {
+    isSuccess,
+    isLoading,
+    data: questionnaire,
+  } = useQuestionnaire(questionnaireId);
+
   const [showSearchForItemsDialog, setShowSearchForItemsDialog] =
     useState(false);
 
@@ -33,23 +36,25 @@ export default function GraphPage({
           />
         </Navbar.Controls>
       </Navbar>
-      <main className="flex flex-grow">
-        <SideBar>
-          <div>
-            <QuestionnaireItemsNav
-              items={questionnaireData.item!}
-              activeItemId={itemLinkId}
+      {isLoading && <div>...Loading</div>}
+      {isSuccess && (
+        <main className="flex flex-grow">
+          <SideBar>
+            <div>
+              <QuestionnaireItemsNav
+                items={questionnaire.item!}
+                activeItemId={itemLinkId}
+              />
+            </div>
+          </SideBar>
+          <Graph questionnaire={questionnaire} activeItemId={itemLinkId} />
+          {showSearchForItemsDialog && (
+            <SearchForItemsDialog
+              questionnaire={questionnaire}
+              onClose={() => setShowSearchForItemsDialog(false)}
             />
-          </div>
-        </SideBar>
-        <Graph questionnaire={fhirQuestionnaire} activeItemId={itemLinkId} />
-      </main>
-
-      {showSearchForItemsDialog && (
-        <SearchForItemsDialog
-          questionnaire={fhirQuestionnaire}
-          onClose={() => setShowSearchForItemsDialog(false)}
-        />
+          )}
+        </main>
       )}
     </>
   );

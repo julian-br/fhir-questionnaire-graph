@@ -1,6 +1,7 @@
 import { Questionnaire, QuestionnaireItem } from "fhir/r4";
 
-export class FHIRQuestionnaire {
+// TODO: rename
+export class QuestionnaireHandler {
   private data;
   private rootItems;
   private itemsMap;

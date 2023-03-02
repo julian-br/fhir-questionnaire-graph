@@ -1,14 +1,15 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dialog, Combobox } from "@headlessui/react";
+import { Questionnaire } from "fhir/r4";
 import { useState, ReactNode, useMemo } from "react";
 import { useLocation, useRoute } from "wouter";
-import { FHIRQuestionnaire } from "../fhir-questionnaire/FHIRQuestionnaire";
+import { QuestionnaireHandler } from "../utils/QuestionnaireHandler";
 import { GRAPH_PAGE_ROUTE } from "../pages/GraphPage";
 import { encodeURLParam } from "../utils/urlParam";
 
 interface SearchForItemsComboxBoxProps {
-  questionnaire: FHIRQuestionnaire;
+  questionnaire: Questionnaire;
   onClose: () => void;
 }
 
@@ -20,7 +21,15 @@ export default function SearchForItemsDialog({
   const [, params] = useRoute(GRAPH_PAGE_ROUTE);
   const [, setLocation] = useLocation();
 
-  const allItems = useMemo(() => questionnaire.getAllItems(), [questionnaire]);
+  const questionnaireHandler = useMemo(
+    () => new QuestionnaireHandler(questionnaire),
+    [questionnaire]
+  );
+
+  const allItems = useMemo(
+    () => questionnaireHandler.getAllItems(),
+    [questionnaire]
+  );
   const filteredItems = allItems.filter((item) =>
     item.text?.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -56,7 +65,7 @@ export default function SearchForItemsDialog({
         <Combobox.Options className="overflow-hidden rounded-b-xl">
           <div className="box-border h-fit max-h-[40rem] overflow-y-auto rounded-b-xl bg-slate-100">
             {filteredItems.map((item) => {
-              const group = questionnaire.getGroupOfItem(item.linkId);
+              const group = questionnaireHandler.getGroupOfItem(item.linkId);
               return (
                 <Combobox.Option
                   key={item.linkId}

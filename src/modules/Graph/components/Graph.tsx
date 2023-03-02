@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import ReactFlow, {
-  ConnectionLineType,
   useNodes,
   useEdges,
   useNodesInitialized,
@@ -12,15 +11,15 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/base.css";
 import { calcGraphLayout, Layout } from "../utils/calcGraphLayout";
-import { FHIRQuestionnaire } from "../../../fhir-questionnaire/FHIRQuestionnaire";
 import { ItemNode } from "./nodes/ItemNode";
 import useGraph from "../hooks/useGraph";
 import AnswerOptionNode from "./nodes/AnswerOptionNode";
 import ForeignItemNode from "./nodes/ForeignItemNode";
 import CustomEdge from "./CustomEdge";
+import { Questionnaire } from "fhir/r4";
 
 interface GraphProps {
-  questionnaire: FHIRQuestionnaire;
+  questionnaire: Questionnaire;
   activeItemId: string;
 }
 const nodeTypes = {
@@ -37,7 +36,7 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
   const graph = useGraph(questionnaire, activeItemId);
   const reactFlowInstanceRef = useRef<ReactFlowInstance | null>(null);
 
-  function resetViewPort() {
+  function resetViewport() {
     if (reactFlowInstanceRef.current !== null) {
       reactFlowInstanceRef.current.setViewport({ x: 0, y: 0, zoom: 1 });
     }
@@ -78,9 +77,6 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
         edgeTypes={edgeTypes}
         nodes={graph.nodes}
         edges={graph.edges}
-        connectionLineType={ConnectionLineType.SmoothStep}
-        nodesDraggable={false}
-        nodesConnectable={false}
         edgesFocusable={false}
         zoomOnDoubleClick={false}
         maxZoom={1.5}
@@ -95,7 +91,7 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
         <Layouter
           onLayout={(newLayout) => {
             graph.setLayout(newLayout);
-            resetViewPort();
+            resetViewport();
           }}
         />
       </ReactFlow>
