@@ -9,6 +9,8 @@ import SearchForItemsDialog from "../components/SearchForItemsDialog";
 import { useState } from "react";
 import { useQuestionnaire } from "../api/questionnaire";
 import ViewItemModal from "../components/ViewItemModal";
+import { QuestionnaireItem } from "fhir/r4";
+import { Node } from "reactflow";
 
 export const GRAPH_PAGE_ROUTE = "/graph/:questionnaireId/:itemLinkId";
 
@@ -25,8 +27,17 @@ export default function GraphPage({
     data: questionnaire,
   } = useQuestionnaire(questionnaireId);
 
+  const [selectedItem, setSelectedItem] = useState<QuestionnaireItem | null>(
+    null
+  );
   const [showSearchForItemsDialog, setShowSearchForItemsDialog] =
     useState(false);
+
+  function handleNodeClicked(node: Node) {
+    if (node.type === "item") {
+      setSelectedItem(node.data.itemData);
+    }
+  }
 
   return (
     <>
@@ -48,7 +59,11 @@ export default function GraphPage({
               />
             </div>
           </SideBar>
-          <Graph questionnaire={questionnaire} activeItemId={itemLinkId} />
+          <Graph
+            questionnaire={questionnaire}
+            activeItemId={itemLinkId}
+            onNodeClicked={handleNodeClicked}
+          />
 
           {showSearchForItemsDialog && (
             <SearchForItemsDialog
@@ -57,7 +72,9 @@ export default function GraphPage({
             />
           )}
 
-          <ViewItemModal onClose={() => null} />
+          {selectedItem !== null && (
+            <ViewItemModal onClose={() => setSelectedItem(null)} />
+          )}
         </main>
       )}
     </>

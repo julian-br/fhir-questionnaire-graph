@@ -21,6 +21,7 @@ import { Questionnaire } from "fhir/r4";
 interface GraphProps {
   questionnaire: Questionnaire;
   activeItemId: string;
+  onNodeClicked?: (nodeData: Node) => void;
 }
 const nodeTypes = {
   item: ItemNode,
@@ -32,7 +33,11 @@ const edgeTypes = {
   custom: CustomEdge,
 };
 
-export default function Graph({ questionnaire, activeItemId }: GraphProps) {
+export default function Graph({
+  questionnaire,
+  activeItemId,
+  onNodeClicked,
+}: GraphProps) {
   const graph = useGraph(questionnaire, activeItemId);
   const reactFlowInstanceRef = useRef<ReactFlowInstance | null>(null);
 
@@ -73,6 +78,7 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
         }}
         onNodeMouseEnter={handleNodeMouseEnter}
         onNodeMouseLeave={handleNodeMouseLeave}
+        onNodeClick={(_, node) => (onNodeClicked ? onNodeClicked(node) : null)}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         nodes={graph.nodes}
