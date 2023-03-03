@@ -73,7 +73,10 @@ export default function GraphPage({
           )}
 
           {selectedItem !== null && (
-            <ViewItemModal onClose={() => setSelectedItem(null)} />
+            <ViewItemModal
+              item={selectedItem}
+              onClose={() => setSelectedItem(null)}
+            />
           )}
         </main>
       )}
