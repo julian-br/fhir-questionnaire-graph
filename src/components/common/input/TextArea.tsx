@@ -1,31 +1,58 @@
-import { TextareaHTMLAttributes } from "react";
+import { TextareaHTMLAttributes, useEffect, useRef, useState } from "react";
 import InputLabel from "./InputLabel";
 
-interface Props
-  extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "onInput"> {
+interface Props {
   label?: string;
+  fitContent?: boolean;
   onInput?: (value: string) => void;
+  placeholder: string;
+  rows?: number;
 }
 
 export default function TextArea({
   label,
-  className: passedClassName,
+  fitContent = false,
   onInput,
-  ...htmlTextAreaProps
+  rows = 1,
+  placeholder,
 }: Props) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const initialHeight = useRef(0);
+
+  useEffect(() => {
+    initialHeight.current = textareaRef.current?.offsetHeight ?? 0;
+  }, []);
+
   function handleInput(value: string) {
     if (onInput !== undefined) {
       onInput(value);
     }
+
+    if (fitContent === true) {
+      resizeToFitContent();
+    }
+  }
+
+  function resizeToFitContent() {
+    if (textareaRef.current === null) {
+      return;
+    }
+
+    // reset height to get correct scroll height
+    textareaRef.current.style.height = initialHeight.current + "px";
+    const scrollHeight = textareaRef.current.scrollHeight + 2 + "px";
+    textareaRef.current.style.height = scrollHeight;
   }
 
   return (
-    <div className={`${passedClassName ?? ""}`}>
+    <div>
       <InputLabel>{label}</InputLabel>
       <textarea
-        {...htmlTextAreaProps}
+        ref={textareaRef}
+        placeholder={placeholder}
+        rows={rows}
         onChange={(e) => handleInput(e.target.value)}
-        className="block w-full resize-none rounded-lg border border-slate-200 bg-slate-100 p-2 text-base placeholder:text-slate-400 focus:border-primary-400   focus-visible:outline-primary-300"
+        className={`box-border block w-full resize-none rounded-lg border border-slate-200 bg-slate-100 p-2 text-sm placeholder:text-slate-500 focus:border-primary-400   focus-visible:outline-primary-300`}
       />
     </div>
   );
