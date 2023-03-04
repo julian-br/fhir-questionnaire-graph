@@ -45,14 +45,14 @@ export default function TextArea({
   }
 
   return (
-    <div>
+    <div className="w-full">
       <InputLabel>{label}</InputLabel>
       <textarea
         ref={textareaRef}
         placeholder={placeholder}
         rows={rows}
         onChange={(e) => handleInput(e.target.value)}
-        className={`box-border block w-full resize-none rounded-lg border border-slate-200 bg-slate-100 p-3 text-sm placeholder:text-slate-500 focus:border-primary-400   focus-visible:outline-primary-300`}
+        className={`box-border block w-full resize-none rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm placeholder:text-slate-500 focus:border-primary-400   focus-visible:outline-primary-300`}
       />
     </div>
   );
