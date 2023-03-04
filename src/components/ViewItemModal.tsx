@@ -1,35 +1,53 @@
-import { faMemory, faMessage } from "@fortawesome/free-solid-svg-icons";
+import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Extension, Questionnaire, QuestionnaireItem } from "fhir/r4";
+import { QuestionnaireItem } from "fhir/r4";
+import moment from "moment";
+import { useRef, useState } from "react";
+import {
+  QuestionnaireItemAnnotation,
+  useAnnotationMutation,
+} from "../api/questionnaire";
+import { getItemAnnotations } from "../utils/getItemAnnotations";
+import Button from "./common/Button";
 import TextArea from "./common/input/TextArea";
 import Modal from "./common/Modal";
 
 interface ViewItemModalProps {
   onClose: () => void;
   item: QuestionnaireItem;
+  questionnaireId: string;
 }
 
-interface QuestionnaireItemAnnotation {
-  authorString: string;
-  time: string;
-  text: string;
-}
+export default function ViewItemModal({
+  onClose,
+  item,
+  questionnaireId,
+}: ViewItemModalProps) {
+  const [annotationText, setAnnotationText] = useState("");
+  const annotationMutation = useAnnotationMutation();
 
-const test: Extension = {
-  url: "annotation",
-  valueAnnotation: {
-    time: "2023-03-03T08:45:07+00:00",
-    authorString: "Demo User",
-    text: "Diese Frage sollte nur angezeigt werden, wenn die Patientin älter als 12 ist!",
-  },
-};
+  const annotationsSortedByDate = getItemAnnotations(item).sort(
+    (a, b) => Date.parse(a.time) - Date.parse(b.time)
+  );
+  const hasAnnotations = annotationsSortedByDate.length > 0;
 
-export default function ViewItemModal({ onClose, item }: ViewItemModalProps) {
-  const annotations = item.extension
-    ?.map((extension) => extension.valueAnnotation)
-    .filter(
-      (extension) => extension !== undefined
-    ) as QuestionnaireItemAnnotation[];
+  function handleSubmitAnnotation(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const newAnnotation = {
+      authorString: "Demo User",
+      time: moment(Date.now()).toISOString(),
+      text: annotationText,
+    };
+
+    annotationMutation.add.mutate(
+      {
+        questionnaireId,
+        itemLinkId: item.linkId,
+        newAnnotation,
+      },
+      { onSuccess: () => setAnnotationText("") }
+    );
+  }
 
   return (
     <Modal onClose={onClose}>
@@ -45,11 +63,30 @@ export default function ViewItemModal({ onClose, item }: ViewItemModalProps) {
             {item.text}
           </h5>
 
-          <div className="mb-5">
-            <h4 className="font-bold text-slate-600">Annotations</h4>
-            <AnnotationFeed annotations={annotations} />
-          </div>
-          <TextArea placeholder="Add a new annotation..." fitContent={true} />
+          <h4 className="font-bold text-slate-600">Annotations</h4>
+          {hasAnnotations ? (
+            <div className="mb-5">
+              <AnnotationFeed annotations={annotationsSortedByDate} />
+            </div>
+          ) : (
+            <div className="ml-2 mb-2 py-1">-</div>
+          )}
+          <form className="w-full" onSubmit={handleSubmitAnnotation}>
+            <TextArea
+              onInput={setAnnotationText}
+              placeholder="Add a new annotation..."
+              fitContent={true}
+              value={annotationText}
+            />
+            <Button
+              type="submit"
+              className="mt-3 block text-sm"
+              variant="primary"
+            >
+              <span className="font-bold">+</span>
+              <span>Add Annotation</span>
+            </Button>
+          </form>
         </div>
       </div>
     </Modal>
@@ -62,10 +99,10 @@ function AnnotationFeed({
   annotations: QuestionnaireItemAnnotation[];
 }) {
   return (
-    <div className="max-h-96 overflow-y-auto rounded-xl">
+    <div className="max-h-72 overflow-y-auto rounded-xl">
       <ul role="list" className="p-2">
         {annotations.map((anntation, index) => (
-          <li key={anntation.time}>
+          <li key={anntation.id}>
             <Annotation
               author={anntation.authorString}
               time={anntation.time}
@@ -87,6 +124,8 @@ interface AnnotationProps {
   text: string;
 }
 function Annotation({ author, time, text }: AnnotationProps) {
+  const timePassedSinceAnnotation = moment(time).fromNow();
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -99,7 +138,9 @@ function Annotation({ author, time, text }: AnnotationProps) {
             {author}
           </h3>
         </div>
-        <time className="pr-1 text-sm text-gray-500">{time}</time>
+        <time className="pr-1 text-sm text-gray-500">
+          {timePassedSinceAnnotation}
+        </time>
       </div>
       <p className="w-11/12  text-sm text-gray-500">{text}</p>
     </>

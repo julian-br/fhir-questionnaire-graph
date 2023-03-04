@@ -74,6 +74,7 @@ export default function GraphPage({
 
           {selectedItem !== null && (
             <ViewItemModal
+              questionnaireId={questionnaireId}
               item={selectedItem}
               onClose={() => setSelectedItem(null)}
             />

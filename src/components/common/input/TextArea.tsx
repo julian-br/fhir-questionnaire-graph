@@ -7,6 +7,7 @@ interface Props {
   onInput?: (value: string) => void;
   placeholder: string;
   rows?: number;
+  value?: string;
 }
 
 export default function TextArea({
@@ -15,6 +16,7 @@ export default function TextArea({
   onInput,
   rows = 1,
   placeholder,
+  value,
 }: Props) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const initialHeight = useRef(0);
@@ -48,6 +50,7 @@ export default function TextArea({
     <div className="w-full">
       <InputLabel>{label}</InputLabel>
       <textarea
+        value={value}
         ref={textareaRef}
         placeholder={placeholder}
         rows={rows}
