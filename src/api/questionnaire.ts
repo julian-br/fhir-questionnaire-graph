@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import exampleQuestionnaire from "../assets/fhir-questionnaire-example.json";
 import { Questionnaire } from "fhir/r4";
-import { QuestionnaireHandler } from "../utils/QuestionnaireHandler";
+import { findItemByLinkId } from "../utils/findItemByLinkId";
 
 export interface QuestionnaireItemAnnotation {
   id: string;
@@ -79,8 +79,7 @@ async function postAnnotation({
   const questionnaireCopy = JSON.parse(
     JSON.stringify(questionnaires[matchingQuestionnaireIndex])
   );
-  const questionnaireHandler = new QuestionnaireHandler(questionnaireCopy);
-  const matchingItem = questionnaireHandler.getItemById(itemLinkId);
+  const matchingItem = findItemByLinkId(itemLinkId, questionnaireCopy);
 
   if (matchingItem === undefined) {
     throw new Error("no item with the id: " + itemLinkId);

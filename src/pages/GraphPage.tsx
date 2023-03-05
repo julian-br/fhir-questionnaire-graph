@@ -6,12 +6,12 @@ import Button from "../components/common/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import SearchForItemsDialog from "../components/SearchForItemsDialog";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useQuestionnaire } from "../api/questionnaire";
 import ViewItemModal from "../components/ViewItemModal";
 import { Node } from "reactflow";
 import { findItemByLinkId } from "../utils/findItemByLinkId";
-import { QuestionnaireHandler } from "../utils/QuestionnaireHandler";
+import { getRelevantItemsForGraph } from "../modules/Graph/utils/getRelevantItemsForGraph";
 
 export const GRAPH_PAGE_ROUTE = "/graph/:questionnaireId/:itemLinkId";
 
@@ -38,11 +38,6 @@ export default function GraphPage({
     }
   }
 
-  const questionaireHandler = useMemo(
-    () => (questionnaire ? new QuestionnaireHandler(questionnaire) : undefined),
-    [questionnaire]
-  );
-
   return (
     <>
       <Navbar>
@@ -64,16 +59,14 @@ export default function GraphPage({
             </div>
           </SideBar>
           <Graph
-            items={
-              questionaireHandler?.getRelevantItemsForItem(itemLinkId) ?? []
-            }
+            items={getRelevantItemsForGraph(itemLinkId, questionnaire)}
             rootItemLinkId={itemLinkId}
             onNodeClicked={handleNodeClicked}
           />
 
           {showSearchForItemsDialog && (
             <SearchForItemsDialog
-              questionnaire={questionnaire}
+              rootItem={questionnaire}
               onClose={() => setShowSearchForItemsDialog(false)}
             />
           )}

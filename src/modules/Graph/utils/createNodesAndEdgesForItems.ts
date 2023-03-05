@@ -1,11 +1,9 @@
 import {
-  Questionnaire,
   QuestionnaireItem,
   QuestionnaireItemAnswerOption,
   QuestionnaireItemEnableWhen,
 } from "fhir/r4";
 import { Edge, Node } from "reactflow";
-import { QuestionnaireHandler } from "../../../utils/QuestionnaireHandler";
 import { AnswerNodeData } from "../components/nodes/AnswerOptionNode";
 import { ForeignItemNodeData } from "../components/nodes/ForeignItemNode";
 import { ItemNodeData } from "../components/nodes/ItemNode";
