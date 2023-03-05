@@ -6,7 +6,7 @@ import Button from "../components/common/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import SearchForItemsDialog from "../components/SearchForItemsDialog";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuestionnaire } from "../api/questionnaire";
 import ViewItemModal from "../components/ViewItemModal";
 import { Node } from "reactflow";
@@ -38,6 +38,11 @@ export default function GraphPage({
     }
   }
 
+  const graphItems = useMemo(() => {
+    if (questionnaire === undefined) return [];
+    return getRelevantItemsForGraph(itemLinkId, questionnaire);
+  }, [itemLinkId, questionnaire]);
+
   return (
     <>
       <Navbar>
@@ -59,7 +64,7 @@ export default function GraphPage({
             </div>
           </SideBar>
           <Graph
-            items={getRelevantItemsForGraph(itemLinkId, questionnaire)}
+            items={graphItems}
             rootItemLinkId={itemLinkId}
             onNodeClicked={handleNodeClicked}
           />

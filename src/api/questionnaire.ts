@@ -59,7 +59,7 @@ async function fetchQuestionnaireById(id: string) {
     throw new Error("no questionnaire with the id " + id);
   }
 
-  return { ...questionnaire };
+  return JSON.parse(JSON.stringify(questionnaire)) as Questionnaire;
 }
 
 async function fetchAllQuestionnaires() {
@@ -75,34 +75,29 @@ async function postAnnotation({
   questionnaireId: string;
   itemLinkId: string;
 }) {
-  const matchingQuestionnaireIndex = questionnaires.findIndex(
+  const questionnaire = questionnaires.find(
     (questionnaire) => questionnaire.id === questionnaireId
   );
 
-  if (matchingQuestionnaireIndex === -1) {
+  if (questionnaire === undefined) {
     throw new Error("no questionnaire with the id: " + questionnaireId);
   }
 
-  const questionnaireCopy = JSON.parse(
-    JSON.stringify(questionnaires[matchingQuestionnaireIndex])
-  );
-  const matchingItem = findItemByLinkId(itemLinkId, questionnaireCopy);
+  const item = findItemByLinkId(itemLinkId, questionnaire);
 
-  if (matchingItem === undefined) {
+  if (item === undefined) {
     throw new Error("no item with the id: " + itemLinkId);
   }
 
-  if (matchingItem.extension === undefined) {
-    matchingItem.extension = [];
+  if (item.extension === undefined) {
+    item.extension = [];
   }
 
   const annotationId = Math.random().toString() + Date.now();
-  matchingItem.extension.push({
+  item.extension.push({
     url: "annotation",
     valueAnnotation: { ...newAnnotation, id: annotationId },
   });
-
-  questionnaires[matchingQuestionnaireIndex] = questionnaireCopy;
 
   return { ...newAnnotation, id: annotationId };
 }
@@ -116,29 +111,24 @@ async function deleteAnnotation({
   questionnaireId: string;
   itemLinkId: string;
 }) {
-  const matchingQuestionnaireIndex = questionnaires.findIndex(
+  const questionnaire = questionnaires.find(
     (questionnaire) => questionnaire.id === questionnaireId
   );
 
-  if (matchingQuestionnaireIndex === -1) {
+  if (questionnaire === undefined) {
     throw new Error("no questionnaire with the id: " + questionnaireId);
   }
-
-  const questionnaireCopy = JSON.parse(
-    JSON.stringify(questionnaires[matchingQuestionnaireIndex])
-  );
-  const matchingItem = findItemByLinkId(itemLinkId, questionnaireCopy);
-  if (matchingItem === undefined) {
+  const item = findItemByLinkId(itemLinkId, questionnaire);
+  if (item === undefined) {
     throw new Error("no item with the id: " + itemLinkId);
   }
 
-  const matchingAnnotationIndex = matchingItem.extension?.findIndex(
+  const matchingAnnotationIndex = item.extension?.findIndex(
     (extension) => extension.valueAnnotation?.id === annotationId
   );
   if (matchingAnnotationIndex === -1 || matchingAnnotationIndex === undefined) {
     throw new Error("no annotation with the id: " + annotationId);
   }
 
-  matchingItem.extension?.splice(matchingAnnotationIndex, 1);
-  questionnaires[matchingQuestionnaireIndex] = questionnaireCopy;
+  item.extension?.splice(matchingAnnotationIndex, 1);
 }

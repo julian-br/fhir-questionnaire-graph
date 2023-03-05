@@ -1,14 +1,18 @@
 import { QuestionnaireItem } from "fhir/r4";
 import { NodeProps } from "reactflow";
+import { getItemAnnotations } from "../../../../utils/getItemAnnotations";
 import NodeContainer from "./NodeContainer";
 
 export interface ItemNodeData extends QuestionnaireItem {}
 
 export function ItemNode({ data }: NodeProps<ItemNodeData>) {
+  const annotations = getItemAnnotations(data);
+
   return (
     <NodeContainer>
       <div className="w-72 bg-white p-3">
         <div className="w-full">
+          <div>{annotations.length}</div>
           <p className="pb-2">
             {data.prefix !== undefined && (
               <span className="mr-2 font-semibold text-primary-800">

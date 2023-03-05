@@ -48,6 +48,10 @@ export default function Graph({
   const graph = useGraph(rootItemLinkId, items);
   const reactFlowInstanceRef = useRef<ReactFlowInstance>();
 
+  useEffect(() => {
+    resetViewport();
+  }, [rootItemLinkId]);
+
   function resetViewport() {
     if (reactFlowInstanceRef.current !== undefined) {
       reactFlowInstanceRef.current.setViewport({ x: 0, y: 0, zoom: 1 });
@@ -101,12 +105,7 @@ export default function Graph({
           position="top-right"
           className="rounded bg-white"
         />
-        <Layouter
-          onLayout={(newLayout) => {
-            graph.setLayout(newLayout);
-            resetViewport();
-          }}
-        />
+        <Layouter onLayout={graph.setLayout} />
       </ReactFlow>
     </div>
   );

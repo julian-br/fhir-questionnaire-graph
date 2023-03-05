@@ -21,11 +21,9 @@ const POSITION = {
 
 class IdGenerator {
   private static groupLinkId: string = "";
-  private static randomString: string = "";
 
   static setGroupLinkId(groupLinkId: string) {
     this.groupLinkId = groupLinkId;
-    this.randomString = Math.random().toString() + Date.now();
   }
 
   static generateEdgeId(sourceLinkId: string, targetLinkId: string) {
@@ -33,7 +31,7 @@ class IdGenerator {
   }
 
   static generateNodeId(itemLinkId: string) {
-    return itemLinkId + this.groupLinkId + this.randomString; // include groupLinkId and random string in each node id to prevent wrong memoization from ReactFlow
+    return itemLinkId + this.groupLinkId; // include groupLinkId and random string in each node id to prevent wrong memoization from ReactFlow
   }
 }
 

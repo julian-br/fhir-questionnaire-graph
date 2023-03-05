@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Edge, useEdgesState, useNodesState, useStore } from "reactflow";
 import { Layout } from "../utils/calcGraphLayout";
 import {
@@ -15,15 +15,29 @@ export default function useGraph(
   const [edges, setEdges] = useEdgesState<Edge>([]);
   const [isLayouted, setIsLayouted] = useState(false);
 
+  const prevRootItemLinkId = useRef<string | undefined>(undefined);
+
   useEffect(() => {
-    setIsLayouted(false);
     const [newNodes, newEdges] = createNodesAndEdgesForItems(
       rootItemLinkId,
       items
     );
-    setNodes(newNodes);
-    setEdges(newEdges);
-  }, [rootItemLinkId]);
+
+    if (rootItemLinkId !== prevRootItemLinkId.current) {
+      setIsLayouted(false);
+      setNodes(newNodes);
+      setEdges(newEdges);
+      prevRootItemLinkId.current = rootItemLinkId;
+    } else {
+      // only update node data, if rootItemLinkId is the same -> prevent unecessary layout
+      setNodes((prevNodes) =>
+        prevNodes.map((node, index) => {
+          node.data = newNodes[index].data;
+          return node;
+        })
+      );
+    }
+  }, [rootItemLinkId, items]);
 
   function setLayout(layout: Layout) {
     setNodes(layout.layoutedNodes);
