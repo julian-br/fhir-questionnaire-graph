@@ -1,9 +1,4 @@
-import {
-  QueryClient,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import exampleQuestionnaire from "../assets/fhir-questionnaire-example.json";
 import { Questionnaire } from "fhir/r4";
 import { QuestionnaireHandler } from "../utils/QuestionnaireHandler";
@@ -57,11 +52,11 @@ async function fetchQuestionnaireById(id: string) {
     throw new Error("no questionnaire with the id " + id);
   }
 
-  return questionnaire;
+  return { ...questionnaire };
 }
 
 async function fetchAllQuestionnaires() {
-  return questionnaires;
+  return [...questionnaires];
 }
 
 async function postAnnotation({
@@ -73,15 +68,18 @@ async function postAnnotation({
   questionnaireId: string;
   itemLinkId: string;
 }) {
-  const matchingQuestionnaire = questionnaires.find(
+  const matchingQuestionnaireIndex = questionnaires.findIndex(
     (questionnaire) => questionnaire.id === questionnaireId
   );
 
-  if (matchingQuestionnaire === undefined) {
+  if (matchingQuestionnaireIndex === -1) {
     throw new Error("no questionnaire with the id: " + questionnaireId);
   }
 
-  const questionnaireHandler = new QuestionnaireHandler(matchingQuestionnaire);
+  const questionnaireCopy = JSON.parse(
+    JSON.stringify(questionnaires[matchingQuestionnaireIndex])
+  );
+  const questionnaireHandler = new QuestionnaireHandler(questionnaireCopy);
   const matchingItem = questionnaireHandler.getItemById(itemLinkId);
 
   if (matchingItem === undefined) {
@@ -97,6 +95,8 @@ async function postAnnotation({
     url: "annotation",
     valueAnnotation: { ...newAnnotation, id: annotationId },
   });
+
+  questionnaires[matchingQuestionnaireIndex] = questionnaireCopy;
 
   return { ...newAnnotation, id: annotationId };
 }

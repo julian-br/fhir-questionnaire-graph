@@ -11,8 +11,6 @@ import { ItemNodeData } from "../components/nodes/ItemNode";
 import { findCorrespondingAnswerOptions } from "./findCorrespondingAnswerOptions";
 import { getEnabledWhenValue } from "./getEnableWhenValue";
 
-//TODO: refactor
-
 export type NodeData = ItemNodeData | AnswerNodeData | ForeignItemNodeData;
 
 // this position will be overwritten as soon as the Graph is layouted
@@ -23,9 +21,11 @@ const POSITION = {
 
 class IdGenerator {
   private static groupLinkId: string = "";
+  private static randomString: string = "";
 
   static setGroupLinkId(groupLinkId: string) {
     this.groupLinkId = groupLinkId;
+    this.randomString = Math.random().toString() + Date.now();
   }
 
   static generateEdgeId(sourceLinkId: string, targetLinkId: string) {
@@ -33,10 +33,11 @@ class IdGenerator {
   }
 
   static generateNodeId(itemLinkId: string) {
-    return itemLinkId + this.groupLinkId; // include groupLinkId in each node id to prevent wrong memoization from ReactFlow
+    return itemLinkId + this.groupLinkId + this.randomString; // include groupLinkId and random string in each node id to prevent wrong memoization from ReactFlow
   }
 }
 
+//TODO: refactor
 export function createNodesAndEdgesFromQuestionnaire(
   questionnaire: Questionnaire,
   groupLinkId: string

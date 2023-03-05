@@ -39,10 +39,10 @@ export default function Graph({
   onNodeClicked,
 }: GraphProps) {
   const graph = useGraph(questionnaire, activeItemId);
-  const reactFlowInstanceRef = useRef<ReactFlowInstance | null>(null);
+  const reactFlowInstanceRef = useRef<ReactFlowInstance>();
 
   function resetViewport() {
-    if (reactFlowInstanceRef.current !== null) {
+    if (reactFlowInstanceRef.current !== undefined) {
       reactFlowInstanceRef.current.setViewport({ x: 0, y: 0, zoom: 1 });
     }
   }

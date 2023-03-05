@@ -2,7 +2,7 @@ import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { QuestionnaireItem } from "fhir/r4";
 import moment from "moment";
-import { useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   QuestionnaireItemAnnotation,
   useAnnotationMutation,
@@ -29,10 +29,16 @@ export default function ViewItemModal({
   const annotationsSortedByDate = getItemAnnotations(item).sort(
     (a, b) => Date.parse(a.time) - Date.parse(b.time)
   );
+
   const hasAnnotations = annotationsSortedByDate.length > 0;
 
   function handleSubmitAnnotation(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (annotationText.length === 0) {
+      return;
+    }
+
     const newAnnotation = {
       authorString: "Demo User",
       time: moment(Date.now()).toISOString(),

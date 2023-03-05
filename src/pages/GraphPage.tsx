@@ -6,11 +6,12 @@ import Button from "../components/common/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import SearchForItemsDialog from "../components/SearchForItemsDialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuestionnaire } from "../api/questionnaire";
 import ViewItemModal from "../components/ViewItemModal";
 import { QuestionnaireItem } from "fhir/r4";
 import { Node } from "reactflow";
+import { findItemByLinkId } from "../utils/findItemByLinkId";
 
 export const GRAPH_PAGE_ROUTE = "/graph/:questionnaireId/:itemLinkId";
 
@@ -27,15 +28,13 @@ export default function GraphPage({
     data: questionnaire,
   } = useQuestionnaire(questionnaireId);
 
-  const [selectedItem, setSelectedItem] = useState<QuestionnaireItem | null>(
-    null
-  );
+  const [selectedItemId, setSelectedItemId] = useState<string>();
   const [showSearchForItemsDialog, setShowSearchForItemsDialog] =
     useState(false);
 
   function handleNodeClicked(node: Node) {
     if (node.type === "item") {
-      setSelectedItem(node.data.itemData);
+      setSelectedItemId(node.data.itemData.linkId);
     }
   }
 
@@ -72,11 +71,11 @@ export default function GraphPage({
             />
           )}
 
-          {selectedItem !== null && (
+          {selectedItemId !== undefined && (
             <ViewItemModal
               questionnaireId={questionnaireId}
-              item={selectedItem}
-              onClose={() => setSelectedItem(null)}
+              item={findItemByLinkId(selectedItemId, questionnaire)!}
+              onClose={() => setSelectedItemId(undefined)}
             />
           )}
         </main>
