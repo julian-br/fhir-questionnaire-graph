@@ -2,7 +2,7 @@ import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { QuestionnaireItem } from "fhir/r4";
 import moment from "moment";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useState } from "react";
 import {
   QuestionnaireItemAnnotation,
   useAnnotationMutation,
@@ -75,7 +75,7 @@ export default function ViewItemModal({
               <AnnotationFeed annotations={annotationsSortedByDate} />
             </div>
           ) : (
-            <div className="ml-2 mb-2 py-1">-</div>
+            <AnnotationEmptyState />
           )}
           <form className="w-full" onSubmit={handleSubmitAnnotation}>
             <TextArea
@@ -96,6 +96,17 @@ export default function ViewItemModal({
         </div>
       </div>
     </Modal>
+  );
+}
+
+function AnnotationEmptyState() {
+  return (
+    <div className="mt-2 flex items-center rounded-xl">
+      <FontAwesomeIcon icon={faMessage} className="h-4 pb-2 text-slate-300" />
+      <p className="ml-2 mb-2 py-1 text-sm text-slate-500">
+        No Annotations added yet...
+      </p>
+    </div>
   );
 }
 
