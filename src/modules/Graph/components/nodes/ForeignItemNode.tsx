@@ -16,7 +16,7 @@ export default function ForeignItemNode({
   data,
 }: NodeProps<ForeignItemNodeData>) {
   return (
-    <NodeContainer variant="custom">
+    <NodeContainer>
       <div className="w-80 rounded-xl border border-slate-300  bg-slate-50 p-4 text-slate-400 ">
         <ForeignItemLink
           foreignItemGroupId={data.foreignGroup.linkId}
