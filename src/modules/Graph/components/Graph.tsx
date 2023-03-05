@@ -16,11 +16,11 @@ import useGraph from "../hooks/useGraph";
 import AnswerOptionNode from "./nodes/AnswerOptionNode";
 import ForeignItemNode from "./nodes/ForeignItemNode";
 import CustomEdge from "./CustomEdge";
-import { Questionnaire } from "fhir/r4";
+import { Questionnaire, QuestionnaireItem } from "fhir/r4";
 
 interface GraphProps {
-  questionnaire: Questionnaire;
-  activeItemId: string;
+  rootItemLinkId: string;
+  items: QuestionnaireItem[];
   onNodeClicked?: (nodeData: Node) => void;
 }
 const nodeTypes = {
@@ -34,11 +34,11 @@ const edgeTypes = {
 };
 
 export default function Graph({
-  questionnaire,
-  activeItemId,
+  rootItemLinkId,
   onNodeClicked,
+  items,
 }: GraphProps) {
-  const graph = useGraph(questionnaire, activeItemId);
+  const graph = useGraph(rootItemLinkId, items);
   const reactFlowInstanceRef = useRef<ReactFlowInstance>();
 
   function resetViewport() {

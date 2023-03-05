@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { Edge, useEdgesState, useNodesState, useStore } from "reactflow";
 import { Layout } from "../utils/calcGraphLayout";
 import {
-  createNodesAndEdgesFromQuestionnaire,
+  createNodesAndEdgesForItems,
   NodeData,
-} from "../utils/createNodesAndEdgesFromQuestionnaire";
-import { Questionnaire } from "fhir/r4";
+} from "../utils/createNodesAndEdgesForItems";
+import { QuestionnaireItem } from "fhir/r4";
 
 export default function useGraph(
-  questionnaire: Questionnaire,
-  activeItemId: string
+  rootItemLinkId: string,
+  items: QuestionnaireItem[]
 ) {
   const [nodes, setNodes] = useNodesState<NodeData>([]);
   const [edges, setEdges] = useEdgesState<Edge>([]);
@@ -17,15 +17,13 @@ export default function useGraph(
 
   useEffect(() => {
     setIsLayouted(false);
-    const [newNodes, newEdges] = createNodesAndEdgesFromQuestionnaire(
-      questionnaire,
-      activeItemId
+    const [newNodes, newEdges] = createNodesAndEdgesForItems(
+      rootItemLinkId,
+      items
     );
     setNodes(newNodes);
     setEdges(newEdges);
-
-    createNodesAndEdgesFromQuestionnaire(questionnaire, activeItemId);
-  }, [activeItemId, questionnaire]);
+  }, [rootItemLinkId]);
 
   function setLayout(layout: Layout) {
     setNodes(layout.layoutedNodes);
