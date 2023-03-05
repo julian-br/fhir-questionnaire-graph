@@ -16,11 +16,18 @@ import useGraph from "../hooks/useGraph";
 import AnswerOptionNode from "./nodes/AnswerOptionNode";
 import ForeignItemNode from "./nodes/ForeignItemNode";
 import CustomEdge from "./CustomEdge";
-import { Questionnaire, QuestionnaireItem } from "fhir/r4";
+import { QuestionnaireItem } from "fhir/r4";
+
+export interface GraphItem extends QuestionnaireItem {
+  foreignGroup?: {
+    text?: string;
+    linkId: string;
+  };
+}
 
 interface GraphProps {
   rootItemLinkId: string;
-  items: QuestionnaireItem[];
+  items: GraphItem[];
   onNodeClicked?: (nodeData: Node) => void;
 }
 const nodeTypes = {

@@ -34,7 +34,7 @@ export default function GraphPage({
 
   function handleNodeClicked(node: Node) {
     if (node.type === "item") {
-      setSelectedItemId(node.data.itemData.linkId);
+      setSelectedItemId(node.data.linkId);
     }
   }
 

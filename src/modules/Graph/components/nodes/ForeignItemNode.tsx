@@ -5,38 +5,36 @@ import { NodeProps } from "reactflow";
 import { Link, useRoute } from "wouter";
 import { GRAPH_PAGE_ROUTE } from "../../../../pages/GraphPage";
 import { encodeURLParam } from "../../../../utils/urlParam";
+import { GraphItem } from "../Graph";
 import NodeContainer from "./NodeContainer";
 
-export interface ForeignItemNodeData {
-  foreignItemGroupId: string;
-  foreignItemGroupText?: string;
-  itemData: QuestionnaireItem;
+export interface ForeignItemNodeData extends GraphItem {
+  foreignGroup: NonNullable<GraphItem["foreignGroup"]>;
 }
 
 export default function ForeignItemNode({
   data,
 }: NodeProps<ForeignItemNodeData>) {
-  const itemData = data.itemData;
   return (
     <NodeContainer variant="custom">
       <div className="w-80 rounded-xl border border-slate-300  bg-slate-50 p-4 text-slate-400 ">
         <ForeignItemLink
-          foreignItemGroupId={data.foreignItemGroupId}
-          foreignItemGroupText={data.foreignItemGroupText}
+          foreignItemGroupId={data.foreignGroup.linkId}
+          foreignItemGroupText={data.foreignGroup.text ?? ""}
         />
         <div className="w-full">
           <p className="pb-2">
-            {itemData.prefix !== undefined && (
+            {data.prefix !== undefined && (
               <span className="mr-2 font-semibold text-slate-600">
-                {itemData.prefix}
+                {data.prefix}
               </span>
             )}
-            <span>{itemData.text}</span>
+            <span>{data.text}</span>
           </p>
           <span
             className={`p rounded-full border border-slate-300 bg-slate-100 py-1 px-2 text-xs font-semibold text-slate-500`}
           >
-            {itemData.type}
+            {data.type}
           </span>
         </div>
       </div>

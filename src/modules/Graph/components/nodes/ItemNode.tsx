@@ -2,25 +2,22 @@ import { QuestionnaireItem } from "fhir/r4";
 import { NodeProps } from "reactflow";
 import NodeContainer from "./NodeContainer";
 
-export interface ItemNodeData {
-  itemData: QuestionnaireItem;
-}
+export interface ItemNodeData extends QuestionnaireItem {}
 
 export function ItemNode({ data }: NodeProps<ItemNodeData>) {
-  const itemData = data.itemData;
   return (
     <NodeContainer>
       <div className="w-72 bg-white p-4">
         <div className="w-full">
           <p className="pb-2">
-            {itemData.prefix !== undefined && (
+            {data.prefix !== undefined && (
               <span className="mr-2 font-semibold text-primary-800">
-                {itemData.prefix}
+                {data.prefix}
               </span>
             )}
-            <span className="text-slate-600">{itemData.text}</span>
+            <span className="text-slate-600">{data.text}</span>
           </p>
-          <TypeBadge type={itemData.type} />
+          <TypeBadge type={data.type} />
         </div>
       </div>
     </NodeContainer>

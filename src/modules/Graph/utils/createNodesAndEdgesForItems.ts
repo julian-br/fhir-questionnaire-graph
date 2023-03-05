@@ -1,9 +1,10 @@
 import {
-  QuestionnaireItem,
+  QuestionnaireItem as GraphItems,
   QuestionnaireItemAnswerOption,
   QuestionnaireItemEnableWhen,
 } from "fhir/r4";
 import { Edge, Node } from "reactflow";
+import { GraphItem } from "../components/Graph";
 import { AnswerNodeData } from "../components/nodes/AnswerOptionNode";
 import { ForeignItemNodeData } from "../components/nodes/ForeignItemNode";
 import { ItemNodeData } from "../components/nodes/ItemNode";
@@ -39,7 +40,7 @@ class IdGenerator {
 //TODO: refactor
 export function createNodesAndEdgesForItems(
   groupLinkId: string,
-  items: QuestionnaireItem[]
+  items: GraphItem[]
 ) {
   IdGenerator.setGroupLinkId(groupLinkId);
 
@@ -67,14 +68,12 @@ export function createNodesAndEdgesForItems(
   return [nodes, edges] as const;
 }
 
-function createNodeForItem(item: QuestionnaireItem): Node<NodeData> {
+function createNodeForItem(item: GraphItem): Node<NodeData> {
   return {
     id: IdGenerator.generateNodeId(item.linkId),
     width: NaN,
-    data: {
-      itemData: item,
-    },
-    type: "item",
+    data: item,
+    type: item.foreignGroup ? "foreignItem" : "item",
     position: POSITION,
   };
 }
@@ -105,8 +104,8 @@ function createEdgeForDependecy({
   dependencyItem,
 }: {
   enabledWhen: QuestionnaireItemEnableWhen;
-  item: QuestionnaireItem;
-  dependencyItem: QuestionnaireItem;
+  item: GraphItems;
+  dependencyItem: GraphItems;
 }): Edge[] {
   if (dependencyItem.answerOption === undefined) {
     const label = `${enabledWhen.operator} ${getEnabledWhenValue(enabledWhen)}`;
