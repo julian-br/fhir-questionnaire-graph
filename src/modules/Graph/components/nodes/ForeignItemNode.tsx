@@ -56,7 +56,7 @@ function ForeignItemLink({
         foreignItemGroupId
       )}`}
       title={`${foreignItemGroupText} (${foreignItemGroupId})`}
-      className="group mb-2 block truncate rounded-lg border border-amber-400 bg-amber-50 px-2 py-2 text-sm text-amber-600 "
+      className="group mb-2 block truncate rounded-lg border border-amber-400 bg-amber-50 px-2 py-1 text-sm text-amber-600 "
     >
       <FontAwesomeIcon icon={faCircleInfo} className="mr-1" />
       <span>from: </span>

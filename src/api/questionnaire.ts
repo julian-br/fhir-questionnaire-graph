@@ -38,8 +38,15 @@ export function useAnnotationMutation() {
       queryClient.invalidateQueries(["questionnaires", questionnaireId]),
   });
 
+  const deleteAnnotationMutation = useMutation({
+    mutationFn: deleteAnnotation,
+    onSuccess: (_, { questionnaireId }) =>
+      queryClient.invalidateQueries(["questionnaires", questionnaireId]),
+  });
+
   return {
     add: addAnnotationMutation,
+    delete: deleteAnnotationMutation,
   };
 }
 
@@ -98,4 +105,40 @@ async function postAnnotation({
   questionnaires[matchingQuestionnaireIndex] = questionnaireCopy;
 
   return { ...newAnnotation, id: annotationId };
+}
+
+async function deleteAnnotation({
+  annotationId,
+  questionnaireId,
+  itemLinkId,
+}: {
+  annotationId: string;
+  questionnaireId: string;
+  itemLinkId: string;
+}) {
+  const matchingQuestionnaireIndex = questionnaires.findIndex(
+    (questionnaire) => questionnaire.id === questionnaireId
+  );
+
+  if (matchingQuestionnaireIndex === -1) {
+    throw new Error("no questionnaire with the id: " + questionnaireId);
+  }
+
+  const questionnaireCopy = JSON.parse(
+    JSON.stringify(questionnaires[matchingQuestionnaireIndex])
+  );
+  const matchingItem = findItemByLinkId(itemLinkId, questionnaireCopy);
+  if (matchingItem === undefined) {
+    throw new Error("no item with the id: " + itemLinkId);
+  }
+
+  const matchingAnnotationIndex = matchingItem.extension?.findIndex(
+    (extension) => extension.valueAnnotation?.id === annotationId
+  );
+  if (matchingAnnotationIndex === -1 || matchingAnnotationIndex === undefined) {
+    throw new Error("no annotation with the id: " + annotationId);
+  }
+
+  matchingItem.extension?.splice(matchingAnnotationIndex, 1);
+  questionnaires[matchingQuestionnaireIndex] = questionnaireCopy;
 }

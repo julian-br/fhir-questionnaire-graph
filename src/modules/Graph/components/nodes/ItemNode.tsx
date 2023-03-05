@@ -7,7 +7,7 @@ export interface ItemNodeData extends QuestionnaireItem {}
 export function ItemNode({ data }: NodeProps<ItemNodeData>) {
   return (
     <NodeContainer>
-      <div className="w-72 bg-white p-4">
+      <div className="w-72 bg-white p-3">
         <div className="w-full">
           <p className="pb-2">
             {data.prefix !== undefined && (
