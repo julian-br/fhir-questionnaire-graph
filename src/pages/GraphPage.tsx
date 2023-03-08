@@ -6,8 +6,12 @@ import Button from "../components/common/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import SearchForItemsDialog from "../components/SearchForItemsDialog";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuestionnaire } from "../api/questionnaire";
+import ViewItemModal from "../components/ViewItemModal";
+import { Node } from "reactflow";
+import { findItemByLinkId } from "../utils/findItemByLinkId";
+import { getRelevantItemsForGraph } from "../modules/Graph/utils/getRelevantItemsForGraph";
 
 export const GRAPH_PAGE_ROUTE = "/graph/:questionnaireId/:itemLinkId";
 
@@ -24,8 +28,20 @@ export default function GraphPage({
     data: questionnaire,
   } = useQuestionnaire(questionnaireId);
 
+  const [selectedItemId, setSelectedItemId] = useState<string>();
   const [showSearchForItemsDialog, setShowSearchForItemsDialog] =
     useState(false);
+
+  function handleNodeClicked(node: Node) {
+    if (node.type === "item") {
+      setSelectedItemId(node.data.linkId);
+    }
+  }
+
+  const graphItems = useMemo(() => {
+    if (questionnaire === undefined) return [];
+    return getRelevantItemsForGraph(itemLinkId, questionnaire);
+  }, [itemLinkId, questionnaire]);
 
   return (
     <>
@@ -47,11 +63,24 @@ export default function GraphPage({
               />
             </div>
           </SideBar>
-          <Graph questionnaire={questionnaire} activeItemId={itemLinkId} />
+          <Graph
+            items={graphItems}
+            rootItemLinkId={itemLinkId}
+            onNodeClicked={handleNodeClicked}
+          />
+
           {showSearchForItemsDialog && (
             <SearchForItemsDialog
-              questionnaire={questionnaire}
+              rootItem={questionnaire}
               onClose={() => setShowSearchForItemsDialog(false)}
+            />
+          )}
+
+          {selectedItemId !== undefined && (
+            <ViewItemModal
+              questionnaireId={questionnaireId}
+              item={findItemByLinkId(selectedItemId, questionnaire)!}
+              onClose={() => setSelectedItemId(undefined)}
             />
           )}
         </main>
