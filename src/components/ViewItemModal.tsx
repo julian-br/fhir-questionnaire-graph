@@ -85,7 +85,7 @@ export default function ViewItemModal({
             <div className="mb-5">
               <AnnotationFeed
                 annotations={annotationsSortedByDate}
-                onDeleteAnnotionClick={handleDeleteAnnotation}
+                onDeleteAnnotationClick={handleDeleteAnnotation}
               />
             </div>
           ) : (
@@ -126,10 +126,10 @@ function AnnotationEmptyState() {
 
 function AnnotationFeed({
   annotations,
-  onDeleteAnnotionClick,
+  onDeleteAnnotationClick,
 }: {
   annotations: QuestionnaireItemAnnotation[];
-  onDeleteAnnotionClick: (annotation: QuestionnaireItemAnnotation) => void;
+  onDeleteAnnotationClick: (annotation: QuestionnaireItemAnnotation) => void;
 }) {
   const scrollAnchor = useRef<HTMLSpanElement>(null);
 
@@ -144,7 +144,7 @@ function AnnotationFeed({
           <li key={anntation.id}>
             <Annotation
               annotation={anntation}
-              onDeleteClick={onDeleteAnnotionClick}
+              onDeleteClick={onDeleteAnnotationClick}
             />
             {index !== annotations.length - 1 && (
               <div className="my-1 ml-2 h-4 w-0.5 rounded-full bg-slate-300"></div>
@@ -191,7 +191,9 @@ function Annotation({ annotation, onDeleteClick }: AnnotationProps) {
           {timePassedSinceAnnotation}
         </time>
       </div>
-      <p className="w-11/12  text-sm text-slate-600">{annotation.text}</p>
+      <p className="w-11/12  whitespace-pre text-sm text-slate-600">
+        {annotation.text}
+      </p>
     </div>
   );
 }
