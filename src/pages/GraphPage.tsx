@@ -8,7 +8,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import SearchForItemsDialog from "../components/SearchForItemsDialog";
 import { useMemo, useState } from "react";
 import { useQuestionnaire } from "../api/questionnaire";
-import ViewItemModal from "../components/ViewItemModal";
+import ViewItemModal from "../components/ViewItemModal/ViewItemModal";
 import { Node } from "reactflow";
 import { findItemByLinkId } from "../utils/findItemByLinkId";
 import { getRelevantItemsForGraph } from "../modules/Graph/utils/getRelevantItemsForGraph";
