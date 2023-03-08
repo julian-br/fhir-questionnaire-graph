@@ -1,40 +1,60 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dialog, Combobox } from "@headlessui/react";
-import { Questionnaire } from "fhir/r4";
-import { useState, ReactNode, useMemo } from "react";
+import { Questionnaire, QuestionnaireItem } from "fhir/r4";
+import { useState, ReactNode, useMemo, PropsWithChildren } from "react";
 import { useLocation, useRoute } from "wouter";
-import { QuestionnaireHandler } from "../utils/QuestionnaireHandler";
 import { GRAPH_PAGE_ROUTE } from "../pages/GraphPage";
 import { encodeURLParam } from "../utils/urlParam";
 
-interface SearchForItemsComboxBoxProps {
-  questionnaire: Questionnaire;
+interface RootItem {
+  item?: QuestionnaireItem[];
+}
+
+interface SearchEntry {
+  id: string;
+  group?: string;
+  text: string;
+  to: string;
+}
+interface SearchForItemsDialogProps<T extends RootItem> {
+  rootItem: T;
   onClose: () => void;
 }
 
-export default function SearchForItemsDialog({
-  questionnaire,
+export default function SearchForItemsDialog<T extends RootItem>({
+  rootItem,
   onClose,
-}: SearchForItemsComboxBoxProps) {
+}: SearchForItemsDialogProps<T>) {
   const [searchQuery, setSearchQuery] = useState("");
   const [, params] = useRoute(GRAPH_PAGE_ROUTE);
   const [, setLocation] = useLocation();
 
-  const questionnaireHandler = useMemo(
-    () => new QuestionnaireHandler(questionnaire),
-    [questionnaire]
+  const searchEntries = useMemo(() => {
+    const entries: SearchEntry[] = [];
+    rootItem.item?.forEach((item) => {
+      entries.push({
+        id: item.linkId,
+        text: item.text ?? item.linkId,
+        to: item.linkId,
+      });
+
+      item.item?.forEach((childItem) => {
+        entries.push({
+          id: childItem.linkId,
+          group: item.text,
+          text: childItem.text ?? childItem.linkId,
+          to: item.linkId,
+        });
+      });
+    });
+    return entries;
+  }, [rootItem]);
+  const matchingSearchEntries = searchEntries.filter((searchEntry) =>
+    searchEntry.text?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const allItems = useMemo(
-    () => questionnaireHandler.getAllItems(),
-    [questionnaire]
-  );
-  const filteredItems = allItems.filter((item) =>
-    item.text?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const hasResults = filteredItems.length > 0;
+  const hasResults = matchingSearchEntries.length > 0;
 
   function navigateToItem(itemLinkId: string) {
     setLocation(
@@ -64,17 +84,13 @@ export default function SearchForItemsDialog({
         </div>
         <Combobox.Options className="overflow-hidden rounded-b-xl">
           <div className="box-border h-fit max-h-[40rem] overflow-y-auto rounded-b-xl bg-slate-100">
-            {filteredItems.map((item) => {
-              const group = questionnaireHandler.getGroupOfItem(item.linkId);
+            {matchingSearchEntries.map((searchEntry) => {
               return (
-                <Combobox.Option
-                  key={item.linkId}
-                  value={group?.linkId ?? item.linkId}
-                >
+                <Combobox.Option key={searchEntry.id} value={searchEntry.to}>
                   {({ active }) => (
                     <SearchResult
-                      text={item.text ?? ""}
-                      group={group?.text}
+                      text={searchEntry.text}
+                      group={searchEntry.group}
                       isActive={active}
                     />
                   )}
@@ -89,9 +105,9 @@ export default function SearchForItemsDialog({
 }
 
 function SearchResult({
+  group,
   text,
   isActive,
-  group,
 }: {
   group?: string;
   text: string;

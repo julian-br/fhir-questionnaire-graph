@@ -16,11 +16,19 @@ import useGraph from "../hooks/useGraph";
 import AnswerOptionNode from "./nodes/AnswerOptionNode";
 import ForeignItemNode from "./nodes/ForeignItemNode";
 import CustomEdge from "./CustomEdge";
-import { Questionnaire } from "fhir/r4";
+import { QuestionnaireItem } from "fhir/r4";
+
+export interface GraphItem extends QuestionnaireItem {
+  foreignGroup?: {
+    text?: string;
+    linkId: string;
+  };
+}
 
 interface GraphProps {
-  questionnaire: Questionnaire;
-  activeItemId: string;
+  rootItemLinkId: string;
+  items: GraphItem[];
+  onNodeClicked?: (nodeData: Node) => void;
 }
 const nodeTypes = {
   item: ItemNode,
@@ -32,12 +40,20 @@ const edgeTypes = {
   custom: CustomEdge,
 };
 
-export default function Graph({ questionnaire, activeItemId }: GraphProps) {
-  const graph = useGraph(questionnaire, activeItemId);
-  const reactFlowInstanceRef = useRef<ReactFlowInstance | null>(null);
+export default function Graph({
+  rootItemLinkId,
+  onNodeClicked,
+  items,
+}: GraphProps) {
+  const graph = useGraph(rootItemLinkId, items);
+  const reactFlowInstanceRef = useRef<ReactFlowInstance>();
+
+  useEffect(() => {
+    resetViewport();
+  }, [rootItemLinkId]);
 
   function resetViewport() {
-    if (reactFlowInstanceRef.current !== null) {
+    if (reactFlowInstanceRef.current !== undefined) {
       reactFlowInstanceRef.current.setViewport({ x: 0, y: 0, zoom: 1 });
     }
   }
@@ -73,6 +89,7 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
         }}
         onNodeMouseEnter={handleNodeMouseEnter}
         onNodeMouseLeave={handleNodeMouseLeave}
+        onNodeClick={(_, node) => (onNodeClicked ? onNodeClicked(node) : null)}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         nodes={graph.nodes}
@@ -88,12 +105,7 @@ export default function Graph({ questionnaire, activeItemId }: GraphProps) {
           position="top-right"
           className="rounded bg-white"
         />
-        <Layouter
-          onLayout={(newLayout) => {
-            graph.setLayout(newLayout);
-            resetViewport();
-          }}
-        />
+        <Layouter onLayout={graph.setLayout} />
       </ReactFlow>
     </div>
   );

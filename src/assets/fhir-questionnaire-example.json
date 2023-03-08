@@ -1248,6 +1248,15 @@
                 "language": "text/fhirpath",
                 "expression": "today() >= $resource.item.where(linkId = 'dateOfBirth').answer.valueDate + 10 years and today() <= $resource.item.where(linkId = 'dateOfBirth').answer.valueDate + 59 years"
               }
+            },
+            {
+              "url": "annotation",
+              "valueAnnotation": {
+                "id": "2",
+                "time": "2023-03-03T08:45:07+00:00",
+                "authorString": "Demo User",
+                "text": "Diese Frage sollte nur angezeigt werden, wenn die Patientin älter als 12 ist."
+              }
             }
           ],
           "linkId": "MF_Frauen_Schwanger_Besonderheiten_6251480_1.1",

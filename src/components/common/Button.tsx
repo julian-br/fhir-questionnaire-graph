@@ -7,13 +7,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const buttonVariants = {
-  primary: "bg-primary-600 text-white font-semibold hover:bg-primary-200",
+  primary: "bg-primary-600 text-white font-semibold hover:bg-primary-500",
   custom: "",
 } as const;
 
 const sizeClassMap = {
-  medium: "px-7 py-2 h-fit rounded-xl",
-  large: "text-lg px-7 py-2 h-fit rounded-xl",
+  medium: "px-4 py-3 h-fit rounded-xl",
+  large: "text-lg px-5 py-2 h-fit rounded-xl",
 } as const;
 
 export default function Button({
