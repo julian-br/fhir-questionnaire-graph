@@ -1,8 +1,8 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dialog, Combobox } from "@headlessui/react";
-import { Questionnaire, QuestionnaireItem } from "fhir/r4";
-import { useState, ReactNode, useMemo, PropsWithChildren } from "react";
+import { QuestionnaireItem } from "fhir/r4";
+import { useState, ReactNode, useMemo } from "react";
 import { useLocation, useRoute } from "wouter";
 import { GRAPH_PAGE_ROUTE } from "../pages/GraphPage";
 import { encodeURLParam } from "../utils/urlParam";
@@ -18,12 +18,12 @@ interface SearchEntry {
   to: string;
 }
 interface SearchForItemsDialogProps<T extends RootItem> {
-  rootItem: T;
+  root: T;
   onClose: () => void;
 }
 
 export default function SearchForItemsDialog<T extends RootItem>({
-  rootItem,
+  root,
   onClose,
 }: SearchForItemsDialogProps<T>) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -32,7 +32,7 @@ export default function SearchForItemsDialog<T extends RootItem>({
 
   const searchEntries = useMemo(() => {
     const entries: SearchEntry[] = [];
-    rootItem.item?.forEach((item) => {
+    root.item?.forEach((item) => {
       entries.push({
         id: item.linkId,
         text: item.text ?? item.linkId,
@@ -49,7 +49,7 @@ export default function SearchForItemsDialog<T extends RootItem>({
       });
     });
     return entries;
-  }, [rootItem]);
+  }, [root]);
   const matchingSearchEntries = searchEntries.filter((searchEntry) =>
     searchEntry.text?.toLowerCase().includes(searchQuery.toLowerCase())
   );

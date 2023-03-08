@@ -4,7 +4,7 @@ export function getEnabledWhenValue(enableWhen: QuestionnaireItemEnableWhen) {
   let key: keyof typeof enableWhen;
   for (key in enableWhen) {
     if (key.includes("answer")) {
-      return enableWhen[key]?.toString();
+      return enableWhen[key];
     }
   }
 }

@@ -3,21 +3,19 @@ import { findItemByLinkId } from "../../../utils/findItemByLinkId";
 import { GraphItem } from "../components/Graph";
 import { findGroupOfItem } from "./findGroupOfItem";
 
-// TODO: refactor
+// TODO: refactor with firepath
 export function getRelevantItemsForGraph(
-  itemLinkId: string,
+  rootItemLinkId: string,
   questionnaire: Questionnaire
 ) {
-  if (questionnaire === undefined) return [];
-  const item = findItemByLinkId(itemLinkId, questionnaire);
-  const childItems = item?.item;
-  if (childItems === undefined) return item ? [item] : [];
+  const item = findItemByLinkId(rootItemLinkId, questionnaire);
+  if (item === undefined) return [];
 
-  const relevantItems: GraphItem[] = [...childItems];
+  const relevantItems: GraphItem[] = item.item ?? [item];
 
   // add foreign dependencies
-  childItems.forEach((childItem) => {
-    childItem.enableWhen?.forEach((enableWhen) => {
+  relevantItems.forEach((relevantItem) => {
+    relevantItem.enableWhen?.forEach((enableWhen) => {
       const itemIsAlreadyIncluded =
         relevantItems.find((item) => item.linkId === enableWhen.question) !==
         undefined;

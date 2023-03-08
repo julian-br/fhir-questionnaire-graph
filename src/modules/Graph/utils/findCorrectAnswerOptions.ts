@@ -11,8 +11,8 @@ export function findCorrectAnswerOptions(
 ) {
   return answerOptions.filter((answerOption) => {
     return compareValuesWithFHIROperator(
-      getAnswerOptionValue(answerOption) ?? "",
-      getEnabledWhenValue(enableWhen) ?? "",
+      getAnswerOptionValue(answerOption),
+      getEnabledWhenValue(enableWhen),
       enableWhen.operator
     );
   });
@@ -20,8 +20,8 @@ export function findCorrectAnswerOptions(
 
 type operatorType = QuestionnaireItemEnableWhen["operator"];
 function compareValuesWithFHIROperator(
-  valueA: string,
-  valueB: string,
+  valueA: any,
+  valueB: any,
   operator: operatorType
 ) {
   switch (operator) {
