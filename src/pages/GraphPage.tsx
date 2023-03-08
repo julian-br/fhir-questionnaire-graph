@@ -71,7 +71,7 @@ export default function GraphPage({
 
           {showSearchForItemsDialog && (
             <SearchForItemsDialog
-              rootItem={questionnaire}
+              root={questionnaire}
               onClose={() => setShowSearchForItemsDialog(false)}
             />
           )}

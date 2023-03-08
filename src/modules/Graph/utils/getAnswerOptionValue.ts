@@ -6,7 +6,7 @@ export function getAnswerOptionValue(
   let key: keyof typeof answerOption;
   for (key in answerOption) {
     if (key.includes("value")) {
-      return answerOption[key]?.toString();
+      return answerOption[key];
     }
   }
 }

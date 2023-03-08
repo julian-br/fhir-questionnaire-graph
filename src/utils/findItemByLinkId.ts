@@ -1,19 +1,11 @@
-import { Questionnaire } from "fhir/r4";
+import { Questionnaire, QuestionnaireItem } from "fhir/r4";
+import fhirpath from "fhirpath";
 
 export function findItemByLinkId(linkId: string, questionnaire: Questionnaire) {
-  const rootItems = questionnaire.item ?? [];
-  for (const item of rootItems) {
-    if (item.linkId === linkId) {
-      return item;
-    }
+  const matchingItems = fhirpath.evaluate(
+    questionnaire,
+    `Questionnaire.item.union(Questionnaire.item.item).where(linkId='${linkId}')`
+  );
 
-    const childItems = item.item;
-    if (childItems !== undefined) {
-      for (const childItem of childItems) {
-        if (childItem.linkId === linkId) {
-          return childItem;
-        }
-      }
-    }
-  }
+  return matchingItems[0] as QuestionnaireItem | undefined;
 }
