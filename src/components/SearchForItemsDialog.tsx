@@ -12,7 +12,6 @@ interface RootItem {
 }
 
 interface SearchEntry {
-  id: string;
   group?: string;
   text: string;
   to: string;
@@ -34,14 +33,12 @@ export default function SearchForItemsDialog<T extends RootItem>({
     const entries: SearchEntry[] = [];
     root.item?.forEach((item) => {
       entries.push({
-        id: item.linkId,
         text: item.text ?? item.linkId,
         to: item.linkId,
       });
 
       item.item?.forEach((childItem) => {
         entries.push({
-          id: childItem.linkId,
           group: item.text,
           text: childItem.text ?? childItem.linkId,
           to: item.linkId,
@@ -50,22 +47,25 @@ export default function SearchForItemsDialog<T extends RootItem>({
     });
     return entries;
   }, [root]);
-  const matchingSearchEntries = searchEntries.filter((searchEntry) =>
-    searchEntry.text?.toLowerCase().includes(searchQuery.toLowerCase())
+  const matchingSearchEntries = useMemo(
+    () =>
+      searchEntries.filter((searchEntry) =>
+        searchEntry.text.toLowerCase().includes(searchQuery.toLowerCase())
+      ),
+    [searchQuery]
   );
-
   const hasResults = matchingSearchEntries.length > 0;
 
-  function navigateToItem(itemLinkId: string) {
+  function navigateToItem(searchEntry: SearchEntry) {
     setLocation(
-      `/graph/${params?.questionnaireId}/${encodeURLParam(itemLinkId)}`
+      `/graph/${params?.questionnaireId}/${encodeURLParam(searchEntry.to)}`
     );
     onClose();
   }
 
   return (
     <SearchForItemDialogContainer onClose={onClose}>
-      <Combobox onChange={navigateToItem}>
+      <Combobox onChange={navigateToItem} value={null}>
         <div className="relative">
           <FontAwesomeIcon
             icon={faSearch}
@@ -82,21 +82,19 @@ export default function SearchForItemsDialog<T extends RootItem>({
             placeholder="search for items..."
           />
         </div>
-        <Combobox.Options className="overflow-hidden rounded-b-xl">
+        <Combobox.Options as="ul" className="overflow-hidden rounded-b-xl">
           <div className="box-border h-fit max-h-[40rem] overflow-y-auto rounded-b-xl bg-slate-100">
-            {matchingSearchEntries.map((searchEntry) => {
-              return (
-                <Combobox.Option key={searchEntry.id} value={searchEntry.to}>
-                  {({ active }) => (
-                    <SearchResult
-                      text={searchEntry.text}
-                      group={searchEntry.group}
-                      isActive={active}
-                    />
-                  )}
-                </Combobox.Option>
-              );
-            })}
+            {matchingSearchEntries.map((searchEntry, index) => (
+              <Combobox.Option as="li" key={index} value={searchEntry}>
+                {({ active }) => (
+                  <SearchResult
+                    text={searchEntry.text}
+                    group={searchEntry.group}
+                    isActive={active}
+                  />
+                )}
+              </Combobox.Option>
+            ))}
           </div>
         </Combobox.Options>
       </Combobox>
