@@ -1,6 +1,6 @@
 import { EdgeLabelRenderer, EdgeProps, getBezierPath } from "reactflow";
 
-export default function CustomEdge({ data, ...edgeData }: EdgeProps) {
+export default function DependecyEdge({ data, ...edgeData }: EdgeProps) {
   const [edgePath, labelX, labelY] = getBezierPath({
     ...edgeData,
   });

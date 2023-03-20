@@ -12,7 +12,7 @@ export function ItemNode({ data }: NodeProps<ItemNodeData>) {
 
   return (
     <NodeContainer>
-      <div className="box-content w-72 rounded-xl border border-slate-300 bg-white p-3 hover:border-2 hover:border-primary-400">
+      <div className="box-content w-72 rounded-lg border border-slate-300 bg-white p-3 hover:border-2 hover:border-primary-400">
         <div className="relative w-full">
           <AnnotationNotification amountOfNotifications={annotations.length} />
           <p className="pb-2">

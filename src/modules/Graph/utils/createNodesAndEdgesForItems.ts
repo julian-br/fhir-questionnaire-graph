@@ -113,7 +113,7 @@ function createEdgeForDependecy({
         source: IdGenerator.generateNodeId(dependencyItem.linkId),
         target: IdGenerator.generateNodeId(item.linkId),
         label: label,
-        type: "custom",
+        type: "dependency",
       },
     ];
   }
@@ -127,7 +127,7 @@ function createEdgeForDependecy({
     id: IdGenerator.generateEdgeId(option.id!, dependencyItem.linkId),
     source: IdGenerator.generateNodeId(option.id!),
     target: IdGenerator.generateNodeId(item.linkId),
-    type: "custom",
+    type: "dependency",
   }));
 }
 
@@ -145,6 +145,6 @@ function createEdgeForAnswerOption(
     id: IdGenerator.generateEdgeId(itemLinkId, answerOption.id),
     source: IdGenerator.generateNodeId(itemLinkId),
     target: IdGenerator.generateNodeId(answerOption.id!),
-    type: "custom",
+    type: "answerOption",
   };
 }

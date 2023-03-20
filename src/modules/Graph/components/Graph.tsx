@@ -15,8 +15,9 @@ import { ItemNode } from "./nodes/ItemNode";
 import useGraph from "../hooks/useGraph";
 import AnswerOptionNode from "./nodes/AnswerOptionNode";
 import ForeignItemNode from "./nodes/ForeignItemNode";
-import CustomEdge from "./CustomEdge";
+import DependecyEdge from "./edges/DependecyEdge";
 import { QuestionnaireItem } from "fhir/r4";
+import AnswerOptionEdge from "./edges/AnswerOptionEdge";
 
 export interface GraphItem extends QuestionnaireItem {
   foreignGroup?: {
@@ -37,7 +38,8 @@ const nodeTypes = {
 };
 
 const edgeTypes = {
-  custom: CustomEdge,
+  dependency: DependecyEdge,
+  answerOption: AnswerOptionEdge,
 };
 
 export default function Graph({

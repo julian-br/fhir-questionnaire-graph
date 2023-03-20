@@ -24,11 +24,6 @@ export default function ForeignItemNode({
         />
         <div className="w-full">
           <p className="pb-2">
-            {data.prefix !== undefined && (
-              <span className="mr-2 font-semibold text-slate-600">
-                {data.prefix}
-              </span>
-            )}
             <span>{data.text}</span>
           </p>
           <span
