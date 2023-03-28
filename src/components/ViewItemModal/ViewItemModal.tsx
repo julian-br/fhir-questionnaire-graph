@@ -66,19 +66,19 @@ export default function ViewItemModal({
 
   return (
     <Modal onClose={onClose}>
-      <div className="mb-3 w-[50rem]">
+      <div className="mb-4 w-[50rem]">
         <div className="">
           <span className="text-sm font-light text-slate-500">
             {item.linkId}
           </span>
-          <h5 className="pb-2 text-lg font-medium text-slate-700">
+          <h5 className="pb-4 text-lg font-medium text-slate-700">
             {item.prefix !== undefined && (
               <span className="pr-2 font-semibold ">{item.prefix}</span>
             )}
             {item.text}
           </h5>
 
-          <h4 className="mb-2 font-medium text-slate-900">Annotations</h4>
+          <h4 className="mb-3 font-medium text-slate-900">Annotations</h4>
 
           <div className="mb-4">
             <AnnotationFeed
