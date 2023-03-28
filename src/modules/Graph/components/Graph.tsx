@@ -29,7 +29,10 @@ export interface GraphItem extends QuestionnaireItem {
 interface GraphProps {
   rootItemLinkId: string;
   items: GraphItem[];
-  onNodeClicked?: (nodeData: Node) => void;
+  onNodeClicked?: (
+    event: React.MouseEvent<Element, MouseEvent>,
+    nodeData: Node
+  ) => void;
 }
 const nodeTypes = {
   item: ItemNode,
@@ -60,10 +63,7 @@ export default function Graph({
     }
   }
 
-  function handleNodeMouseEnter(
-    event: React.MouseEvent<Element, MouseEvent>,
-    node: Node
-  ) {
+  function handleNodeMouseEnter(event: React.MouseEvent, node: Node) {
     if (node.type === "foreignItem") {
       return;
     }
@@ -91,7 +91,9 @@ export default function Graph({
         }}
         onNodeMouseEnter={handleNodeMouseEnter}
         onNodeMouseLeave={handleNodeMouseLeave}
-        onNodeClick={(_, node) => (onNodeClicked ? onNodeClicked(node) : null)}
+        onNodeClick={(event, node) =>
+          onNodeClicked ? onNodeClicked(event, node) : null
+        }
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         nodes={graph.nodes}

@@ -26,7 +26,7 @@ export default function DependecyEdge({ data, ...edgeData }: EdgeProps) {
           >
             <EdgeLabel
               selected={edgeData.selected ?? false}
-              text={edgeData.label!.toString()}
+              text={edgeData.label?.toString() ?? ""}
             />
           </div>
         </EdgeLabelRenderer>

@@ -6,12 +6,14 @@ import Button from "../components/common/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import SearchForItemsDialog from "../components/SearchForItemsDialog";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useQuestionnaire } from "../api/questionnaire";
 import ViewItemModal from "../components/ViewItemModal/ViewItemModal";
 import { Node } from "reactflow";
 import { findItemByLinkId } from "../utils/findItemByLinkId";
 import { getRelevantItemsForGraph } from "../modules/Graph/utils/getRelevantItemsForGraph";
+import { encodeURLParam } from "../utils/urlParam";
+import { useLocation } from "wouter";
 
 export const GRAPH_PAGE_ROUTE = "/graph/:questionnaireId/:itemLinkId";
 
@@ -22,6 +24,7 @@ export default function GraphPage({
   questionnaireId: string;
   itemLinkId: string;
 }) {
+  const [, setLocation] = useLocation();
   const {
     isSuccess,
     isLoading,
@@ -32,8 +35,15 @@ export default function GraphPage({
   const [showSearchForItemsDialog, setShowSearchForItemsDialog] =
     useState(false);
 
-  function handleNodeClicked(node: Node) {
+  function handleNodeClicked(event: React.MouseEvent, node: Node) {
     if (node.type === "item") {
+      if (event.ctrlKey) {
+        console.log("redirect");
+        setLocation(
+          `/graph/${questionnaire?.id}/${encodeURLParam(node.data.linkId)}`
+        );
+        return;
+      }
       setSelectedItemId(node.data.linkId);
     }
   }

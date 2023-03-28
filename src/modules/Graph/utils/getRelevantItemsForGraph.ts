@@ -1,4 +1,4 @@
-import { Questionnaire } from "fhir/r4";
+import { Questionnaire, QuestionnaireItem } from "fhir/r4";
 import { findItemByLinkId } from "../../../utils/findItemByLinkId";
 import { GraphItem } from "../components/Graph";
 import { findGroupOfItem } from "./findGroupOfItem";
@@ -11,7 +11,51 @@ export function getRelevantItemsForGraph(
   const item = findItemByLinkId(rootItemLinkId, questionnaire);
   if (item === undefined) return [];
 
-  const relevantItems: GraphItem[] = item.item ?? [item];
+  if (item.type === "group") {
+    return handleGroupItem(item, questionnaire);
+  }
+
+  return handleSingleItem(item, questionnaire);
+}
+
+function handleSingleItem(
+  item: QuestionnaireItem,
+  questionnaire: Questionnaire
+) {
+  const groupOfItem = findGroupOfItem(item, questionnaire);
+  const relevantItems: GraphItem[] = [];
+  const itemsToAddDependeciesFor = [item];
+
+  while (itemsToAddDependeciesFor.length > 0) {
+    const currentItem = itemsToAddDependeciesFor.shift()!;
+    const groupOfCurrentItem = findGroupOfItem(currentItem, questionnaire);
+    const itemIsForeign = groupOfCurrentItem !== groupOfItem;
+
+    if (itemIsForeign && groupOfCurrentItem !== undefined) {
+      relevantItems.push({
+        ...currentItem,
+        foreignGroup: {
+          linkId: groupOfCurrentItem.linkId,
+          text: groupOfCurrentItem.text,
+        },
+      });
+    } else {
+      relevantItems.push(currentItem);
+    }
+    currentItem.enableWhen?.forEach((enabledWhen) => {
+      const dependency = findItemByLinkId(enabledWhen.question, questionnaire);
+      if (dependency !== undefined) itemsToAddDependeciesFor.push(dependency);
+    });
+  }
+
+  return relevantItems;
+}
+
+function handleGroupItem(
+  groupItem: QuestionnaireItem,
+  questionnaire: Questionnaire
+) {
+  const relevantItems: GraphItem[] = groupItem.item!;
 
   // add foreign dependencies
   relevantItems.forEach((relevantItem) => {
