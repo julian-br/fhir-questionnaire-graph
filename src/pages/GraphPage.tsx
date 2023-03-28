@@ -1,6 +1,6 @@
 import Navbar from "../components/Navbar";
 import SideBar from "../components/SideBar";
-import QuestionnaireItemsNav from "../components/QuestionnaireItemsNav";
+import QuestionnaireNav from "../components/QuestionnaireNav";
 import Graph from "../modules/Graph/components/Graph";
 import Button from "../components/common/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -72,8 +72,8 @@ export default function GraphPage({
         <main className="flex flex-grow">
           <SideBar>
             <div>
-              <QuestionnaireItemsNav
-                items={questionnaire.item!}
+              <QuestionnaireNav
+                questionnaire={questionnaire}
                 activeItemId={itemLinkId}
               />
             </div>

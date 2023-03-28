@@ -1,5 +1,4 @@
 export function encodeURLParam(param: string) {
-  console.log(param);
   return param.replaceAll(".", "~");
 }
 
