@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import exampleQuestionnaire from "../assets/fhir-questionnaire-example.json";
+import exampleQuestionnaire from "../assets/example-dataset.json";
 import { Questionnaire } from "fhir/r4";
 import { findItemByLinkId } from "../utils/findItemByLinkId";
 
