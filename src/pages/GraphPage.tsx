@@ -47,14 +47,15 @@ export default function GraphPage({
   function handleNodeClicked(event: React.MouseEvent, node: Node) {
     if (node.type === "item") {
       if (event.ctrlKey) {
-        console.log("redirect");
-        setLocation(
-          constructGraphPageUrl(questionnaire?.id ?? "", node.data.linkId)
-        );
+        navigateToItem(node.data.linkId);
         return;
       }
       setSelectedItemId(node.data.linkId);
     }
+  }
+
+  function navigateToItem(itemLinkId: string) {
+    setLocation(constructGraphPageUrl(questionnaire?.id ?? "", itemLinkId));
   }
 
   const graphItems = useMemo(() => {
@@ -95,6 +96,7 @@ export default function GraphPage({
 
           {showSearchForItemsDialog && (
             <SearchForItemsDialog
+              onEntrySelect={(entry) => navigateToItem(entry.linkTo)}
               root={questionnaire}
               onClose={() => setShowSearchForItemsDialog(false)}
             />
