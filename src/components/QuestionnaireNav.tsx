@@ -140,7 +140,7 @@ function GroupItemNavEntry({
               itemInGroupHasAnnotations && !isActive
                 ? "font-semibold text-primary-600"
                 : ""
-            } mr-1 truncate`}
+            } ${isOpen ? "font-bold" : ""} mr-1 truncate`}
           >
             {item.prefix !== undefined && (
               <strong className="mr-1">{item.prefix}</strong>
