@@ -41,7 +41,7 @@ export default function SearchForItemsDialog<T extends RootItem>({
         entries.push({
           group: item.text,
           text: childItem.text ?? childItem.linkId,
-          to: item.linkId,
+          to: childItem.linkId,
         });
       });
     });
