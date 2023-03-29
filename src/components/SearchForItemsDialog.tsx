@@ -4,8 +4,7 @@ import { Dialog, Combobox } from "@headlessui/react";
 import { QuestionnaireItem } from "fhir/r4";
 import { useState, ReactNode, useMemo } from "react";
 import { useLocation, useRoute } from "wouter";
-import { GRAPH_PAGE_ROUTE } from "../pages/GraphPage";
-import { encodeURLParam } from "../utils/urlParam";
+import { constructGraphPageUrl, GRAPH_PAGE_ROUTE } from "../pages/GraphPage";
 
 interface RootItem {
   item?: QuestionnaireItem[];
@@ -58,7 +57,7 @@ export default function SearchForItemsDialog<T extends RootItem>({
 
   function navigateToItem(searchEntry: SearchEntry) {
     setLocation(
-      `/graph/${params?.questionnaireId}/${encodeURLParam(searchEntry.to)}`
+      constructGraphPageUrl(params?.questionnaireId ?? "", searchEntry.to)
     );
     onClose();
   }

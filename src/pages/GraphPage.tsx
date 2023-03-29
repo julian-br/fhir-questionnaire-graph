@@ -17,6 +17,15 @@ import { useLocation } from "wouter";
 
 export const GRAPH_PAGE_ROUTE = "/graph/:questionnaireId/:itemLinkId";
 
+export function constructGraphPageUrl(
+  questionnaireId: string,
+  itemLinkId: string
+) {
+  return `/graph/${encodeURLParam(questionnaireId)}/${encodeURLParam(
+    itemLinkId
+  )}`;
+}
+
 export default function GraphPage({
   itemLinkId,
   questionnaireId,
@@ -40,7 +49,7 @@ export default function GraphPage({
       if (event.ctrlKey) {
         console.log("redirect");
         setLocation(
-          `/graph/${questionnaire?.id}/${encodeURLParam(node.data.linkId)}`
+          constructGraphPageUrl(questionnaire?.id ?? "", node.data.linkId)
         );
         return;
       }

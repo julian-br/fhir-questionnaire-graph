@@ -1,15 +1,13 @@
 import { Questionnaire, QuestionnaireItem } from "fhir/r4";
-import { Link, useLocation, useRoute } from "wouter";
-import { encodeURLParam } from "../utils/urlParam";
+import { useLocation, useRoute } from "wouter";
 import Button from "./common/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
-  faCircle,
   faLayerGroup,
   faMessage,
 } from "@fortawesome/free-solid-svg-icons";
-import { GRAPH_PAGE_ROUTE } from "../pages/GraphPage";
+import { constructGraphPageUrl, GRAPH_PAGE_ROUTE } from "../pages/GraphPage";
 import { getItemAnnotations } from "../utils/getItemAnnotations";
 import { findGroupOfItem } from "../modules/Graph/utils/findGroupOfItem";
 import { findItemByLinkId } from "../utils/findItemByLinkId";
@@ -30,7 +28,7 @@ export default function QuestionnaireNav({
 
   function navigateToItem(itemLinkId: string) {
     setLocation(
-      `/graph/${params?.questionnaireId}/${encodeURLParam(itemLinkId)}`
+      constructGraphPageUrl(params?.questionnaireId ?? "", itemLinkId)
     );
   }
 
