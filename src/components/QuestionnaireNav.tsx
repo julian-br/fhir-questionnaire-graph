@@ -3,12 +3,16 @@ import { Link, useLocation, useRoute } from "wouter";
 import { encodeURLParam } from "../utils/urlParam";
 import Button from "./common/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLayerGroup, faMessage } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronRight,
+  faLayerGroup,
+  faMessage,
+} from "@fortawesome/free-solid-svg-icons";
 import { GRAPH_PAGE_ROUTE } from "../pages/GraphPage";
 import { getItemAnnotations } from "../utils/getItemAnnotations";
 import { findGroupOfItem } from "../modules/Graph/utils/findGroupOfItem";
 import { findItemByLinkId } from "../utils/findItemByLinkId";
-import { Children, ReactNode, useMemo } from "react";
+import { Children, ReactNode, useMemo, useState } from "react";
 
 interface QuestionnaireItemsNavProps {
   questionnaire: Questionnaire;
@@ -22,7 +26,6 @@ export default function QuestionnaireNav({
 }: QuestionnaireItemsNavProps) {
   const [, setLocation] = useLocation();
   const [, params] = useRoute(GRAPH_PAGE_ROUTE);
-  const amountOfItems = questionnaire.item?.length;
 
   function navigateToItem(itemLinkId: string) {
     setLocation(
@@ -40,11 +43,11 @@ export default function QuestionnaireNav({
 
   return (
     <nav className="border-box w-[22rem] select-none">
-      <h3 className="mb-2 ml-6 text-base font-semibold text-primary-900">
+      <h3 className="mb-1 ml-4 text-base font-semibold text-primary-900">
         <FontAwesomeIcon icon={faLayerGroup} className="mr-1 h-4 " />
-        <span className="text-primary-900"> Items ({amountOfItems})</span>
+        <span className="text-primary-900"> Items</span>
       </h3>
-      <div className="z-10 mt-1 ml-1 max-h-[90vh] overflow-y-auto overflow-x-hidden pl-2 pr-3">
+      <div className="z-10 mt-1 ml-1 max-h-[90vh] overflow-y-auto overflow-x-hidden  pl-2 pr-3">
         {questionnaire.item?.map((item) => {
           if (item.type === "group") {
             return (
@@ -101,7 +104,7 @@ function GroupItemNavEntry({
       <Button
         onClick={onClick}
         variant="custom"
-        className={`z-20 block w-full rounded-lg px-4 py-2 text-left text-xs ${
+        className={`z-20 block w-full rounded px-2 py-2 text-left text-xs ${
           isActive
             ? "bg-primary-200 font-bold text-primary-600"
             : `py-2 font-semibold ${
@@ -109,7 +112,15 @@ function GroupItemNavEntry({
               } hover:bg-slate-200 hover:text-primary-600`
         }`}
       >
-        <div className="flex items-center justify-between">
+        <div className="flex w-full items-center">
+          <FontAwesomeIcon
+            icon={faChevronRight}
+            className={`${
+              isActive
+                ? "mb-1 rotate-90 font-bold text-primary-500"
+                : "text-slate-400"
+            } mr-2 h-3 `}
+          />
           <p className="mr-1 truncate">
             {item.prefix !== undefined && (
               <strong className="mr-1">{item.prefix}</strong>
@@ -118,10 +129,19 @@ function GroupItemNavEntry({
               {item.text}
             </span>
           </p>
-          {itemInGroupHasAnnotation && <FontAwesomeIcon icon={faMessage} />}
+          {itemInGroupHasAnnotation && (
+            <FontAwesomeIcon className="ml-auto" icon={faMessage} />
+          )}
         </div>
       </Button>
-      {isActive && <div className="pl-3">{children}</div>}
+      {isActive && (
+        <div className="flex w-full">
+          <div className="my-2 ml-3  mr-2 w-1 border-r-2 border-slate-300"></div>
+          <div className=" w-full overflow-hidden whitespace-nowrap">
+            {children}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -141,7 +161,7 @@ function ItemNavEntry({
     <Button
       onClick={onClick}
       variant="custom"
-      className={`z-20 block w-full rounded-lg px-4 py-2 text-left text-xs ${
+      className={`z-20 block w-full rounded px-2 py-2 text-left text-xs ${
         isActive
           ? "bg-primary-200 font-bold text-primary-600"
           : `py-2 font-semibold ${
@@ -149,7 +169,7 @@ function ItemNavEntry({
             } hover:bg-slate-200 hover:text-primary-600`
       }`}
     >
-      <div className="flex items-center justify-between">
+      <div className="flex items-center">
         <p className="mr-1 truncate">
           {item.prefix !== undefined && (
             <strong className="mr-1">{item.prefix}</strong>

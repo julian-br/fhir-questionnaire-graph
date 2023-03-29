@@ -78,7 +78,7 @@ function Annotation({ annotation, onDeleteClick }: AnnotationProps) {
           {timePassedSinceAnnotation}
         </time>
       </div>
-      <p className="w-11/12  whitespace-pre text-sm text-slate-600">
+      <p className="w-11/12 whitespace-pre text-sm text-slate-600">
         {annotation.text}
       </p>
     </div>
