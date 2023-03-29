@@ -55,11 +55,11 @@ export default function Graph({
 
   useEffect(() => {
     resetViewport();
-  }, [rootItemLinkId]);
+  }, [graph.isLayouted]);
 
   function resetViewport() {
     if (reactFlowInstanceRef.current !== undefined) {
-      reactFlowInstanceRef.current.setViewport({ x: 0, y: 0, zoom: 1 });
+      reactFlowInstanceRef.current.fitView();
     }
   }
 
