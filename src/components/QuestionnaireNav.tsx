@@ -48,7 +48,7 @@ export default function QuestionnaireNav({
         <FontAwesomeIcon icon={faLayerGroup} className="mr-1 h-4 " />
         <span className="text-primary-900"> Items</span>
       </h3>
-      <div className="z-10 mt-1 ml-1 max-h-[90vh] overflow-y-auto overflow-x-hidden pl-2 pr-3">
+      <div className="z-10 mt-1 ml-1 max-h-[90vh] overflow-y-auto overflow-x-hidden pr-4 pl-2">
         {questionnaire.item?.map((item) => {
           if (item.type === "group") {
             const isGroupOfActiveItem = groupOfActiveItem === item.linkId;
@@ -103,7 +103,7 @@ function BaseNavEntry({
         isActive
           ? " bg-primary-200 font-bold text-slate-600"
           : "font-medium hover:bg-slate-200"
-      } z-20 block w-full rounded px-2 py-2 text-left text-[0.8rem] `}
+      } z-20 block w-full rounded px-2 py-2 text-left text-[0.8rem] text-slate-500`}
     >
       {children}
     </Button>
