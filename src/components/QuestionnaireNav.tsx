@@ -5,6 +5,7 @@ import Button from "./common/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
+  faCircle,
   faLayerGroup,
   faMessage,
 } from "@fortawesome/free-solid-svg-icons";
@@ -12,7 +13,7 @@ import { GRAPH_PAGE_ROUTE } from "../pages/GraphPage";
 import { getItemAnnotations } from "../utils/getItemAnnotations";
 import { findGroupOfItem } from "../modules/Graph/utils/findGroupOfItem";
 import { findItemByLinkId } from "../utils/findItemByLinkId";
-import { Children, ReactNode, useMemo, useState } from "react";
+import { Children, isValidElement, ReactNode, useMemo, useState } from "react";
 
 interface QuestionnaireItemsNavProps {
   questionnaire: Questionnaire;
@@ -47,21 +48,23 @@ export default function QuestionnaireNav({
         <FontAwesomeIcon icon={faLayerGroup} className="mr-1 h-4 " />
         <span className="text-primary-900"> Items</span>
       </h3>
-      <div className="z-10 mt-1 ml-1 max-h-[90vh] overflow-y-auto overflow-x-hidden  pl-2 pr-3">
+      <div className="z-10 mt-1 ml-1 max-h-[90vh] overflow-y-auto overflow-x-hidden pl-2 pr-3">
         {questionnaire.item?.map((item) => {
           if (item.type === "group") {
+            const isGroupOfActiveItem = groupOfActiveItem === item.linkId;
+            const isActiveItem = activeItemId === item.linkId;
             return (
               <GroupItemNavEntry
                 key={item.linkId}
                 item={item}
                 onClick={() => navigateToItem(item.linkId)}
-                isActive={groupOfActiveItem === item.linkId}
+                isActive={isActiveItem}
+                isOpen={isGroupOfActiveItem || isActiveItem}
               >
                 {item.item?.map((nestedItem) => (
                   <ItemNavEntry
                     isActive={nestedItem.linkId === activeItemId}
                     onClick={() => navigateToItem(nestedItem.linkId)}
-                    hasAnnotation={false}
                     item={nestedItem}
                   />
                 ))}
@@ -72,7 +75,6 @@ export default function QuestionnaireNav({
               <ItemNavEntry
                 key={item.linkId}
                 item={item}
-                hasAnnotation={false}
                 onClick={() => navigateToItem(item.linkId)}
                 isActive={item.linkId === activeItemId}
               />
@@ -84,102 +86,112 @@ export default function QuestionnaireNav({
   );
 }
 
-function GroupItemNavEntry({
-  isActive,
-  item,
-  onClick,
+function BaseNavEntry({
   children,
-}: {
-  isActive: boolean;
-  item: QuestionnaireItem;
-  onClick: () => void;
-  children: ReactNode;
-}) {
-  const itemInGroupHasAnnotation = item.item?.some(
-    (item) => getItemAnnotations(item).length > 0
-  );
-
-  return (
-    <div>
-      <Button
-        onClick={onClick}
-        variant="custom"
-        className={`z-20 block w-full rounded px-2 py-2 text-left text-xs ${
-          isActive
-            ? "bg-primary-200 font-bold text-primary-600"
-            : `py-2 font-semibold ${
-                itemInGroupHasAnnotation ? "text-primary-600" : "text-slate-500"
-              } hover:bg-slate-200 hover:text-primary-600`
-        }`}
-      >
-        <div className="flex w-full items-center">
-          <FontAwesomeIcon
-            icon={faChevronRight}
-            className={`${
-              isActive
-                ? "mb-1 rotate-90 font-bold text-primary-500"
-                : "text-slate-400"
-            } mr-2 h-3 `}
-          />
-          <p className="mr-1 truncate">
-            {item.prefix !== undefined && (
-              <strong className="mr-1">{item.prefix}</strong>
-            )}
-            <span className="" title={`${item.text} (${item.linkId})`}>
-              {item.text}
-            </span>
-          </p>
-          {itemInGroupHasAnnotation && (
-            <FontAwesomeIcon className="ml-auto" icon={faMessage} />
-          )}
-        </div>
-      </Button>
-      {isActive && (
-        <div className="flex w-full">
-          <div className="my-2 ml-3  mr-2 w-1 border-r-2 border-slate-300"></div>
-          <div className=" w-full overflow-hidden whitespace-nowrap">
-            {children}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function ItemNavEntry({
   isActive,
-  item,
-  hasAnnotation,
   onClick,
 }: {
+  children: ReactNode;
   isActive: boolean;
-  item: QuestionnaireItem;
-  hasAnnotation: boolean;
   onClick: () => void;
 }) {
   return (
     <Button
       onClick={onClick}
       variant="custom"
-      className={`z-20 block w-full rounded px-2 py-2 text-left text-xs ${
+      className={`${
         isActive
-          ? "bg-primary-200 font-bold text-primary-600"
-          : `py-2 font-semibold ${
-              hasAnnotation ? "text-primary-600" : "text-slate-500"
-            } hover:bg-slate-200 hover:text-primary-600`
-      }`}
+          ? " bg-primary-200 font-bold text-slate-600"
+          : "font-medium hover:bg-slate-200"
+      } z-20 block w-full rounded px-2 py-2 text-left text-[0.8rem] `}
     >
+      {children}
+    </Button>
+  );
+}
+
+function GroupItemNavEntry({
+  isActive,
+  item,
+  onClick,
+  children,
+  isOpen,
+}: {
+  isActive: boolean;
+  item: QuestionnaireItem;
+  onClick: () => void;
+  children: ReactNode;
+  isOpen: boolean;
+}) {
+  const itemInGroupHasAnnotations = item.item?.some(
+    (item) => getItemAnnotations(item).length > 0
+  );
+
+  return (
+    <>
+      <BaseNavEntry isActive={isActive} onClick={onClick}>
+        <div className="flex w-full items-center">
+          <FontAwesomeIcon
+            icon={faChevronRight}
+            className={`${isOpen ? "mb-1 rotate-90" : ""} mr-2 h-3 `}
+          />
+          <p
+            className={`${
+              itemInGroupHasAnnotations && !isActive
+                ? "font-semibold text-primary-600"
+                : ""
+            } mr-1 truncate`}
+          >
+            {item.prefix !== undefined && (
+              <strong className="mr-1">{item.prefix}</strong>
+            )}
+            <span title={`${item.text} (${item.linkId})`}>{item.text}</span>
+          </p>
+        </div>
+      </BaseNavEntry>
+      {isOpen && (
+        <div className="flex w-full">
+          <div className="my-2 ml-2  mr-2 w-1 border-r-2 border-slate-300"></div>
+          <div className=" w-full overflow-hidden whitespace-nowrap">
+            {children}
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+function ItemNavEntry({
+  isActive,
+  item,
+  onClick,
+}: {
+  isActive: boolean;
+  item: QuestionnaireItem;
+  onClick: () => void;
+}) {
+  const hasAnnotations = getItemAnnotations(item).length > 0;
+
+  return (
+    <BaseNavEntry onClick={onClick} isActive={isActive}>
       <div className="flex items-center">
-        <p className="mr-1 truncate">
+        <p
+          className={`${
+            hasAnnotations && !isActive ? "text-primary-600" : ""
+          } mr-1 truncate`}
+        >
           {item.prefix !== undefined && (
             <strong className="mr-1">{item.prefix}</strong>
           )}
-          <span className="" title={`${item.text} (${item.linkId})`}>
-            {item.text}
-          </span>
+          <span title={`${item.text} (${item.linkId})`}>{item.text}</span>
         </p>
-        {hasAnnotation && <FontAwesomeIcon icon={faMessage} />}
+        {hasAnnotations && (
+          <FontAwesomeIcon
+            className="ml-auto text-primary-600"
+            icon={faMessage}
+          />
+        )}
       </div>
-    </Button>
+    </BaseNavEntry>
   );
 }
