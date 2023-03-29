@@ -11,7 +11,7 @@ import { constructGraphPageUrl, GRAPH_PAGE_ROUTE } from "../pages/GraphPage";
 import { getItemAnnotations } from "../utils/getItemAnnotations";
 import { findGroupOfItem } from "../modules/Graph/utils/findGroupOfItem";
 import { findItemByLinkId } from "../utils/findItemByLinkId";
-import { Children, isValidElement, ReactNode, useMemo, useState } from "react";
+import { ReactNode, useMemo } from "react";
 
 interface QuestionnaireItemsNavProps {
   questionnaire: Questionnaire;
@@ -24,12 +24,9 @@ export default function QuestionnaireNav({
   activeItemId,
 }: QuestionnaireItemsNavProps) {
   const [, setLocation] = useLocation();
-  const [, params] = useRoute(GRAPH_PAGE_ROUTE);
 
   function navigateToItem(itemLinkId: string) {
-    setLocation(
-      constructGraphPageUrl(params?.questionnaireId ?? "", itemLinkId)
-    );
+    setLocation(constructGraphPageUrl(questionnaire.id ?? "", itemLinkId));
   }
 
   const groupOfActiveItem = useMemo(() => {
@@ -46,7 +43,7 @@ export default function QuestionnaireNav({
         <FontAwesomeIcon icon={faLayerGroup} className="mr-1 h-4 " />
         <span className="text-primary-900"> Items</span>
       </h3>
-      <div className="z-10 mt-1 ml-1 max-h-[90vh] overflow-y-auto overflow-x-hidden pr-4 pl-2">
+      <div className="z-10 mt-1 ml-1 max-h-[85vh] overflow-y-auto overflow-x-hidden pr-4 pl-2">
         {questionnaire.item?.map((item) => {
           if (item.type === "group") {
             const isGroupOfActiveItem = groupOfActiveItem === item.linkId;
@@ -61,6 +58,7 @@ export default function QuestionnaireNav({
               >
                 {item.item?.map((nestedItem) => (
                   <ItemNavEntry
+                    key={nestedItem.linkId}
                     isActive={nestedItem.linkId === activeItemId}
                     onClick={() => navigateToItem(nestedItem.linkId)}
                     item={nestedItem}

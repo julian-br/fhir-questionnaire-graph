@@ -12,13 +12,13 @@ export function getRelevantItemsForGraph(
   if (item === undefined) return [];
 
   if (item.type === "group") {
-    return handleGroupItem(item, questionnaire);
+    return findReleventItemsForGroup(item, questionnaire);
   }
 
-  return handleSingleItem(item, questionnaire);
+  return findRelevantItemsForSingleQuestion(item, questionnaire);
 }
 
-function handleSingleItem(
+function findRelevantItemsForSingleQuestion(
   item: QuestionnaireItem,
   questionnaire: Questionnaire
 ) {
@@ -51,11 +51,11 @@ function handleSingleItem(
   return relevantItems;
 }
 
-function handleGroupItem(
+function findReleventItemsForGroup(
   groupItem: QuestionnaireItem,
   questionnaire: Questionnaire
 ) {
-  const relevantItems: GraphItem[] = groupItem.item!;
+  const relevantItems: GraphItem[] = [...groupItem.item!];
 
   // add foreign dependencies
   relevantItems.forEach((relevantItem) => {
