@@ -56,7 +56,7 @@ export default function GraphPage({
   return (
     <>
       <Navbar>
-        <div className="ml-4">
+        <div className="ml-9">
           <div className="font-medium text-slate-600">
             {questionnaire?.name}: {questionnaire?.title}
           </div>
