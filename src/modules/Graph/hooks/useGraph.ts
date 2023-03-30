@@ -7,7 +7,7 @@ import {
 import { QuestionnaireItem } from "fhir/r4";
 
 export default function useGraph(
-  selectedItemId: string,
+  activeItemId: string,
   items: QuestionnaireItem[]
 ) {
   const [nodes, setNodes] = useNodesState<NodeData>([]);
@@ -18,15 +18,15 @@ export default function useGraph(
 
   useEffect(() => {
     const [newNodes, newEdges] = createNodesAndEdgesForItems(
-      selectedItemId,
+      activeItemId,
       items
     );
 
-    if (selectedItemId !== prevRootItemLinkId.current) {
+    if (activeItemId !== prevRootItemLinkId.current) {
       setIsLayouted(false);
       setNodes(newNodes);
       setEdges(newEdges);
-      prevRootItemLinkId.current = selectedItemId;
+      prevRootItemLinkId.current = activeItemId;
     } else {
       // only update node data, if rootItemLinkId is the same -> prevent unecessary layout
       setNodes((prevNodes) =>
@@ -36,7 +36,7 @@ export default function useGraph(
         })
       );
     }
-  }, [selectedItemId, items]);
+  }, [activeItemId, items]);
 
   function setNodeLayout(layoutedNodes: Node[]) {
     setNodes(layoutedNodes);

@@ -14,6 +14,7 @@ import { findItemByLinkId } from "../utils/findItemByLinkId";
 import { getRelevantItemsForGraph } from "../modules/Graph/utils/getRelevantItemsForGraph";
 import { encodeURLParam } from "../utils/urlParam";
 import { useLocation } from "wouter";
+import ActiveItemOverview from "../modules/Graph/components/ActiveItemOverview";
 
 export const GRAPH_PAGE_ROUTE = "/graph/:questionnaireId/:itemLinkId";
 
@@ -66,7 +67,7 @@ export default function GraphPage({
   return (
     <>
       <Navbar>
-        <div className="ml-9">
+        <div className="ml-16">
           <div className="font-medium text-slate-600">
             {questionnaire?.name}: {questionnaire?.title}
           </div>
@@ -88,11 +89,18 @@ export default function GraphPage({
               />
             </div>
           </SideBar>
-          <Graph
-            items={graphItems}
-            rootItemLinkId={itemLinkId}
-            onNodeClicked={handleNodeClicked}
-          />
+
+          <div className="w-full">
+            <ActiveItemOverview
+              activeItemId={itemLinkId}
+              questionnaire={questionnaire}
+            />
+            <Graph
+              items={graphItems}
+              rootItemLinkId={itemLinkId}
+              onNodeClicked={handleNodeClicked}
+            />
+          </div>
 
           {showSearchForItemsDialog && (
             <SearchForItemsDialog
