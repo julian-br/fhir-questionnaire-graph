@@ -232,7 +232,7 @@
     {
       "linkId": "PC-R99_Testbogen_patient_medic_10-2022v2_Frage_I.0",
       "prefix": "I.",
-      "text": "1. Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=allgemein) (gueltigkeit-geschlecht=allgemein)",
+      "text": "Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=allgemein) (gueltigkeit-geschlecht=allgemein)",
       "type": "group",
       "required": false,
       "item": [
@@ -297,7 +297,7 @@
     {
       "linkId": "PC-R99_Testbogen_patient_medic_10-2022v2_Frage_II.0",
       "prefix": "II.",
-      "text": "2. Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=minderjaehrig) (gueltigkeit-geschlecht=allgemein)",
+      "text": "Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=minderjaehrig) (gueltigkeit-geschlecht=allgemein)",
       "type": "group",
       "required": false,
       "item": [
@@ -380,7 +380,7 @@
     {
       "linkId": "PC-R99_Testbogen_patient_medic_10-2022v2_Frage_III.0",
       "prefix": "III.",
-      "text": "3. Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=volljaehrig) (gueltigkeit-geschlecht=allgemein)",
+      "text": "Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=volljaehrig) (gueltigkeit-geschlecht=allgemein)",
       "type": "group",
       "required": false,
       "item": [
@@ -463,7 +463,7 @@
     {
       "linkId": "PC-R99_Testbogen_patient_medic_10-2022v2_Frage_IV.0",
       "prefix": "IV.",
-      "text": "4. Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=volljaehrig) (gueltigkeit-geschlecht=weiblich)",
+      "text": "Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=volljaehrig) (gueltigkeit-geschlecht=weiblich)",
       "type": "group",
       "required": false,
       "item": [
@@ -564,7 +564,7 @@
     {
       "linkId": "PC-R99_Testbogen_patient_medic_10-2022v2_Frage_V.0",
       "prefix": "V.",
-      "text": "5. Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=minderjaehrig) (gueltigkeit-geschlecht=weiblich)",
+      "text": "Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=minderjaehrig) (gueltigkeit-geschlecht=weiblich)",
       "type": "group",
       "required": false,
       "item": [
@@ -665,7 +665,7 @@
     {
       "linkId": "PC-R99_Testbogen_patient_medic_10-2022v2_Frage_VI.0",
       "prefix": "VI.",
-      "text": "6. Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=gebaerfaehig) (gueltigkeit-geschlecht=weiblich)",
+      "text": "Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=gebaerfaehig) (gueltigkeit-geschlecht=weiblich)",
       "type": "group",
       "required": false,
       "item": [
@@ -766,7 +766,7 @@
     {
       "linkId": "PC-R99_Testbogen_patient_medic_10-2022v2_Frage_VII.0",
       "prefix": "VII.",
-      "text": "7. Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=allgemein) (gueltigkeit-geschlecht=weiblich)",
+      "text": "Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=allgemein) (gueltigkeit-geschlecht=weiblich)",
       "type": "group",
       "required": false,
       "item": [
@@ -849,7 +849,7 @@
     {
       "linkId": "PC-R99_Testbogen_patient_medic_10-2022v2_Frage_VIII.0",
       "prefix": "VIII.",
-      "text": "8. Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=volljaehrig) (gueltigkeit-geschlecht=maennlich)",
+      "text": "Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=volljaehrig) (gueltigkeit-geschlecht=maennlich)",
       "type": "group",
       "required": false,
       "item": [
@@ -950,7 +950,7 @@
     {
       "linkId": "PC-R99_Testbogen_patient_medic_10-2022v2_Frage_IX.0",
       "prefix": "IX.",
-      "text": "9. Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=minderjaehrig) (gueltigkeit-geschlecht=maennlich)",
+      "text": "Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=minderjaehrig) (gueltigkeit-geschlecht=maennlich)",
       "type": "group",
       "required": false,
       "item": [
@@ -1051,7 +1051,7 @@
     {
       "linkId": "PC-R99_Testbogen_patient_medic_10-2022v2_Frage_X.0",
       "prefix": "X.",
-      "text": "10. Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=allgemein) (gueltigkeit-geschlecht=maennlich)",
+      "text": "Kombination von Gültigkeiten für Alter und Geschlecht (gueltigkeit-alter=allgemein) (gueltigkeit-geschlecht=maennlich)",
       "type": "group",
       "required": false,
       "item": [
@@ -1134,7 +1134,7 @@
     {
       "linkId": "PC-R99_Testbogen_patient_medic_10-2022v2_Frage_XI.0",
       "prefix": "XI.",
-      "text": "11. Fragen mit Antwort-Liste ➔ <multipleChoiceQuestion>",
+      "text": "Fragen mit Antwort-Liste ➔ <multipleChoiceQuestion>",
       "type": "group",
       "required": false,
       "item": [
@@ -1573,7 +1573,7 @@
     {
       "linkId": "PC-R99_Testbogen_patient_medic_10-2022v2_Frage_XIV.0",
       "prefix": "XIV.",
-      "text": "14. Ja-/​Nein-Frage mit Ja-/​Nein-Nachfrage ➔ <booleanQuestion>",
+      "text": "Ja-/​Nein-Frage mit Ja-/​Nein-Nachfrage ➔ <booleanQuestion>",
       "type": "group",
       "required": false,
       "item": [
@@ -1885,7 +1885,7 @@
     {
       "linkId": "PC-R99_Testbogen_patient_medic_10-2022v2_Frage_XVI.0",
       "prefix": "XVI.",
-      "text": "16. Ja-/​Nein-Frage mit Nachfrage mit (ausloeser=wenn-nein) ➔ <booleanQuestion>",
+      "text": "Ja-/​Nein-Frage mit Nachfrage mit (ausloeser=wenn-nein) ➔ <booleanQuestion>",
       "type": "group",
       "required": false,
       "item": [

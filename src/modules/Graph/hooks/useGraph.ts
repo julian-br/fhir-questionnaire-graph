@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Edge, useEdgesState, useNodesState, useStore } from "reactflow";
-import { Layout } from "../utils/calcGraphLayout";
+import { Edge, Node, useEdgesState, useNodesState } from "reactflow";
 import {
   createNodesAndEdgesForItems,
   NodeData,
@@ -8,7 +7,7 @@ import {
 import { QuestionnaireItem } from "fhir/r4";
 
 export default function useGraph(
-  rootItemLinkId: string,
+  activeItemId: string,
   items: QuestionnaireItem[]
 ) {
   const [nodes, setNodes] = useNodesState<NodeData>([]);
@@ -19,15 +18,15 @@ export default function useGraph(
 
   useEffect(() => {
     const [newNodes, newEdges] = createNodesAndEdgesForItems(
-      rootItemLinkId,
+      activeItemId,
       items
     );
 
-    if (rootItemLinkId !== prevRootItemLinkId.current) {
+    if (activeItemId !== prevRootItemLinkId.current) {
       setIsLayouted(false);
       setNodes(newNodes);
       setEdges(newEdges);
-      prevRootItemLinkId.current = rootItemLinkId;
+      prevRootItemLinkId.current = activeItemId;
     } else {
       // only update node data, if rootItemLinkId is the same -> prevent unecessary layout
       setNodes((prevNodes) =>
@@ -37,11 +36,10 @@ export default function useGraph(
         })
       );
     }
-  }, [rootItemLinkId, items]);
+  }, [activeItemId, items]);
 
-  function setLayout(layout: Layout) {
-    setNodes(layout.layoutedNodes);
-    setEdges(layout.layoutedEdges);
+  function setNodeLayout(layoutedNodes: Node[]) {
+    setNodes(layoutedNodes);
     setIsLayouted(true);
   }
 
@@ -70,7 +68,7 @@ export default function useGraph(
   return {
     nodes,
     edges,
-    setLayout,
+    setLayout: setNodeLayout,
     isLayouted,
     highlightEdges,
     unhighlightEdges,

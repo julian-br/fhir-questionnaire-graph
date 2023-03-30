@@ -37,16 +37,16 @@ class IdGenerator {
 
 //TODO: refactor
 export function createNodesAndEdgesForItems(
-  groupLinkId: string,
+  selectedItemId: string,
   items: GraphItem[]
 ) {
-  IdGenerator.setGroupLinkId(groupLinkId);
+  IdGenerator.setGroupLinkId(selectedItemId);
 
   const nodes: Node<NodeData>[] = [];
   const edges: Edge[] = [];
 
   for (const item of items) {
-    nodes.push(createNodeForItem(item));
+    nodes.push(createNodeForItem(item, item.linkId === selectedItemId));
 
     item.answerOption?.forEach((answerOption) => {
       nodes.push(createNodeForAnswerOption(answerOption));
@@ -66,12 +66,13 @@ export function createNodesAndEdgesForItems(
   return [nodes, edges] as const;
 }
 
-function createNodeForItem(item: GraphItem): Node<NodeData> {
+function createNodeForItem(item: GraphItem, selected = false): Node<NodeData> {
   return {
     id: IdGenerator.generateNodeId(item.linkId),
     width: NaN,
     data: item,
     type: item.foreignGroup ? "foreignItem" : "item",
+    selected,
     position: POSITION,
   };
 }

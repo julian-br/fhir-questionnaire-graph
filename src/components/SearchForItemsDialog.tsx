@@ -3,9 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dialog, Combobox } from "@headlessui/react";
 import { QuestionnaireItem } from "fhir/r4";
 import { useState, ReactNode, useMemo } from "react";
-import { useLocation, useRoute } from "wouter";
-import { GRAPH_PAGE_ROUTE } from "../pages/GraphPage";
-import { encodeURLParam } from "../utils/urlParam";
 
 interface RootItem {
   item?: QuestionnaireItem[];
@@ -14,34 +11,34 @@ interface RootItem {
 interface SearchEntry {
   group?: string;
   text: string;
-  to: string;
+  linkTo: string;
 }
 interface SearchForItemsDialogProps<T extends RootItem> {
   root: T;
   onClose: () => void;
+  onEntrySelect: (entry: SearchEntry) => void;
 }
 
 export default function SearchForItemsDialog<T extends RootItem>({
   root,
   onClose,
+  onEntrySelect,
 }: SearchForItemsDialogProps<T>) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [, params] = useRoute(GRAPH_PAGE_ROUTE);
-  const [, setLocation] = useLocation();
 
   const searchEntries = useMemo(() => {
     const entries: SearchEntry[] = [];
     root.item?.forEach((item) => {
       entries.push({
         text: item.text ?? item.linkId,
-        to: item.linkId,
+        linkTo: item.linkId,
       });
 
       item.item?.forEach((childItem) => {
         entries.push({
           group: item.text,
           text: childItem.text ?? childItem.linkId,
-          to: item.linkId,
+          linkTo: childItem.linkId,
         });
       });
     });
@@ -56,16 +53,14 @@ export default function SearchForItemsDialog<T extends RootItem>({
   );
   const hasResults = matchingSearchEntries.length > 0;
 
-  function navigateToItem(searchEntry: SearchEntry) {
-    setLocation(
-      `/graph/${params?.questionnaireId}/${encodeURLParam(searchEntry.to)}`
-    );
+  function handleEntrySelected(selectedEntry: SearchEntry) {
+    onEntrySelect(selectedEntry);
     onClose();
   }
 
   return (
     <SearchForItemDialogContainer onClose={onClose}>
-      <Combobox onChange={navigateToItem} value={null}>
+      <Combobox onChange={handleEntrySelected} value={null}>
         <div className="relative">
           <FontAwesomeIcon
             icon={faSearch}

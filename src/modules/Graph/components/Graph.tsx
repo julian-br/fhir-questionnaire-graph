@@ -10,7 +10,7 @@ import ReactFlow, {
   Node,
 } from "reactflow";
 import "reactflow/dist/base.css";
-import { calcGraphLayout, Layout } from "../utils/calcGraphLayout";
+import { calcNodeLayout } from "../utils/calcGraphLayout";
 import { ItemNode } from "./nodes/ItemNode";
 import useGraph from "../hooks/useGraph";
 import AnswerOptionNode from "./nodes/AnswerOptionNode";
@@ -29,7 +29,10 @@ export interface GraphItem extends QuestionnaireItem {
 interface GraphProps {
   rootItemLinkId: string;
   items: GraphItem[];
-  onNodeClicked?: (nodeData: Node) => void;
+  onNodeClicked?: (
+    event: React.MouseEvent<Element, MouseEvent>,
+    nodeData: Node
+  ) => void;
 }
 const nodeTypes = {
   item: ItemNode,
@@ -52,18 +55,15 @@ export default function Graph({
 
   useEffect(() => {
     resetViewport();
-  }, [rootItemLinkId]);
+  }, [graph.isLayouted]);
 
   function resetViewport() {
     if (reactFlowInstanceRef.current !== undefined) {
-      reactFlowInstanceRef.current.setViewport({ x: 0, y: 0, zoom: 1 });
+      reactFlowInstanceRef.current.fitView({ maxZoom: 1 });
     }
   }
 
-  function handleNodeMouseEnter(
-    event: React.MouseEvent<Element, MouseEvent>,
-    node: Node
-  ) {
+  function handleNodeMouseEnter(event: React.MouseEvent, node: Node) {
     if (node.type === "foreignItem") {
       return;
     }
@@ -91,7 +91,9 @@ export default function Graph({
         }}
         onNodeMouseEnter={handleNodeMouseEnter}
         onNodeMouseLeave={handleNodeMouseLeave}
-        onNodeClick={(_, node) => (onNodeClicked ? onNodeClicked(node) : null)}
+        onNodeClick={(event, node) =>
+          onNodeClicked ? onNodeClicked(event, node) : null
+        }
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         nodes={graph.nodes}
@@ -107,21 +109,25 @@ export default function Graph({
           position="top-right"
           className="rounded bg-white"
         />
-        <Layouter onLayout={graph.setLayout} />
+        <NodeLayouter onNodeLayout={graph.setLayout} />
       </ReactFlow>
     </div>
   );
 }
 
-function Layouter({ onLayout }: { onLayout: (layout: Layout) => void }) {
+function NodeLayouter({
+  onNodeLayout,
+}: {
+  onNodeLayout: (layoutedNodes: Node[]) => void;
+}) {
   const nodes = useNodes();
   const edges = useEdges();
   const nodesInitialized = useNodesInitialized();
 
   useEffect(() => {
     if (nodesInitialized === true) {
-      calcGraphLayout([...nodes], [...edges]).then((newLayout) =>
-        onLayout(newLayout)
+      calcNodeLayout([...nodes], [...edges]).then((newLayout) =>
+        onNodeLayout(newLayout)
       );
     }
   }, [nodesInitialized]);
