@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Edge, useEdgesState, useNodesState, useStore } from "reactflow";
-import { Layout } from "../utils/calcGraphLayout";
+import { Edge, Node, useEdgesState, useNodesState } from "reactflow";
 import {
   createNodesAndEdgesForItems,
   NodeData,
@@ -39,9 +38,8 @@ export default function useGraph(
     }
   }, [selectedItemId, items]);
 
-  function setLayout(layout: Layout) {
-    setNodes(layout.layoutedNodes);
-    setEdges(layout.layoutedEdges);
+  function setNodeLayout(layoutedNodes: Node[]) {
+    setNodes(layoutedNodes);
     setIsLayouted(true);
   }
 
@@ -70,7 +68,7 @@ export default function useGraph(
   return {
     nodes,
     edges,
-    setLayout,
+    setLayout: setNodeLayout,
     isLayouted,
     highlightEdges,
     unhighlightEdges,

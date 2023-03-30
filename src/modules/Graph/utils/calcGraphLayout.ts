@@ -10,15 +10,10 @@ const LAYOUT_OPTIONS = {
   "elk.separateConnectedComponents": "false", // don't allign nodes of the same hierachy layer horizontally
 };
 
-export interface Layout {
-  layoutedNodes: Node[];
-  layoutedEdges: Edge[];
-}
-
-export async function calcGraphLayout(
+export async function calcNodeLayout(
   nodes: Node[],
   edges: Edge[]
-): Promise<Layout> {
+): Promise<Node[]> {
   const elk = new ELK();
   const graphData: ElkNode = {
     id: "root",
@@ -57,8 +52,5 @@ export async function calcGraphLayout(
     };
   });
 
-  return {
-    layoutedNodes: nodes,
-    layoutedEdges: edges,
-  };
+  return nodes;
 }
