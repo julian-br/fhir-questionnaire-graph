@@ -4,7 +4,6 @@ import ReactFlow, {
   useEdges,
   useNodesInitialized,
   ReactFlowInstance,
-  Background,
   Controls,
   getConnectedEdges,
   Node,
@@ -103,7 +102,6 @@ export default function Graph({
         maxZoom={1.5}
         minZoom={0.5}
       >
-        <Background />
         <Controls
           showInteractive={false}
           position="top-right"

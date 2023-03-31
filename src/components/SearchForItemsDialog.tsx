@@ -71,7 +71,7 @@ export default function SearchForItemsDialog<T extends RootItem>({
             spellCheck="false"
             className={({ open }) =>
               `${
-                open && hasResults ? "rounded-t-xl" : "rounded-xl"
+                open && hasResults ? "rounded-t-lg" : "rounded-lg"
               } block w-full border-b py-4 pl-10 pr-3 placeholder:text-slate-500 focus:outline-none`
             }
             placeholder="search for items..."

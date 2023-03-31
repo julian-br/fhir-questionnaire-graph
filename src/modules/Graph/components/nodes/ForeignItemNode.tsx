@@ -17,7 +17,7 @@ export default function ForeignItemNode({
 }: NodeProps<ForeignItemNodeData>) {
   return (
     <NodeContainer>
-      <div className="w-80 rounded-lg border border-slate-300  bg-slate-50 p-4 text-slate-400 ">
+      <div className="w-80 rounded border border-slate-300 bg-slate-100 p-4 text-slate-500 ">
         <ForeignItemLink
           foreignItemGroupId={data.foreignGroup.linkId}
           foreignItemGroupText={data.foreignGroup.text ?? ""}
@@ -27,7 +27,7 @@ export default function ForeignItemNode({
             <span>{data.text}</span>
           </p>
           <span
-            className={`p rounded-full border border-slate-300 bg-slate-100 py-1 px-2 text-xs font-semibold text-slate-500`}
+            className={`p rounded-full border border-slate-300 bg-slate-200 py-1 px-2 text-xs font-semibold text-slate-500`}
           >
             {data.type}
           </span>
@@ -51,7 +51,7 @@ function ForeignItemLink({
         foreignItemGroupId
       )}`}
       title={`${foreignItemGroupText} (${foreignItemGroupId})`}
-      className="group mb-2 block truncate rounded-lg border border-amber-400 bg-amber-50 px-2 py-1 text-sm text-amber-600 "
+      className="group mb-2 block truncate rounded text-sm text-amber-600 "
     >
       <FontAwesomeIcon icon={faCircleInfo} className="mr-1" />
       <span>from: </span>
