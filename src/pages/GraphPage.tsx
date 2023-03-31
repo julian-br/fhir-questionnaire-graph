@@ -4,7 +4,7 @@ import QuestionnaireNav from "../components/QuestionnaireNav";
 import Graph from "../modules/Graph/components/Graph";
 import Button from "../components/common/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faFileArrowDown, faSearch } from "@fortawesome/free-solid-svg-icons";
 import SearchForItemsDialog from "../components/SearchForItemsDialog";
 import React, { useMemo, useState } from "react";
 import { useQuestionnaire } from "../api/questionnaire";
@@ -14,6 +14,8 @@ import { findItemByLinkId } from "../utils/findItemByLinkId";
 import { getRelevantItemsForGraph } from "../modules/Graph/utils/getRelevantItemsForGraph";
 import { encodeURLParam } from "../utils/urlParam";
 import { useLocation } from "wouter";
+import ContextMenu from "../components/ContextMenu";
+import { downloadQuestionnaire } from "../utils/downloadQuestionnaire";
 
 export const GRAPH_PAGE_ROUTE = "/graph/:questionnaireId/:itemLinkId";
 
@@ -66,7 +68,7 @@ export default function GraphPage({
   return (
     <>
       <Navbar>
-        <div className="ml-16">
+        <div className="ml-9">
           <div className="font-medium text-slate-600">
             {questionnaire?.name}: {questionnaire?.title}
           </div>
@@ -75,6 +77,21 @@ export default function GraphPage({
           <SearchForItemButton
             onClick={() => setShowSearchForItemsDialog(true)}
           />
+          <ContextMenu>
+            <ContextMenu.Entry
+              onClick={() =>
+                questionnaire ? downloadQuestionnaire(questionnaire) : null
+              }
+            >
+              <div className="flex items-center">
+                <FontAwesomeIcon
+                  icon={faFileArrowDown}
+                  className="mr-2 h-4 text-slate-500"
+                />
+                <span>Download Json</span>
+              </div>
+            </ContextMenu.Entry>
+          </ContextMenu>
         </Navbar.Controls>
       </Navbar>
       {isLoading && <div>...Loading</div>}
@@ -121,7 +138,7 @@ function SearchForItemButton({ onClick }: { onClick: () => void }) {
     <Button
       onClick={onClick}
       variant="custom"
-      className="box-border w-96 rounded-full border border-slate-300 bg-slate-50 px-3 py-2 text-left text-sm text-slate-400 hover:border-2 hover:border-primary-300 hover:text-primary-500"
+      className="box-border h-10 w-96 rounded-full border border-slate-300 bg-slate-50 px-3 py-2 text-left text-sm text-slate-400 hover:border-2 hover:border-primary-300 hover:text-primary-500"
     >
       <FontAwesomeIcon icon={faSearch} className="mr-2"></FontAwesomeIcon>
       <span>Search for item...</span>

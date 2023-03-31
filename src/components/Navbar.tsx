@@ -8,7 +8,7 @@ interface NavbarProps {
 
 function Navbar({ children }: NavbarProps) {
   return (
-    <nav className="z-10 flex items-center border-b bg-white  py-3 px-7 ">
+    <nav className="z-10 flex items-center border-b bg-white  py-2 pl-7 pr-2 ">
       <Brand />
       {children}
     </nav>
@@ -28,7 +28,7 @@ function Brand() {
 }
 
 function NavbarControls({ children }: { children: ReactNode }) {
-  return <div className="ml-auto flex gap-3">{children}</div>;
+  return <div className="ml-auto flex items-center gap-1">{children}</div>;
 }
 
 Navbar.Controls = NavbarControls;
