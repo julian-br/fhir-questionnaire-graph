@@ -87,14 +87,17 @@ function BaseNavEntry({
   children,
   isActive,
   onClick,
+  onKeyDown,
 }: {
   children: ReactNode;
   isActive: boolean;
   onClick?: () => void;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLButtonElement>) => void;
 }) {
   return (
     <Button
-      onClick={onClick}
+      onClick={() => (onClick ? onClick() : null)}
+      onKeyDown={(event) => (onKeyDown ? onKeyDown(event) : null)}
       variant="custom"
       className={`${
         isActive
@@ -137,20 +140,27 @@ function GroupItemNavEntry({
     setIsOpen((prev) => !prev);
   }
 
+  function handleKeyDown(event: React.KeyboardEvent<HTMLButtonElement>) {
+    if (event.code === "Space") {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleIsOpen();
+    }
+  }
+
   return (
     <>
-      <BaseNavEntry isActive={isActive}>
+      <BaseNavEntry isActive={isActive} onKeyDown={handleKeyDown}>
         <div className="flex w-full items-center pr-2">
-          <Button
+          <div
             onClick={toggleIsOpen}
-            variant="custom"
             className="flex w-7 shrink-0 items-center justify-center rounded text-slate-500 hover:text-primary-400"
           >
             <FontAwesomeIcon
               icon={faChevronRight}
               className={`font-bold ${isOpen ? "rotate-90" : ""}`}
             />
-          </Button>
+          </div>
           <p
             onClick={onClick}
             className={`${
