@@ -17,7 +17,7 @@ export default function ForeignItemNode({
 }: NodeProps<ForeignItemNodeData>) {
   return (
     <NodeContainer>
-      <div className="w-80 rounded border border-slate-300 bg-slate-100 p-4 text-slate-500 ">
+      <div className="w-80 rounded border-2 border-slate-300 bg-slate-100 p-4 text-slate-500 ">
         <ForeignItemLink
           foreignItemGroupId={data.foreignGroup.linkId}
           foreignItemGroupText={data.foreignGroup.text ?? ""}

@@ -14,10 +14,8 @@ export function ItemNode({ data, selected }: NodeProps<ItemNodeData>) {
     <NodeContainer>
       <div
         className={`${
-          selected
-            ? "border-2 border-primary-400 shadow-lg shadow-primary-100"
-            : ""
-        } box-content w-72 rounded border border-slate-300 bg-white p-3 hover:border-2 hover:border-primary-300`}
+          selected ? "border-primary-400 shadow-lg shadow-primary-100" : ""
+        } box-content  w-72 rounded border-2  border-slate-300 bg-white p-3 hover:border-2 hover:border-primary-300`}
       >
         <div className="relative w-full">
           <AnnotationNotification amountOfNotifications={annotations.length} />

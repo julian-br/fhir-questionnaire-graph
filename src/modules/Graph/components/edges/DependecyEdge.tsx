@@ -10,8 +10,8 @@ export default function DependecyEdge({ data, ...edgeData }: EdgeProps) {
     <>
       <path
         id={edgeData.id}
-        className={`fill-none ${
-          edgeData.selected ? "stroke-primary-300 stroke-2" : "stroke-slate-400"
+        className={`fill-none stroke-2 ${
+          edgeData.selected ? "stroke-primary-300 " : "stroke-slate-300"
         }`}
         d={edgePath}
         markerEnd={edgeData.markerEnd}
