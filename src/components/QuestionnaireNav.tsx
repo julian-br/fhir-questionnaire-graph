@@ -6,12 +6,13 @@ import {
   faChevronRight,
   faLayerGroup,
   faMessage,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { constructGraphPageUrl, GRAPH_PAGE_ROUTE } from "../pages/GraphPage";
 import { getItemAnnotations } from "../utils/getItemAnnotations";
 import { findGroupOfItem } from "../modules/Graph/utils/findGroupOfItem";
 import { findItemByLinkId } from "../utils/findItemByLinkId";
-import { ReactNode, useMemo } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 
 interface QuestionnaireItemsNavProps {
   questionnaire: Questionnaire;
@@ -31,8 +32,8 @@ export default function QuestionnaireNav({
 
   const groupOfActiveItem = useMemo(() => {
     const activeItem = findItemByLinkId(activeItemId, questionnaire);
-    if (activeItem?.type === "group" || activeItem === undefined) {
-      return activeItemId;
+    if (activeItem === undefined) {
+      return undefined;
     }
     return findGroupOfItem(activeItem, questionnaire)?.linkId;
   }, [activeItemId]);
@@ -54,7 +55,7 @@ export default function QuestionnaireNav({
                 item={item}
                 onClick={() => navigateToItem(item.linkId)}
                 isActive={isActiveItem}
-                isOpen={isGroupOfActiveItem || isActiveItem}
+                containsActiveItem={isGroupOfActiveItem}
               >
                 {item.item?.map((nestedItem) => (
                   <ItemNavEntry
@@ -89,7 +90,7 @@ function BaseNavEntry({
 }: {
   children: ReactNode;
   isActive: boolean;
-  onClick: () => void;
+  onClick?: () => void;
 }) {
   return (
     <Button
@@ -99,7 +100,7 @@ function BaseNavEntry({
         isActive
           ? " bg-primary-200 font-bold text-slate-600"
           : "font-medium hover:bg-slate-200"
-      } z-20 block w-full rounded px-2 py-2 text-left text-[0.8rem] text-slate-500`}
+      } z-20 block w-full rounded text-left text-[0.8rem] text-slate-500`}
     >
       {children}
     </Button>
@@ -111,32 +112,52 @@ function GroupItemNavEntry({
   item,
   onClick,
   children,
-  isOpen,
+  containsActiveItem,
 }: {
   isActive: boolean;
+  containsActiveItem: boolean;
   item: QuestionnaireItem;
   onClick: () => void;
   children: ReactNode;
-  isOpen: boolean;
 }) {
+  const [isOpen, setIsOpen] = useState(false);
   const itemInGroupHasAnnotations = item.item?.some(
     (item) => getItemAnnotations(item).length > 0
   );
 
+  useEffect(() => {
+    // unfold the nested entries if a nested question is the active item, and was not selected  via the nav
+    // e.g by clicking a node with ctrl key pressed, an item can be selected
+    if (containsActiveItem) {
+      setIsOpen(true);
+    }
+  }, [containsActiveItem]);
+
+  function toggleIsOpen() {
+    setIsOpen((prev) => !prev);
+  }
+
   return (
     <>
-      <BaseNavEntry isActive={isActive} onClick={onClick}>
-        <div className="flex w-full items-center">
-          <FontAwesomeIcon
-            icon={faChevronRight}
-            className={`${isOpen ? "mb-1 rotate-90" : ""} mr-2 h-3 `}
-          />
+      <BaseNavEntry isActive={isActive}>
+        <div className="flex w-full items-center pr-2">
+          <Button
+            onClick={toggleIsOpen}
+            variant="custom"
+            className="flex w-7 shrink-0 items-center justify-center rounded text-slate-500 hover:text-primary-400"
+          >
+            <FontAwesomeIcon
+              icon={faChevronRight}
+              className={`font-bold ${isOpen ? "rotate-90" : ""}`}
+            />
+          </Button>
           <p
+            onClick={onClick}
             className={`${
               itemInGroupHasAnnotations && !isActive
                 ? "font-semibold text-primary-600"
                 : ""
-            } ${isOpen ? "font-bold" : ""} mr-1 truncate`}
+            } mr-1 truncate py-2`}
           >
             {item.prefix !== undefined && (
               <strong className="mr-1">{item.prefix}</strong>
@@ -170,11 +191,11 @@ function ItemNavEntry({
 
   return (
     <BaseNavEntry onClick={onClick} isActive={isActive}>
-      <div className="flex items-center">
+      <div className="mx-2 flex items-center">
         <p
           className={`${
             hasAnnotations && !isActive ? "text-primary-600" : ""
-          } mr-1 truncate`}
+          } mr-1 truncate  py-2 `}
         >
           {item.prefix !== undefined && (
             <strong className="mr-1">{item.prefix}</strong>
