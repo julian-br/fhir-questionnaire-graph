@@ -87,9 +87,9 @@ function Annotation({ annotation, onDeleteClick }: AnnotationProps) {
 
 function AnnotationEmptyState() {
   return (
-    <div className="my-2 flex items-center rounded-xl">
-      <FontAwesomeIcon icon={faMessage} className="h-4 pb-2 text-slate-300" />
-      <p className="ml-2 mb-2 py-1 text-sm text-slate-500">
+    <div className="my-2 flex items-center rounded-xl bg-slate-50 py-4 px-3">
+      <FontAwesomeIcon icon={faMessage} className="h-4  text-slate-300" />
+      <p className="ml-2 text-sm font-medium text-slate-500">
         No Annotations added yet...
       </p>
     </div>

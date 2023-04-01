@@ -78,7 +78,7 @@ export default function ViewItemModal({
             {item.text}
           </h5>
 
-          <h4 className="mb-3 font-medium text-slate-900">Annotations</h4>
+          <h4 className="mb-2 font-medium text-slate-900">Annotations</h4>
 
           <div className="mb-4">
             <AnnotationFeed
