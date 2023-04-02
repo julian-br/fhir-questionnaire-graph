@@ -1,6 +1,6 @@
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { QuestionnaireItem } from "fhir/r4";
+import { QuestionnaireItem, QuestionnaireItemEnableWhen } from "fhir/r4";
 import { NodeProps } from "reactflow";
 import { getItemAnnotations } from "../../../../utils/getItemAnnotations";
 import NodeContainer from "./NodeContainer";
@@ -15,10 +15,16 @@ export function ItemNode({ data, selected }: NodeProps<ItemNodeData>) {
       <div
         className={`${
           selected ? "border-primary-400 shadow-lg shadow-primary-100" : ""
-        } box-content  w-72 rounded border-2  border-slate-300 bg-white p-3 hover:border-2 hover:border-primary-300`}
+        } border-content  group w-80 rounded  border-2 border-slate-300 bg-white p-3 hover:border-2 hover:border-primary-300`}
       >
         <div className="relative w-full">
           <AnnotationNotification amountOfNotifications={annotations.length} />
+          <div className="absolute top-1/2 -left-7 -translate-y-1/2">
+            <EnableWhenBehaviorBadge
+              enableWhen={data.enableWhen}
+              enableWhenBehavior={data.enableBehavior}
+            />
+          </div>
           <p className="pb-2">
             {data.prefix !== undefined && (
               <span className="mr-2 font-semibold text-primary-800">
@@ -60,6 +66,25 @@ function AnnotationNotification({
         className="h-4 w-5 p-3 text-primary-50"
         icon={faMessage}
       />
+    </div>
+  );
+}
+
+function EnableWhenBehaviorBadge({
+  enableWhen,
+  enableWhenBehavior,
+}: {
+  enableWhen?: QuestionnaireItemEnableWhen[];
+  enableWhenBehavior?: "all" | "any";
+}) {
+  const amountOfEnableWhens = enableWhen?.length ?? 0;
+  if (amountOfEnableWhens <= 1 || enableWhenBehavior !== "all") {
+    return <></>;
+  }
+
+  return (
+    <div className="border-content rounded-lg bg-primary-200 py-2 px-1 text-lg font-semibold text-primary-800 group-hover:border-2 group-hover:border-primary-300 group-hover:text-primary-600">
+      &
     </div>
   );
 }
