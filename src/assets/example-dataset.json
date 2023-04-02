@@ -170,6 +170,13 @@
           "linkId": "7468909631478",
           "prefix": "2.2",
           "text": "What pre-existing medical conditions do you have?",
+          "enableWhen": [
+            {
+              "question": "7421476212095",
+              "operator": "=",
+              "answerBoolean": true
+            }
+          ],
           "answerOption": [
             {
               "valueCoding": {
@@ -232,9 +239,11 @@
           "text": "Are you taking medication for your diabetes?",
           "enableWhen": [
             {
-              "question": "7421476212095",
+              "question": "7468909631478",
               "operator": "=",
-              "answerBoolean": true
+              "answerCoding": {
+                "display": "Diabetes"
+              }
             }
           ]
         },
@@ -300,6 +309,52 @@
               "answerBoolean": true
             }
           ]
+        },
+        {
+          "type": "boolean",
+          "linkId": "1695955203442",
+          "prefix": "3.1",
+          "text": "Have you had any medical procedures in the past year?"
+        },
+        {
+          "type": "open-choice",
+          "linkId": "4588314654527",
+          "prefix": "3.2",
+          "text": "What type of procedure?",
+          "enableWhen": [
+            {
+              "question": "1695955203442",
+              "operator": "=",
+              "answerBoolean": true
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Physical examination"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Blood test"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "X-ray"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "CT scan"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "MRI"
+              }
+            }
+          ]
         }
       ],
       "type": "group",
@@ -319,6 +374,62 @@
         }
       ],
       "enableBehavior": "any"
+    },
+    {
+      "type": "group",
+      "linkId": "4271680249104",
+      "prefix": "IV",
+      "text": "Mental health",
+      "item": [
+        {
+          "type": "boolean",
+          "linkId": "3322689534277",
+          "prefix": "1.1",
+          "text": "Have you ever been diagnosed with a mental health disorder?"
+        },
+        {
+          "type": "string",
+          "linkId": "7443022791251",
+          "prefix": "1.2",
+          "text": "What mental health disorder have you been diagnosed with?",
+          "enableWhen": [
+            {
+              "question": "3322689534277",
+              "operator": "=",
+              "answerBoolean": true
+            }
+          ]
+        },
+        {
+          "type": "boolean",
+          "linkId": "469789683427",
+          "prefix": "2.1",
+          "text": "Have you had any suicidal thoughts or attempts in the past?"
+        },
+        {
+          "type": "open-choice",
+          "linkId": "9466356437087",
+          "prefix": "3.1",
+          "text": "Do you experience anxiety or depression?",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Anxiety"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Depression"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Both"
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       "item": [
@@ -495,7 +606,7 @@
       ],
       "type": "group",
       "linkId": "9903016654029",
-      "prefix": "IV",
+      "prefix": "V",
       "text": "Habits"
     },
     {
@@ -528,7 +639,7 @@
       ],
       "type": "group",
       "linkId": "6538513158434",
-      "prefix": "V",
+      "prefix": "VI",
       "text": "Living circumstances"
     },
     {
@@ -577,8 +688,14 @@
               "answerCoding": {
                 "display": "Other"
               }
+            },
+            {
+              "question": "7998291539954",
+              "operator": ">",
+              "answerInteger": 14
             }
-          ]
+          ],
+          "enableBehavior": "all"
         },
         {
           "type": "boolean",
@@ -607,7 +724,7 @@
       ],
       "type": "group",
       "linkId": "8339420041004",
-      "prefix": "VI",
+      "prefix": "VII",
       "text": "Medication use"
     },
     {
@@ -660,12 +777,75 @@
             }
           ],
           "enableBehavior": "all"
+        },
+        {
+          "type": "string",
+          "linkId": "2933497099743",
+          "prefix": "2.2",
+          "text": "What is the name of that person?"
         }
       ],
       "type": "group",
       "linkId": "8747665243538",
-      "prefix": "VII",
+      "prefix": "VIII",
       "text": "Question for after the procedure"
+    },
+    {
+      "type": "group",
+      "linkId": "1276400500711",
+      "prefix": "IX",
+      "text": "Medical records/documents",
+      "item": [
+        {
+          "type": "open-choice",
+          "linkId": "2679788974347",
+          "prefix": "1.1",
+          "text": "Do you have any medical ID cards/passports?",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Allergy card"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "X-ray pass"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Diabetic card"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "None"
+              }
+            }
+          ]
+        },
+        {
+          "type": "boolean",
+          "linkId": "3221596825040",
+          "prefix": "1.2",
+          "text": "Are these still valid?",
+          "enableWhen": [
+            {
+              "question": "2679788974347",
+              "operator": "!=",
+              "answerCoding": {
+                "display": "None"
+              }
+            }
+          ]
+        },
+        {
+          "type": "boolean",
+          "linkId": "6335615634386",
+          "prefix": "2.1",
+          "text": "Do you have any previous medical reports/X-rays?"
+        }
+      ]
     }
   ],
   "resourceType": "Questionnaire",
