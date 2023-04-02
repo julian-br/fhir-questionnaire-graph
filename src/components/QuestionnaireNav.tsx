@@ -178,7 +178,7 @@ function GroupItemNavEntry({
       </BaseNavEntry>
       {isOpen && (
         <div className="flex w-full">
-          <div className="my-2 ml-2  mr-2 w-1 border-r-2 border-slate-300"></div>
+          <div className="ml-3 mb-2 mr-1 w-1 border-r-2 border-slate-300"></div>
           <div className=" w-full overflow-hidden whitespace-nowrap">
             {children}
           </div>

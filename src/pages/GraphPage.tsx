@@ -138,7 +138,7 @@ function SearchForItemButton({ onClick }: { onClick: () => void }) {
     <Button
       onClick={onClick}
       variant="custom"
-      className="box-border h-10 w-96 rounded-full border border-slate-300 bg-slate-50 px-3 py-2 text-left text-sm text-slate-400 hover:border-2 hover:border-primary-300 hover:text-primary-500"
+      className="h- box-border w-96 rounded-full border border-slate-300 bg-slate-50 px-3 py-2 text-left text-sm text-slate-400 hover:border-2 hover:border-primary-300 hover:text-primary-500"
     >
       <FontAwesomeIcon icon={faSearch} className="mr-2"></FontAwesomeIcon>
       <span>Search for item...</span>

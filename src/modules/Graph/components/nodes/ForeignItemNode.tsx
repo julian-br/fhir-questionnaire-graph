@@ -1,6 +1,5 @@
-import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import { faShareFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { QuestionnaireItem } from "fhir/r4";
 import { NodeProps } from "reactflow";
 import { Link, useRoute } from "wouter";
 import { GRAPH_PAGE_ROUTE } from "../../../../pages/GraphPage";
@@ -55,9 +54,9 @@ function ForeignItemLink({
         foreignItemGroupId
       )}`}
       title={`${foreignItemGroupText} (${foreignItemGroupId})`}
-      className="group mb-2 block truncate rounded text-sm text-amber-600 "
+      className="group  block truncate rounded text-sm text-amber-600 "
     >
-      <FontAwesomeIcon icon={faCircleInfo} className="mr-1" />
+      <FontAwesomeIcon icon={faShareFromSquare} className="mr-1 scale-x-[-1]" />
       <span>from: </span>
       <span className="font-semibold group-hover:underline">
         {foreignItemGroupText ? foreignItemGroupText : foreignItemGroupId}

@@ -20,9 +20,9 @@ export function ItemNode({ data, selected }: NodeProps<ItemNodeData>) {
         <div className="relative w-full">
           <AnnotationNotification amountOfNotifications={annotations.length} />
           <div className="absolute top-1/2 -left-7 -translate-y-1/2">
-            <EnableWhenBehaviorBadge
+            <EnableBehaviorBadge
               enableWhen={data.enableWhen}
-              enableWhenBehavior={data.enableBehavior}
+              enableBehavior={data.enableBehavior}
             />
           </div>
           <p className="pb-2">
@@ -70,15 +70,15 @@ function AnnotationNotification({
   );
 }
 
-function EnableWhenBehaviorBadge({
+function EnableBehaviorBadge({
   enableWhen,
-  enableWhenBehavior,
+  enableBehavior,
 }: {
   enableWhen?: QuestionnaireItemEnableWhen[];
-  enableWhenBehavior?: "all" | "any";
+  enableBehavior?: "all" | "any";
 }) {
   const amountOfEnableWhens = enableWhen?.length ?? 0;
-  if (amountOfEnableWhens <= 1 || enableWhenBehavior !== "all") {
+  if (amountOfEnableWhens <= 1 || enableBehavior !== "all") {
     return <></>;
   }
 
