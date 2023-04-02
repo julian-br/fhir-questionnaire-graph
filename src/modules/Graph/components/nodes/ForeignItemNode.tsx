@@ -15,13 +15,17 @@ export interface ForeignItemNodeData extends GraphItem {
 export default function ForeignItemNode({
   data,
 }: NodeProps<ForeignItemNodeData>) {
+  // only display the foreign item link for the first item of the foreign dependency tree
+  const displayForeignItemLink = data.enableWhen === undefined;
   return (
     <NodeContainer>
       <div className="w-80 rounded border-2 border-slate-300 bg-slate-100 p-4 text-slate-500 ">
-        <ForeignItemLink
-          foreignItemGroupId={data.foreignGroup.linkId}
-          foreignItemGroupText={data.foreignGroup.text ?? ""}
-        />
+        {displayForeignItemLink && (
+          <ForeignItemLink
+            foreignItemGroupId={data.foreignGroup.linkId}
+            foreignItemGroupText={data.foreignGroup.text ?? ""}
+          />
+        )}
         <div className="w-full">
           <p className="pb-2">
             <span>{data.text}</span>
