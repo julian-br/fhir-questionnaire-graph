@@ -51,14 +51,7 @@ export function useAnnotationMutation() {
 }
 
 async function fetchQuestionnaireById(id: string) {
-  const questionnaire = questionnaires.find(
-    (questionnaire) => questionnaire.id === id
-  );
-
-  if (questionnaire === undefined) {
-    throw new Error("no questionnaire with the id " + id);
-  }
-
+  const questionnaire = getQuestionnaireById(id);
   return JSON.parse(JSON.stringify(questionnaire)) as Questionnaire;
 }
 
@@ -75,14 +68,7 @@ async function postAnnotation({
   questionnaireId: string;
   itemLinkId: string;
 }) {
-  const questionnaire = questionnaires.find(
-    (questionnaire) => questionnaire.id === questionnaireId
-  );
-
-  if (questionnaire === undefined) {
-    throw new Error("no questionnaire with the id: " + questionnaireId);
-  }
-
+  const questionnaire = getQuestionnaireById(questionnaireId);
   const item = findItemByLinkId(itemLinkId, questionnaire);
 
   if (item === undefined) {
@@ -95,7 +81,7 @@ async function postAnnotation({
 
   const annotationId = Math.random().toString() + Date.now();
   item.extension.push({
-    url: "annotation",
+    url: "http://hl7.org/fhir/StructureDefinition/Annotation",
     valueAnnotation: { ...newAnnotation, id: annotationId },
   });
 
@@ -111,13 +97,7 @@ async function deleteAnnotation({
   questionnaireId: string;
   itemLinkId: string;
 }) {
-  const questionnaire = questionnaires.find(
-    (questionnaire) => questionnaire.id === questionnaireId
-  );
-
-  if (questionnaire === undefined) {
-    throw new Error("no questionnaire with the id: " + questionnaireId);
-  }
+  const questionnaire = getQuestionnaireById(questionnaireId);
   const item = findItemByLinkId(itemLinkId, questionnaire);
   if (item === undefined) {
     throw new Error("no item with the id: " + itemLinkId);
@@ -131,4 +111,16 @@ async function deleteAnnotation({
   }
 
   item.extension?.splice(matchingAnnotationIndex, 1);
+}
+
+function getQuestionnaireById(id: string) {
+  const questionnaire = questionnaires.find(
+    (questionnaire) => questionnaire.id === id
+  );
+
+  if (questionnaire === undefined) {
+    throw new Error("no questionnaire with the id: " + id);
+  }
+
+  return questionnaire;
 }
