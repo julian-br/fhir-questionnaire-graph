@@ -43,11 +43,18 @@ function findRelevantItemsForSingleQuestion(
       relevantItems.push(currentItem);
     }
     currentItem.enableWhen?.forEach((enabledWhen) => {
+      /* console.log(enabledWhen); */
       const dependency = findItemByLinkId(enabledWhen.question, questionnaire);
-      if (dependency !== undefined) itemsToAddDependeciesFor.push(dependency);
+
+      if (dependency === undefined) {
+        throw new Error(
+          `can not find dependency item with the id ${enabledWhen.question}`
+        );
+      }
+
+      itemsToAddDependeciesFor.push(dependency);
     });
   }
-
   return relevantItems;
 }
 
@@ -67,16 +74,15 @@ function findReleventItemsForGroup(
       if (itemIsAlreadyIncluded) return;
 
       const foreignItem = findItemByLinkId(enableWhen.question, questionnaire);
-      if (foreignItem === undefined) return;
+      if (foreignItem === undefined) {
+        throw new Error(
+          `no item with the id ${enableWhen.question} in this questionnarie`
+        );
+      }
 
-      const groupOfForeignItem = findGroupOfItem(foreignItem, questionnaire);
-      relevantItems.push({
-        ...foreignItem,
-        foreignGroup: {
-          text: groupOfForeignItem?.text ?? foreignItem.text,
-          linkId: groupOfForeignItem?.linkId ?? foreignItem.linkId,
-        },
-      });
+      relevantItems.push(
+        ...findRelevantItemsForSingleQuestion(relevantItem, questionnaire)
+      );
     });
   });
 

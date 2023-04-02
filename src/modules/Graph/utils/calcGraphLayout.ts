@@ -6,7 +6,7 @@ const LAYOUT_OPTIONS = {
   "elk.direction": "RIGHT", // direction of the graph
   "elk.layered.considerModelOrder.strategy": "NODES_AND_EDGES", // keep order of nodes
   "elk.layered.nodePlacement.bk.fixedAlignment": "BALANCED", // balance the tree, e.g root note is vertically centered
-  "elk.layered.spacing.nodeNodeBetweenLayers": "200", // space between different hierachy layers
+  "elk.layered.spacing.nodeNodeBetweenLayers": "160", // space between different hierachy layers
   "elk.separateConnectedComponents": "false", // don't allign nodes of the same hierachy layer horizontally
 };
 

@@ -1,5 +1,6 @@
 import {
   QuestionnaireItem as GraphItems,
+  QuestionnaireItem,
   QuestionnaireItemAnswerOption,
   QuestionnaireItemEnableWhen,
 } from "fhir/r4";
@@ -10,6 +11,7 @@ import { ForeignItemNodeData } from "../components/nodes/ForeignItemNode";
 import { ItemNodeData } from "../components/nodes/ItemNode";
 import { findCorrectAnswerOptions } from "./findCorrectAnswerOptions";
 import { getEnabledWhenValue } from "./getEnableWhenValue";
+import { getAnswerOptionValue } from "./getAnswerOptionValue";
 
 export type NodeData = ItemNodeData | AnswerNodeData | ForeignItemNodeData;
 
@@ -33,6 +35,15 @@ class IdGenerator {
   static generateNodeId(itemLinkId: string) {
     return itemLinkId + this.groupLinkId; // include groupLinkId and random string in each node id to prevent wrong memoization from ReactFlow
   }
+
+  static generateAnswerOptionId(
+    answerOption: QuestionnaireItemAnswerOption,
+    ofItem: QuestionnaireItem
+  ) {
+    return (
+      ofItem.linkId + getAnswerOptionValue(answerOption) + this.groupLinkId
+    );
+  }
 }
 
 //TODO: refactor
@@ -49,14 +60,21 @@ export function createNodesAndEdgesForItems(
     nodes.push(createNodeForItem(item, item.linkId === selectedItemId));
 
     item.answerOption?.forEach((answerOption) => {
-      nodes.push(createNodeForAnswerOption(answerOption));
-      edges.push(createEdgeForAnswerOption(item.linkId, answerOption));
+      nodes.push(createNodeForAnswerOption(answerOption, item));
+      edges.push(createEdgeForAnswerOption(item, answerOption));
     });
 
     item.enableWhen?.forEach((enabledWhen) => {
       const dependencyItem = items.find(
         (item) => item.linkId === enabledWhen.question
-      )!;
+      );
+
+      if (dependencyItem === undefined) {
+        throw new Error(
+          `can not find dependency item with the id ${enabledWhen.question}`
+        );
+      }
+
       edges.push(
         ...createEdgeForDependecy({ enabledWhen, dependencyItem, item })
       );
@@ -78,16 +96,15 @@ function createNodeForItem(item: GraphItem, selected = false): Node<NodeData> {
 }
 
 function createNodeForAnswerOption(
-  answerOption: QuestionnaireItemAnswerOption
+  answerOption: QuestionnaireItemAnswerOption,
+  ofItem: QuestionnaireItem
 ): Node {
-  if (answerOption.id === undefined) {
-    throw new Error(
-      `the answer option ${JSON.stringify(answerOption)} has no valid id`
-    );
-  }
-
+  const answerOptionId = IdGenerator.generateAnswerOptionId(
+    answerOption,
+    ofItem
+  );
   return {
-    id: IdGenerator.generateNodeId(answerOption.id),
+    id: IdGenerator.generateNodeId(answerOptionId),
     width: NaN,
     data: {
       ...answerOption,
@@ -123,29 +140,29 @@ function createEdgeForDependecy({
     dependencyItem.answerOption,
     enabledWhen
   );
-
-  return correctAnswerOptions.map((option) => ({
-    id: IdGenerator.generateEdgeId(option.id!, dependencyItem.linkId),
-    source: IdGenerator.generateNodeId(option.id!),
-    target: IdGenerator.generateNodeId(item.linkId),
-    type: "dependency",
-  }));
+  return correctAnswerOptions.map((option) => {
+    const answerOptionId = IdGenerator.generateAnswerOptionId(
+      option,
+      dependencyItem
+    );
+    return {
+      id: IdGenerator.generateEdgeId(answerOptionId, dependencyItem.linkId),
+      source: IdGenerator.generateNodeId(answerOptionId),
+      target: IdGenerator.generateNodeId(item.linkId),
+      type: "dependency",
+    };
+  });
 }
 
 function createEdgeForAnswerOption(
-  itemLinkId: string,
+  item: QuestionnaireItem,
   answerOption: QuestionnaireItemAnswerOption
 ): Edge {
-  if (answerOption.id === undefined) {
-    throw new Error(
-      `the answer option ${JSON.stringify(answerOption)} has no valid id`
-    );
-  }
-
+  const answerOptionId = IdGenerator.generateAnswerOptionId(answerOption, item);
   return {
-    id: IdGenerator.generateEdgeId(itemLinkId, answerOption.id),
-    source: IdGenerator.generateNodeId(itemLinkId),
-    target: IdGenerator.generateNodeId(answerOption.id!),
+    id: IdGenerator.generateEdgeId(item.linkId, answerOptionId),
+    source: IdGenerator.generateNodeId(item.linkId),
+    target: IdGenerator.generateNodeId(answerOptionId),
     type: "answerOption",
   };
 }
