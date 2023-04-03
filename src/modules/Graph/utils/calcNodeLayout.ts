@@ -8,6 +8,7 @@ const LAYOUT_OPTIONS = {
   "elk.layered.nodePlacement.bk.fixedAlignment": "BALANCED", // balance the tree, e.g root note is vertically centered
   "elk.layered.spacing.nodeNodeBetweenLayers": "160", // space between different hierachy layers
   "elk.separateConnectedComponents": "false", // don't allign nodes of the same hierachy layer horizontally
+  "elk.spacing.componentComponent": "10",
 };
 
 export async function calcNodeLayout(

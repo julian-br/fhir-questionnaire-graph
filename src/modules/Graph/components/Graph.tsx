@@ -9,7 +9,7 @@ import ReactFlow, {
   Node,
 } from "reactflow";
 import "reactflow/dist/base.css";
-import { calcNodeLayout } from "../utils/calcGraphLayout";
+import { calcNodeLayout } from "../utils/calcNodeLayout";
 import { ItemNode } from "./nodes/ItemNode";
 import useGraph from "../hooks/useGraph";
 import AnswerOptionNode from "./nodes/AnswerOptionNode";
