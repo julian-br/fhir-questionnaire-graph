@@ -9,8 +9,10 @@ export default function AnswerOptionEdge({ data, ...edgeData }: EdgeProps) {
     <>
       <path
         id={edgeData.id}
-        className={`fill-none stroke-2 ${
-          edgeData.selected ? "stroke-primary-300 " : "stroke-slate-300"
+        className={`fill-none ${
+          edgeData.selected
+            ? "stroke-primary-300 stroke-[3]"
+            : "stroke-slate-300 stroke-2"
         }`}
         d={edgePath}
         markerEnd={edgeData.markerEnd}

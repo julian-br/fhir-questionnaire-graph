@@ -59,7 +59,7 @@ function ForeignItemLink({
       <FontAwesomeIcon icon={faShareFromSquare} className="mr-1 scale-x-[-1]" />
       <span>from: </span>
       <span className="font-semibold group-hover:underline">
-        {foreignItemGroupText ? foreignItemGroupText : foreignItemGroupId}
+        {foreignItemGroupText ?? foreignItemGroupId}
       </span>
     </Link>
   );
