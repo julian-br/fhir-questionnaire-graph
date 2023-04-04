@@ -12,7 +12,7 @@ function ContextMenu({ children }: ContextMenuProps) {
     <div className="h-full">
       <Menu as="nav" className="relative">
         <Menu.Button className="rounded-full px-2 py-2 text-slate-400 hover:bg-slate-100">
-          <FontAwesomeIcon className="h-6" icon={faEllipsisVertical} />
+          <FontAwesomeIcon className="mt-1 h-6" icon={faEllipsisVertical} />
         </Menu.Button>
         <Menu.Items className="absolute right-0 mt-1 w-56 rounded border bg-white py-3 shadow">
           {children}

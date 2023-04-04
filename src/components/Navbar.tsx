@@ -8,7 +8,7 @@ interface NavbarProps {
 
 function Navbar({ children }: NavbarProps) {
   return (
-    <nav className="z-10 flex items-center border-b bg-white  py-2 pl-7 pr-2 ">
+    <nav className="z-10 flex items-center border-b bg-white  py-1 pl-7 pr-2 ">
       <Brand />
       {children}
     </nav>
