@@ -15,7 +15,7 @@ export default function NodeContainer({ children }: NodeContainerProps) {
       />
       <div>{children}</div>
       <Handle
-        className="invisible -translate-x-14"
+        className="invisible -translate-x-6"
         type="source"
         position={Position.Right}
       />
