@@ -454,7 +454,7 @@
           "answerOption": [
             {
               "valueCoding": {
-                "display": "ccasionally (once a month or less)"
+                "display": "Occasionally (once a month or less)"
               }
             },
             {
@@ -782,7 +782,14 @@
           "type": "string",
           "linkId": "2933497099743",
           "prefix": "2.2",
-          "text": "What is the name of that person?"
+          "text": "What is the name of that person?",
+          "enableWhen": [
+            {
+              "question": "5665124370247",
+              "operator": "=",
+              "answerBoolean": true
+            }
+          ]
         }
       ],
       "type": "group",
