@@ -43,12 +43,11 @@ function findRelevantItemsForSingleQuestion(
       relevantItems.push(currentItem);
     }
     currentItem.enableWhen?.forEach((enabledWhen) => {
-      /* console.log(enabledWhen); */
       const dependency = findItemByLinkId(enabledWhen.question, questionnaire);
 
       if (dependency === undefined) {
         throw new Error(
-          `can not find dependency item with the id ${enabledWhen.question}`
+          `dependency can't be added: no item with the id ${enabledWhen.question}`
         );
       }
 
@@ -75,9 +74,7 @@ function findReleventItemsForGroup(
 
       const foreignItem = findItemByLinkId(enableWhen.question, questionnaire);
       if (foreignItem === undefined) {
-        throw new Error(
-          `no item with the id ${enableWhen.question} in this questionnarie`
-        );
+        throw new Error(`no item with the id ${enableWhen.question}`);
       }
 
       relevantItems.push(
