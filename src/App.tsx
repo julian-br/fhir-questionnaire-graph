@@ -14,10 +14,10 @@ function App() {
           <IndexPage />
         </Route>
         <Route path={GRAPH_PAGE_ROUTE}>
-          {(params: { questionnaireId: string; itemLinkId: string }) => (
+          {(params: { questionnaireId: string; activeItemLinkId: string }) => (
             <GraphPage
               questionnaireId={decodeURLParam(params.questionnaireId)}
-              itemLinkId={decodeURLParam(params.itemLinkId)}
+              activeItemLinkId={decodeURLParam(params.activeItemLinkId)}
             />
           )}
         </Route>

@@ -81,6 +81,15 @@ export default function Graph({
     graph.unhighlightEdges(connectedEdges);
   }
 
+  function handleNodeClicked(
+    event: React.MouseEvent<Element, MouseEvent>,
+    node: Node
+  ) {
+    if (onNodeClicked !== undefined) {
+      onNodeClicked(event, node);
+    }
+  }
+
   return (
     <div className={`h-full w-full bg-slate-50`}>
       <ReactFlow
@@ -90,9 +99,7 @@ export default function Graph({
         }}
         onNodeMouseEnter={handleNodeMouseEnter}
         onNodeMouseLeave={handleNodeMouseLeave}
-        onNodeClick={(event, node) =>
-          onNodeClicked ? onNodeClicked(event, node) : null
-        }
+        onNodeClick={handleNodeClicked}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         nodes={graph.nodes}

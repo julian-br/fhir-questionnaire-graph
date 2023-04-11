@@ -129,8 +129,8 @@ function GroupItemNavEntry({
   );
 
   useEffect(() => {
-    // unfold the nested entries if a nested question is the active item, and was not selected  via the nav
-    // e.g by clicking a node with ctrl key pressed, an item can be selected
+    // unfold the nested entries if a nested question is the active item, and was not selected via the nav
+    // e.g by clicking a node with ctrl key pressed
     if (containsActiveItem) {
       setIsOpen(true);
     }

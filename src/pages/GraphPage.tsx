@@ -17,23 +17,23 @@ import { useLocation } from "wouter";
 import ContextMenu from "../components/ContextMenu";
 import { downloadQuestionnaire } from "../utils/downloadQuestionnaire";
 
-export const GRAPH_PAGE_ROUTE = "/graph/:questionnaireId/:itemLinkId";
+export const GRAPH_PAGE_ROUTE = "/graph/:questionnaireId/:activeItemLinkId";
 
 export function constructGraphPageUrl(
   questionnaireId: string,
-  itemLinkId: string
+  activeItemLinkId: string
 ) {
   return `/graph/${encodeURLParam(questionnaireId)}/${encodeURLParam(
-    itemLinkId
+    activeItemLinkId
   )}`;
 }
 
 export default function GraphPage({
-  itemLinkId,
+  activeItemLinkId,
   questionnaireId,
 }: {
   questionnaireId: string;
-  itemLinkId: string;
+  activeItemLinkId: string;
 }) {
   const [, setLocation] = useLocation();
   const {
@@ -42,7 +42,7 @@ export default function GraphPage({
     data: questionnaire,
   } = useQuestionnaire(questionnaireId);
 
-  const [selectedItemId, setSelectedItemId] = useState<string>();
+  const [itemIdForDetailView, setItemIdForDetailView] = useState<string>();
   const [showSearchForItemsDialog, setShowSearchForItemsDialog] =
     useState(false);
 
@@ -52,7 +52,7 @@ export default function GraphPage({
         navigateToItem(node.data.linkId);
         return;
       }
-      setSelectedItemId(node.data.linkId);
+      setItemIdForDetailView(node.data.linkId);
     }
   }
 
@@ -62,8 +62,8 @@ export default function GraphPage({
 
   const graphItems = useMemo(() => {
     if (questionnaire === undefined) return [];
-    return getRelevantItemsForGraph(itemLinkId, questionnaire);
-  }, [itemLinkId, questionnaire]);
+    return getRelevantItemsForGraph(activeItemLinkId, questionnaire);
+  }, [activeItemLinkId, questionnaire]);
 
   return (
     <>
@@ -101,14 +101,14 @@ export default function GraphPage({
             <div>
               <QuestionnaireNav
                 questionnaire={questionnaire}
-                activeItemId={itemLinkId}
+                activeItemId={activeItemLinkId}
               />
             </div>
           </SideBar>
 
           <Graph
             items={graphItems}
-            rootItemLinkId={itemLinkId}
+            rootItemLinkId={activeItemLinkId}
             onNodeClicked={handleNodeClicked}
           />
 
@@ -120,11 +120,11 @@ export default function GraphPage({
             />
           )}
 
-          {selectedItemId !== undefined && (
+          {itemIdForDetailView !== undefined && (
             <ViewItemModal
               questionnaireId={questionnaireId}
-              item={findItemByLinkId(selectedItemId, questionnaire)!}
-              onClose={() => setSelectedItemId(undefined)}
+              item={findItemByLinkId(itemIdForDetailView, questionnaire)!}
+              onClose={() => setItemIdForDetailView(undefined)}
             />
           )}
         </main>

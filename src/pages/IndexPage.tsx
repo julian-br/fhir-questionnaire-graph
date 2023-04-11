@@ -1,6 +1,7 @@
 import { Redirect } from "wouter";
 import { useQuestionnaires } from "../api/questionnaire";
 import { encodeURLParam } from "../utils/urlParam";
+import { constructGraphPageUrl } from "./GraphPage";
 
 export const INDEX_PAGE_ROUTE = "";
 
@@ -11,9 +12,10 @@ export default function IndexPage() {
     <main>
       {isSuccess && (
         <Redirect
-          to={`/graph/${encodeURLParam(questionnaires[0].id!)}/${encodeURLParam(
+          to={constructGraphPageUrl(
+            questionnaires[0].id!,
             questionnaires[0].item![0].linkId
-          )}`}
+          )}
         />
       )}
     </main>

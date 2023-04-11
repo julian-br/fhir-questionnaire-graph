@@ -16,7 +16,7 @@ import { getAnswerOptionValue } from "./getAnswerOptionValue";
 export type NodeData = ItemNodeData | AnswerNodeData | ForeignItemNodeData;
 
 // this position will be overwritten as soon as the Graph is layouted
-const POSITION = {
+const DEFAULT_POSITION = {
   x: NaN,
   y: NaN,
 };
@@ -48,16 +48,16 @@ class IdGenerator {
 
 //TODO: refactor
 export function createNodesAndEdgesForItems(
-  selectedItemId: string,
+  activeItemId: string,
   items: GraphItem[]
 ) {
-  IdGenerator.setGroupLinkId(selectedItemId);
+  IdGenerator.setGroupLinkId(activeItemId);
 
   const nodes: Node<NodeData>[] = [];
   const edges: Edge[] = [];
 
   for (const item of items) {
-    nodes.push(createNodeForItem(item, item.linkId === selectedItemId));
+    nodes.push(createNodeForItem(item, item.linkId === activeItemId));
 
     item.answerOption?.forEach((answerOption) => {
       nodes.push(createNodeForAnswerOption(answerOption, item));
@@ -84,14 +84,14 @@ export function createNodesAndEdgesForItems(
   return [nodes, edges] as const;
 }
 
-function createNodeForItem(item: GraphItem, selected = false): Node<NodeData> {
+function createNodeForItem(item: GraphItem, isActive = false): Node<NodeData> {
   return {
     id: IdGenerator.generateNodeId(item.linkId),
     width: NaN,
     data: item,
     type: item.foreignGroup ? "foreignItem" : "item",
-    selected,
-    position: POSITION,
+    selected: isActive,
+    position: DEFAULT_POSITION,
   };
 }
 
@@ -110,7 +110,7 @@ function createNodeForAnswerOption(
       ...answerOption,
     },
     type: "answerOption",
-    position: POSITION,
+    position: DEFAULT_POSITION,
   };
 }
 
