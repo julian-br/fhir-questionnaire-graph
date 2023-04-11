@@ -92,6 +92,7 @@ function createNodeForItem(item: GraphItem, isActive = false): Node<NodeData> {
     type: item.foreignGroup ? "foreignItem" : "item",
     selected: isActive,
     position: DEFAULT_POSITION,
+    selectable: false,
   };
 }
 
@@ -111,6 +112,7 @@ function createNodeForAnswerOption(
     },
     type: "answerOption",
     position: DEFAULT_POSITION,
+    selectable: false,
   };
 }
 
