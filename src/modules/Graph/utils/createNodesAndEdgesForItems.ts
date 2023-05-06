@@ -22,7 +22,7 @@ const DEFAULT_POSITION = {
 };
 
 class IdGenerator {
-  private static groupLinkId: string = "";
+  private static groupLinkId = "";
 
   static setGroupLinkId(groupLinkId: string) {
     this.groupLinkId = groupLinkId;
@@ -33,7 +33,7 @@ class IdGenerator {
   }
 
   static generateNodeId(itemLinkId: string) {
-    return itemLinkId + this.groupLinkId; // include groupLinkId and random string in each node id to prevent wrong memoization from ReactFlow
+    return itemLinkId + this.groupLinkId; // include groupLinkId in each node id to prevent wrong memoization from ReactFlow
   }
 
   static generateAnswerOptionId(

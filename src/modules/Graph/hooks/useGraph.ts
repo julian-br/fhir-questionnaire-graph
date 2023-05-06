@@ -30,8 +30,15 @@ export default function useGraph(
     } else {
       // only update node data, if rootItemLinkId is the same -> prevent unecessary layout
       setNodes((prevNodes) =>
-        prevNodes.map((node, index) => {
-          node.data = newNodes[index].data;
+        prevNodes.map((node) => {
+          const matchingNewNode = newNodes.find(
+            (newNode) => newNode.id === node.id
+          );
+
+          if (matchingNewNode === undefined) {
+            throw new Error("no node with a matching id in the new node data");
+          }
+          node.data = { ...matchingNewNode.data };
           return node;
         })
       );
